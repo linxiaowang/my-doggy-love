@@ -124,7 +124,7 @@ AUTH_SECRET="请生成一个随机字符串，至少32位"
 - ` ` (空格) → `%20` 或 `+`
 
 **示例**：
-- 如果密码是 `Lxw@199802`，则应该写成：`mysql://root:Lxw%40199802@127.0.0.1:3306/my_doggy_love`
+- 如果密码是 `123456`，则应该写成：`mysql://root:Lxw%40199802@127.0.0.1:3306/my_doggy_love`
 - 如果密码是 `pass#123`，则应该写成：`mysql://root:pass%23123@127.0.0.1:3306/my_doggy_love`
 
 生成 AUTH_SECRET：
@@ -364,7 +364,7 @@ cat .env | grep DATABASE_URL
    - 其他特殊字符参见上述列表
 
 **示例**：
-- ❌ 错误：`DATABASE_URL="mysql://root:Lxw@199802@127.0.0.1:3306/my_doggy_love"`
+- ❌ 错误：`DATABASE_URL="mysql://root:123456@127.0.0.1:3306/my_doggy_love"`
 - ✅ 正确：`DATABASE_URL="mysql://root:Lxw%40199802@127.0.0.1:3306/my_doggy_love"`
 
 ##### 2. MySQL 容器未启动或未就绪
@@ -404,7 +404,7 @@ cat .env | grep DATABASE_URL
 **使用 Docker 命令测试**：
 ```bash
 docker exec -it my_doggy_love_mysql mysql -uroot -p
-# 输入密码：Lxw@199802（不编码，原密码）
+# 输入密码：123456（不编码，原密码）
 ```
 
 **使用 Prisma 测试**：

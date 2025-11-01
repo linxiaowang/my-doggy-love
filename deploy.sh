@@ -108,6 +108,9 @@ if ! docker ps | grep -q my_doggy_love_mysql; then
         fi
     fi
     
+    # 读取 MySQL 密码
+    MYSQL_PASSWORD=$(grep "MYSQL_ROOT_PASSWORD:" docker-compose.yml | sed 's/.*MYSQL_ROOT_PASSWORD: //' | tr -d ' ' || echo "")
+    
     # 启动容器
     docker compose up -d
     
@@ -118,9 +121,18 @@ if ! docker ps | grep -q my_doggy_love_mysql; then
         MAX_WAIT=60
         WAIT_COUNT=0
         while [ $WAIT_COUNT -lt $MAX_WAIT ]; do
-            if docker exec my_doggy_love_mysql mysqladmin ping -h localhost --silent 2>/dev/null; then
-                echo "✅ MySQL 已就绪"
-                break
+            # 使用密码测试 MySQL 连接
+            if [ -n "$MYSQL_PASSWORD" ]; then
+                if docker exec -e MYSQL_PWD="$MYSQL_PASSWORD" my_doggy_love_mysql mysqladmin ping -h localhost --silent -uroot 2>/dev/null; then
+                    echo "✅ MySQL 已就绪"
+                    break
+                fi
+            else
+                # 如果没有密码，尝试不使用密码（仅用于测试）
+                if docker exec my_doggy_love_mysql mysqladmin ping -h localhost --silent 2>/dev/null; then
+                    echo "✅ MySQL 已就绪"
+                    break
+                fi
             fi
             echo "   等待中... ($WAIT_COUNT/$MAX_WAIT 秒)"
             sleep 2
@@ -139,8 +151,18 @@ if ! docker ps | grep -q my_doggy_love_mysql; then
     fi
 else
     # 容器已在运行，检查 MySQL 是否可用
+    # 读取 MySQL 密码
+    MYSQL_PASSWORD=$(grep "MYSQL_ROOT_PASSWORD:" docker-compose.yml | sed 's/.*MYSQL_ROOT_PASSWORD: //' | tr -d ' ' || echo "")
+    
     echo "🐬 MySQL 容器已在运行，检查连接..."
-    if ! docker exec my_doggy_love_mysql mysqladmin ping -h localhost --silent 2>/dev/null; then
+    # 使用密码测试 MySQL 连接
+    if [ -n "$MYSQL_PASSWORD" ]; then
+        MYSQL_CONNECTED=$(docker exec -e MYSQL_PWD="$MYSQL_PASSWORD" my_doggy_love_mysql mysqladmin ping -h localhost --silent -uroot 2>/dev/null && echo "yes" || echo "no")
+    else
+        MYSQL_CONNECTED=$(docker exec my_doggy_love_mysql mysqladmin ping -h localhost --silent 2>/dev/null && echo "yes" || echo "no")
+    fi
+    
+    if [ "$MYSQL_CONNECTED" != "yes" ]; then
         echo "⚠️  MySQL 容器运行但无法连接，尝试重启..."
         docker compose restart mysql
         sleep 5
@@ -148,9 +170,16 @@ else
         MAX_WAIT=60
         WAIT_COUNT=0
         while [ $WAIT_COUNT -lt $MAX_WAIT ]; do
-            if docker exec my_doggy_love_mysql mysqladmin ping -h localhost --silent 2>/dev/null; then
-                echo "✅ MySQL 已就绪"
-                break
+            if [ -n "$MYSQL_PASSWORD" ]; then
+                if docker exec -e MYSQL_PWD="$MYSQL_PASSWORD" my_doggy_love_mysql mysqladmin ping -h localhost --silent -uroot 2>/dev/null; then
+                    echo "✅ MySQL 已就绪"
+                    break
+                fi
+            else
+                if docker exec my_doggy_love_mysql mysqladmin ping -h localhost --silent 2>/dev/null; then
+                    echo "✅ MySQL 已就绪"
+                    break
+                fi
             fi
             echo "   等待中... ($WAIT_COUNT/$MAX_WAIT 秒)"
             sleep 2

@@ -4,10 +4,10 @@ services:
     container_name: my_doggy_love_mysql
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: Lxw@199802
+      MYSQL_ROOT_PASSWORD: 123456
       MYSQL_DATABASE: my_doggy_love
       MYSQL_USER: root
-      MYSQL_PASSWORD: Lxw@199802
+      MYSQL_PASSWORD: 123456
     ports:
       - "3306:3306"
     volumes:
