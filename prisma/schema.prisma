@@ -1,0 +1,121 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String?  @unique
+  passwordHash String?
+  nickName     String
+  avatarUrl    String?
+  createdAt    DateTime @default(now())
+
+  coupleMemberships CoupleMember[]
+  posts             DailyPost[]      @relation("UserPosts")
+  comments          Comment[]
+  messages          Message[]
+}
+
+model Couple {
+  id        String         @id @default(cuid())
+  code      String         @unique
+  createdAt DateTime       @default(now())
+
+  members   CoupleMember[]
+  posts     DailyPost[]
+  wishes    Wish[]
+  messages  Message[]
+  anniversaries Anniversary[]
+}
+
+model CoupleMember {
+  id        String   @id @default(cuid())
+  userId    String
+  coupleId  String
+  role      String   @default("A")
+  joinedAt  DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id])
+  couple Couple @relation(fields: [coupleId], references: [id])
+
+  @@unique([userId, coupleId])
+}
+
+model DailyPost {
+  id        String   @id @default(cuid())
+  coupleId  String
+  authorId  String
+  content   String
+  mediaUrls Json
+  tags      Json
+  createdAt DateTime @default(now())
+
+  couple Couple @relation(fields: [coupleId], references: [id])
+  author User   @relation("UserPosts", fields: [authorId], references: [id])
+  comments Comment[]
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  authorId  String
+  content   String
+  createdAt DateTime @default(now())
+
+  // 可挂载到不同实体之一
+  postId   String?
+  wishId   String?
+  messageId String?
+
+  // 回复父评论（可为空表示顶层）
+  parentId String?
+  parent   Comment? @relation("CommentToComment", fields: [parentId], references: [id])
+  replies  Comment[] @relation("CommentToComment")
+
+  author  User   @relation(fields: [authorId], references: [id])
+  post    DailyPost? @relation(fields: [postId], references: [id])
+  wish    Wish?      @relation(fields: [wishId], references: [id])
+  message Message?   @relation(fields: [messageId], references: [id])
+}
+
+model Wish {
+  id          String   @id @default(cuid())
+  coupleId    String
+  title       String
+  description String?
+  status      String   @default("todo")
+  finishedAt  DateTime?
+  createdAt   DateTime @default(now())
+
+  couple   Couple  @relation(fields: [coupleId], references: [id])
+  comments Comment[]
+}
+
+model Anniversary {
+  id        String   @id @default(cuid())
+  coupleId  String
+  title     String
+  date      DateTime
+  coverUrl  String?
+  createdAt DateTime @default(now())
+
+  couple Couple @relation(fields: [coupleId], references: [id])
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  coupleId  String
+  authorId  String
+  content   String
+  createdAt DateTime @default(now())
+
+  couple  Couple @relation(fields: [coupleId], references: [id])
+  author  User   @relation(fields: [authorId], references: [id])
+  comments Comment[]
+}
+
+

@@ -1,97 +1,58 @@
 <script setup lang="ts">
-const { data: page } = await useAsyncData('index', () => queryCollection('index').first())
-
-const title = page.value?.seo?.title || page.value?.title
-const description = page.value?.seo?.description || page.value?.description
-
-useSeoMeta({
-  titleTemplate: '',
-  title,
-  ogTitle: title,
-  description,
-  ogDescription: description
+import { ref, onMounted } from 'vue'
+definePageMeta({
+  layout: 'home',
 })
+
+const presetImages = [
+  '/assets/images/couple/couple-1.png',
+  '/assets/images/couple/couple-2.png',
+  '/assets/images/couple/couple-3.png',
+  '/assets/images/couple/couple-4.png'
+]
+
+const images = ref<string[]>([...presetImages])
+onMounted(async () => {
+  try {
+    const me = await $fetch('/api/auth/me')
+    if (me?.user) {
+      const res = await $fetch<{ items: any[] }>('/api/daily')
+      const media = (res.items || []).flatMap(i => Array.isArray(i.mediaUrls) ? i.mediaUrls : [])
+      if (media.length) images.value = [...media.slice(0, 6), ...presetImages]
+    }
+  } catch {
+    // ignore
+  }
+})
+
+function goQuickRecord() {
+  navigateTo('/daily')
+}
 </script>
 
 <template>
-  <div v-if="page">
-    <UPageHero
-      :title="page.title"
-      :description="page.description"
-      :links="page.hero.links"
-    >
-      <template #top>
-        <HeroBackground />
-      </template>
-
-      <template #title>
-        <MDC
-          :value="page.title"
-          unwrap="p"
-        />
-      </template>
-
-      <PromotionalVideo />
-    </UPageHero>
-
-    <UPageSection
-      v-for="(section, index) in page.sections"
-      :key="index"
-      :title="section.title"
-      :description="section.description"
-      :orientation="section.orientation"
-      :reverse="section.reverse"
-      :features="section.features"
-    >
-      <ImagePlaceholder />
-    </UPageSection>
-
-    <UPageSection
-      :title="page.features.title"
-      :description="page.features.description"
-    >
-      <UPageGrid>
-        <UPageCard
-          v-for="(item, index) in page.features.items"
-          :key="index"
-          v-bind="item"
-          spotlight
-        />
-      </UPageGrid>
-    </UPageSection>
-
-    <UPageSection
-      id="testimonials"
-      :headline="page.testimonials.headline"
-      :title="page.testimonials.title"
-      :description="page.testimonials.description"
-    >
-      <UPageColumns class="xl:columns-4">
-        <UPageCard
-          v-for="(testimonial, index) in page.testimonials.items"
-          :key="index"
-          variant="subtle"
-          :description="testimonial.quote"
-          :ui="{ description: 'before:content-[open-quote] after:content-[close-quote]' }"
-        >
-          <template #footer>
-            <UUser
-              v-bind="testimonial.user"
-              size="lg"
-            />
-          </template>
-        </UPageCard>
-      </UPageColumns>
-    </UPageSection>
-
-    <USeparator />
-
-    <UPageCTA
-      v-bind="page.cta"
-      variant="naked"
-      class="overflow-hidden"
-    >
-      <LazyStarsBg />
-    </UPageCTA>
+  <div class="min-h-screen bg-#f7f6f3">
+    <DogHeader />
+    <div class="max-w-6xl mx-auto px-4 md:px-6 py-10 space-y-8">
+      <section class="grid md:grid-cols-2 gap-8 items-center">
+        <div>
+          <h1 class="text-3xl md:text-4xl font-serif leading-tight">爱的小事，值得被温柔记录。</h1>
+          <p class="mt-3 text-#6b7280">以“线条小狗”为灵感的情侣纪念与日常记录空间。以留白与软色调，收纳你们的每一帧心动。</p>
+          <div class="mt-5 flex gap-3">
+            <button class="btn-primary" @click="goQuickRecord">开始记录</button>
+            <NuxtLink to="/daily" class="btn-secondary">查看日常</NuxtLink>
+          </div>
+        </div>
+        <DogCarousel :images="images" />
+      </section>
+    </div>
+    <QuickRecordButton @click="goQuickRecord" />
   </div>
 </template>
+
+<script lang="ts">
+import DogHeader from '@/components/ui/DogHeader.vue'
+import DogCarousel from '@/components/ui/DogCarousel.vue'
+import QuickRecordButton from '@/components/ui/QuickRecordButton.vue'
+export default {}
+</script>
