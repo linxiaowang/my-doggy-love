@@ -198,13 +198,6 @@ fi
 
 # 数据库迁移
 echo "🗄️  执行数据库迁移..."
-# 再次验证连接（使用 Prisma 的测试连接）
-if ! pnpm prisma migrate status 2>/dev/null; then
-    echo "⚠️  数据库连接测试失败，检查 .env 文件中的 DATABASE_URL"
-    echo "   注意：密码中的特殊字符（如 @ # % 等）需要 URL 编码"
-    echo "   @ -> %40, # -> %23, % -> %25"
-    exit 1
-fi
 pnpm prisma migrate deploy
 pnpm prisma generate
 
