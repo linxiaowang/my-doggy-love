@@ -56,9 +56,41 @@ fi
 # 启动 MySQL（如果还没启动）
 if ! docker ps | grep -q my_doggy_love_mysql; then
     echo "🐬 启动 MySQL..."
+    
+    # 先尝试手动拉取镜像（避免 compose 超时）
+    if ! docker images | grep -q "mysql.*8.0"; then
+        echo "📥 拉取 MySQL 8.0 镜像..."
+        if ! docker pull mysql:8.0; then
+            echo "❌ 镜像拉取失败，尝试使用国内镜像源..."
+            echo "   请手动执行以下命令之一："
+            echo ""
+            echo "   方案 1: 使用阿里云镜像仓库"
+            echo "   docker pull registry.cn-hangzhou.aliyuncs.com/library/mysql:8.0"
+            echo "   docker tag registry.cn-hangzhou.aliyuncs.com/library/mysql:8.0 mysql:8.0"
+            echo ""
+            echo "   方案 2: 检查并修复 Docker 镜像加速器配置"
+            echo "   sudo cat /etc/docker/daemon.json"
+            echo "   sudo systemctl restart docker"
+            echo ""
+            echo "   方案 3: 使用华为云镜像仓库"
+            echo "   docker pull swr.cn-north-4.myhuaweicloud.com/library/mysql:8.0"
+            echo "   docker tag swr.cn-north-4.myhuaweicloud.com/library/mysql:8.0 mysql:8.0"
+            exit 1
+        fi
+    fi
+    
+    # 启动容器
     docker compose up -d
-    echo "⏳ 等待 MySQL 就绪..."
-    sleep 5
+    
+    # 检查容器是否启动成功
+    if docker ps | grep -q my_doggy_love_mysql; then
+        echo "⏳ 等待 MySQL 就绪..."
+        sleep 5
+    else
+        echo "❌ MySQL 容器启动失败，查看日志："
+        docker compose logs mysql
+        exit 1
+    fi
 fi
 
 # 数据库迁移

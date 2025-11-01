@@ -325,7 +325,7 @@ docker exec -i my_doggy_love_mysql mysql -uroot -pYOUR_PASSWORD my_doggy_love < 
 
 **问题**：`Error Get "https://registry-1.docker.io/v2/": net/http: request canceled`
 
-**解决方案**：配置 Docker 镜像加速器
+#### 方案 1：配置并验证 Docker 镜像加速器
 
 ```bash
 # 1. 创建或编辑 Docker daemon 配置
@@ -344,12 +344,69 @@ EOF
 sudo systemctl daemon-reload
 sudo systemctl restart docker
 
-# 3. 验证配置
+# 3. 验证配置是否生效（必须能看到 Registry Mirrors）
 docker info | grep -A 10 "Registry Mirrors"
 
-# 4. 重新拉取镜像
-docker compose pull
+# 4. 如果看不到 Registry Mirrors，检查配置文件
+sudo cat /etc/docker/daemon.json
+
+# 5. 手动拉取镜像测试
+docker pull mysql:8.0
+```
+
+#### 方案 2：直接使用国内镜像仓库（推荐）
+
+如果镜像加速器配置后仍无法拉取，直接使用国内镜像仓库：
+
+```bash
+# 使用阿里云镜像仓库
+docker pull registry.cn-hangzhou.aliyuncs.com/library/mysql:8.0
+docker tag registry.cn-hangzhou.aliyuncs.com/library/mysql:8.0 mysql:8.0
+
+# 或者使用华为云镜像仓库
+docker pull swr.cn-north-4.myhuaweicloud.com/library/mysql:8.0
+docker tag swr.cn-north-4.myhuaweicloud.com/library/mysql:8.0 mysql:8.0
+
+# 验证镜像已存在
+docker images | grep mysql
+
+# 然后启动容器
 docker compose up -d
+```
+
+#### 方案 3：使用快速修复脚本（推荐）
+
+项目提供了自动修复脚本，会自动尝试多种方案：
+
+```bash
+# 在项目根目录执行
+chmod +x fix-docker-mirror.sh
+./fix-docker-mirror.sh
+```
+
+脚本会自动：
+1. 检查并配置 Docker 镜像加速器
+2. 尝试从镜像加速器拉取
+3. 如果失败，自动尝试从阿里云镜像仓库拉取
+4. 如果仍失败，尝试从华为云镜像仓库拉取
+5. 自动打标签，确保镜像可用
+
+#### 方案 4：诊断 Docker 配置
+
+```bash
+# 1. 检查 Docker 服务状态
+sudo systemctl status docker
+
+# 2. 检查 Docker 配置
+sudo cat /etc/docker/daemon.json
+
+# 3. 检查 Docker 信息（查看是否有镜像加速器）
+docker info
+
+# 4. 测试网络连接
+curl -I https://registry-1.docker.io/v2/
+
+# 5. 如果网络不通，可能需要配置代理或使用方案 2
 ```
 
 ### 检查应用是否运行
