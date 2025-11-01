@@ -32,6 +32,27 @@ fi
 echo "📦 安装依赖..."
 pnpm install --frozen-lockfile
 
+# 配置 Docker 镜像加速器（如果还没配置，解决拉取镜像慢的问题）
+if command -v docker &> /dev/null; then
+    if [ ! -f /etc/docker/daemon.json ] || ! docker info 2>/dev/null | grep -q "registry.cn-hangzhou.aliyuncs.com"; then
+        echo "⚙️  配置 Docker 镜像加速器..."
+        sudo mkdir -p /etc/docker
+        sudo tee /etc/docker/daemon.json > /dev/null << 'EOF'
+{
+  "registry-mirrors": [
+    "https://registry.cn-hangzhou.aliyuncs.com",
+    "https://docker.mirrors.ustc.edu.cn",
+    "https://dockerhub.azk8s.cn"
+  ]
+}
+EOF
+        sudo systemctl daemon-reload
+        sudo systemctl restart docker
+        echo "✅ Docker 镜像加速器已配置，请重新运行此脚本"
+        exit 0
+    fi
+fi
+
 # 启动 MySQL（如果还没启动）
 if ! docker ps | grep -q my_doggy_love_mysql; then
     echo "🐬 启动 MySQL..."

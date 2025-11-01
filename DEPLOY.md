@@ -32,6 +32,23 @@ yum install -y docker
 systemctl start docker
 systemctl enable docker
 
+# 配置 Docker 镜像加速器（解决国内拉取镜像慢的问题）
+mkdir -p /etc/docker
+cat > /etc/docker/daemon.json << 'EOF'
+{
+  "registry-mirrors": [
+    "https://registry.cn-hangzhou.aliyuncs.com",
+    "https://docker.mirrors.ustc.edu.cn",
+    "https://dockerhub.azk8s.cn"
+  ]
+}
+EOF
+systemctl daemon-reload
+systemctl restart docker
+
+# 验证镜像加速器配置
+docker info | grep -A 10 "Registry Mirrors"
+
 # 安装 Docker Compose
 curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
@@ -303,6 +320,37 @@ docker exec -i my_doggy_love_mysql mysql -uroot -pYOUR_PASSWORD my_doggy_love < 
 ```
 
 ## 八、故障排查
+
+### Docker 镜像拉取超时
+
+**问题**：`Error Get "https://registry-1.docker.io/v2/": net/http: request canceled`
+
+**解决方案**：配置 Docker 镜像加速器
+
+```bash
+# 1. 创建或编辑 Docker daemon 配置
+sudo mkdir -p /etc/docker
+sudo tee /etc/docker/daemon.json > /dev/null << 'EOF'
+{
+  "registry-mirrors": [
+    "https://registry.cn-hangzhou.aliyuncs.com",
+    "https://docker.mirrors.ustc.edu.cn",
+    "https://dockerhub.azk8s.cn"
+  ]
+}
+EOF
+
+# 2. 重启 Docker
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+
+# 3. 验证配置
+docker info | grep -A 10 "Registry Mirrors"
+
+# 4. 重新拉取镜像
+docker compose pull
+docker compose up -d
+```
 
 ### 检查应用是否运行
 
