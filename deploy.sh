@@ -57,6 +57,34 @@ fi
 if ! docker ps | grep -q my_doggy_love_mysql; then
     echo "🐬 启动 MySQL..."
     
+    # 检查 3306 端口是否被占用
+    if command -v netstat &> /dev/null; then
+        PORT_IN_USE=$(netstat -tlnp 2>/dev/null | grep ':3306 ' || true)
+    elif command -v ss &> /dev/null; then
+        PORT_IN_USE=$(ss -tlnp 2>/dev/null | grep ':3306 ' || true)
+    else
+        PORT_IN_USE=""
+    fi
+    
+    if [ -n "$PORT_IN_USE" ]; then
+        echo "⚠️  检测到 3306 端口已被占用："
+        echo "$PORT_IN_USE"
+        echo ""
+        echo "请选择解决方案："
+        echo "  1. 停止占用端口的服务/容器"
+        echo "  2. 修改 docker-compose.yml 使用其他端口（如 3307）"
+        echo ""
+        echo "快速检查占用端口的进程："
+        if command -v lsof &> /dev/null; then
+            sudo lsof -i :3306 || echo "   无法获取详细信息（需要 sudo）"
+        fi
+        echo ""
+        echo "如果是旧的 MySQL 容器，尝试："
+        echo "  docker ps -a | grep mysql"
+        echo "  docker rm -f \$(docker ps -a | grep mysql | awk '{print \$1}')"
+        exit 1
+    fi
+    
     # 先尝试手动拉取镜像（避免 compose 超时）
     if ! docker images | grep -q "mysql.*8.0"; then
         echo "📥 拉取 MySQL 8.0 镜像..."

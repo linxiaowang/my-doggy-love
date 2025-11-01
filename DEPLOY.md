@@ -415,10 +415,62 @@ curl -I https://registry-1.docker.io/v2/
 curl http://localhost:3000
 ```
 
+### MySQL 端口被占用
+
+**问题**：`Error starting userland proxy: listen tcp4 0.0.0.0:3306: bind: address already in use`
+
+**解决方案**：
+
+#### 方案 1：检查并停止占用端口的服务
+
+```bash
+# 1. 检查 3306 端口占用情况
+sudo lsof -i :3306
+# 或
+sudo netstat -tlnp | grep 3306
+# 或
+sudo ss -tlnp | grep 3306
+
+# 2. 如果是旧的 Docker 容器
+docker ps -a | grep mysql
+docker rm -f $(docker ps -a | grep mysql | awk '{print $1}')
+
+# 3. 如果是系统 MySQL 服务
+sudo systemctl stop mysqld  # CentOS/RHEL
+sudo systemctl stop mysql    # Ubuntu/Debian
+
+# 4. 重新启动 Docker MySQL
+docker compose up -d
+```
+
+#### 方案 2：修改为其他端口
+
+如果 3306 端口必须被其他服务使用，可以修改 `docker-compose.yml`：
+
+```yaml
+services:
+  mysql:
+    # ... 其他配置 ...
+    ports:
+      - "3307:3306"  # 改为 3307（外部端口）:3306（容器内部端口）
+```
+
+然后更新 `.env` 文件中的 `DATABASE_URL`：
+
+```env
+DATABASE_URL="mysql://root:YOUR_PASSWORD@127.0.0.1:3307/my_doggy_love"
+```
+
 ### 检查端口占用
 
 ```bash
+# 检查应用端口
 netstat -tlnp | grep 3000
+ss -tlnp | grep 3000
+
+# 检查 MySQL 端口
+netstat -tlnp | grep 3306
+ss -tlnp | grep 3306
 ```
 
 ### 检查 MySQL 连接
