@@ -35,7 +35,7 @@ pnpm install --frozen-lockfile
 # 启动 MySQL（如果还没启动）
 if ! docker ps | grep -q my_doggy_love_mysql; then
     echo "🐬 启动 MySQL..."
-    docker-compose up -d
+    docker compose up -d
     echo "⏳ 等待 MySQL 就绪..."
     sleep 5
 fi
