@@ -109,7 +109,7 @@ chmod +x deploy.sh
 3. **启动 MySQL**：`docker-compose up -d`
 4. **初始化数据库**：`pnpm prisma migrate deploy`
 5. **构建项目**：`pnpm build`
-6. **启动应用**：`pm2 start ecosystem.config.js`
+6. **启动应用**：`pm2 start ecosystem.config.cjs`
 7. **配置 Nginx**：参考 `nginx.example.conf`
 
 ## 📁 项目结构
@@ -148,7 +148,7 @@ my-doggy-love/
 │   └── assets/
 │       └── images/      # 线条小狗 IP 图片资源
 ├── docker-compose.yml   # MySQL 容器配置
-├── ecosystem.config.js  # PM2 配置
+├── ecosystem.config.cjs # PM2 配置（CommonJS）
 └── deploy.sh            # 一键部署脚本
 ```
 

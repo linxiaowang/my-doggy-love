@@ -183,8 +183,8 @@ chmod -R 755 /opt/my-doggy-love/public/uploads
 ```bash
 cd /opt/my-doggy-love
 
-# 创建 PM2 配置文件
-cat > ecosystem.config.js << 'EOF'
+# 创建 PM2 配置文件（使用 .cjs 扩展名，因为项目是 ES 模块）
+cat > ecosystem.config.cjs << 'EOF'
 module.exports = {
   apps: [{
     name: 'my-doggy-love',
@@ -210,7 +210,7 @@ EOF
 mkdir -p /opt/my-doggy-love/logs
 
 # 启动应用
-pm2 start ecosystem.config.js
+pm2 start ecosystem.config.cjs
 
 # 查看状态
 pm2 status

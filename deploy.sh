@@ -217,14 +217,22 @@ mkdir -p logs
 if command -v pm2 &> /dev/null; then
     echo "🚀 使用 PM2 启动应用..."
     pm2 delete my-doggy-love 2>/dev/null || true
-    pm2 start ecosystem.config.js
+    # 优先使用 .cjs 文件（支持 ES 模块项目）
+    if [ -f ecosystem.config.cjs ]; then
+        pm2 start ecosystem.config.cjs
+    elif [ -f ecosystem.config.js ]; then
+        pm2 start ecosystem.config.js
+    else
+        echo "❌ 未找到 PM2 配置文件"
+        exit 1
+    fi
     pm2 save
     echo "✅ 应用已启动，使用 'pm2 status' 查看状态"
     echo "📝 查看日志: pm2 logs my-doggy-love"
 else
     echo "⚠️  PM2 未安装，使用 node 直接启动..."
     echo "   建议安装 PM2: npm install -g pm2"
-    echo "   然后运行: pm2 start ecosystem.config.js"
+    echo "   然后运行: pm2 start ecosystem.config.cjs"
     NODE_ENV=production node .output/server/index.mjs
 fi
 
