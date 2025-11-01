@@ -20,8 +20,9 @@ fi
 # 检查 .env 文件
 if [ ! -f .env ]; then
     echo "⚠️  未找到 .env 文件，正在创建..."
+    # 注意：密码中的 @ 需要 URL 编码为 %40
     cat > .env << EOF
-DATABASE_URL="mysql://root:Lxw@199802@127.0.0.1:3306/my_doggy_love"
+DATABASE_URL="mysql://root:Lxw%40199802@127.0.0.1:3306/my_doggy_love"
 UPLOAD_DIR="public/uploads"
 AUTH_SECRET="$(openssl rand -base64 32)"
 EOF
@@ -113,16 +114,68 @@ if ! docker ps | grep -q my_doggy_love_mysql; then
     # 检查容器是否启动成功
     if docker ps | grep -q my_doggy_love_mysql; then
         echo "⏳ 等待 MySQL 就绪..."
-        sleep 5
+        # 等待 MySQL 真正就绪（最多等待 60 秒）
+        MAX_WAIT=60
+        WAIT_COUNT=0
+        while [ $WAIT_COUNT -lt $MAX_WAIT ]; do
+            if docker exec my_doggy_love_mysql mysqladmin ping -h localhost --silent 2>/dev/null; then
+                echo "✅ MySQL 已就绪"
+                break
+            fi
+            echo "   等待中... ($WAIT_COUNT/$MAX_WAIT 秒)"
+            sleep 2
+            WAIT_COUNT=$((WAIT_COUNT + 2))
+        done
+        
+        if [ $WAIT_COUNT -ge $MAX_WAIT ]; then
+            echo "❌ MySQL 启动超时，查看日志："
+            docker compose logs mysql
+            exit 1
+        fi
     else
         echo "❌ MySQL 容器启动失败，查看日志："
         docker compose logs mysql
         exit 1
     fi
+else
+    # 容器已在运行，检查 MySQL 是否可用
+    echo "🐬 MySQL 容器已在运行，检查连接..."
+    if ! docker exec my_doggy_love_mysql mysqladmin ping -h localhost --silent 2>/dev/null; then
+        echo "⚠️  MySQL 容器运行但无法连接，尝试重启..."
+        docker compose restart mysql
+        sleep 5
+        
+        MAX_WAIT=60
+        WAIT_COUNT=0
+        while [ $WAIT_COUNT -lt $MAX_WAIT ]; do
+            if docker exec my_doggy_love_mysql mysqladmin ping -h localhost --silent 2>/dev/null; then
+                echo "✅ MySQL 已就绪"
+                break
+            fi
+            echo "   等待中... ($WAIT_COUNT/$MAX_WAIT 秒)"
+            sleep 2
+            WAIT_COUNT=$((WAIT_COUNT + 2))
+        done
+        
+        if [ $WAIT_COUNT -ge $MAX_WAIT ]; then
+            echo "❌ MySQL 无法连接，查看日志："
+            docker compose logs mysql
+            exit 1
+        fi
+    else
+        echo "✅ MySQL 连接正常"
+    fi
 fi
 
 # 数据库迁移
 echo "🗄️  执行数据库迁移..."
+# 再次验证连接（使用 Prisma 的测试连接）
+if ! pnpm prisma migrate status 2>/dev/null; then
+    echo "⚠️  数据库连接测试失败，检查 .env 文件中的 DATABASE_URL"
+    echo "   注意：密码中的特殊字符（如 @ # % 等）需要 URL 编码"
+    echo "   @ -> %40, # -> %23, % -> %25"
+    exit 1
+fi
 pnpm prisma migrate deploy
 pnpm prisma generate
 

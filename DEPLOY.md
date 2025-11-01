@@ -108,6 +108,25 @@ UPLOAD_DIR="public/uploads"
 AUTH_SECRET="请生成一个随机字符串，至少32位"
 ```
 
+**⚠️ 重要提示：密码 URL 编码**
+
+如果 MySQL 密码中包含特殊字符，必须在 `DATABASE_URL` 中进行 URL 编码：
+
+- `@` → `%40`
+- `#` → `%23`
+- `%` → `%25`
+- `&` → `%26`
+- `+` → `%2B`
+- `=` → `%3D`
+- `:` → `%3A`
+- `/` → `%2F`
+- `?` → `%3F`
+- ` ` (空格) → `%20` 或 `+`
+
+**示例**：
+- 如果密码是 `Lxw@199802`，则应该写成：`mysql://root:Lxw%40199802@127.0.0.1:3306/my_doggy_love`
+- 如果密码是 `pass#123`，则应该写成：`mysql://root:pass%23123@127.0.0.1:3306/my_doggy_love`
+
 生成 AUTH_SECRET：
 ```bash
 openssl rand -base64 32
@@ -320,6 +339,94 @@ docker exec -i my_doggy_love_mysql mysql -uroot -pYOUR_PASSWORD my_doggy_love < 
 ```
 
 ## 八、故障排查
+
+### 数据库认证失败
+
+**问题**：`Error: P1000: Authentication failed against database server, the provided database credentials for 'root' are not valid.`
+
+#### 可能的原因和解决方案
+
+##### 1. 密码中的特殊字符未进行 URL 编码（最常见）
+
+MySQL 连接字符串中的密码如果包含特殊字符（如 `@`、`#`、`%` 等），需要进行 URL 编码。
+
+**检查 `.env` 文件**：
+```bash
+cat .env | grep DATABASE_URL
+```
+
+**修复方法**：
+1. 编辑 `.env` 文件
+2. 将密码中的特殊字符进行 URL 编码：
+   - `@` → `%40`
+   - `#` → `%23`
+   - `%` → `%25`
+   - 其他特殊字符参见上述列表
+
+**示例**：
+- ❌ 错误：`DATABASE_URL="mysql://root:Lxw@199802@127.0.0.1:3306/my_doggy_love"`
+- ✅ 正确：`DATABASE_URL="mysql://root:Lxw%40199802@127.0.0.1:3306/my_doggy_love"`
+
+##### 2. MySQL 容器未启动或未就绪
+
+**检查 MySQL 容器状态**：
+```bash
+docker ps | grep mysql
+docker compose logs mysql
+```
+
+**如果容器未运行**：
+```bash
+docker compose up -d
+# 等待 MySQL 就绪（可能需要 10-30 秒）
+docker exec my_doggy_love_mysql mysqladmin ping -h localhost
+```
+
+##### 3. 密码不匹配
+
+**检查 `docker-compose.yml` 中的密码**：
+```bash
+cat docker-compose.yml | grep MYSQL_ROOT_PASSWORD
+```
+
+**检查 `.env` 中的密码是否与 `docker-compose.yml` 一致**（注意 URL 编码）：
+```bash
+cat .env | grep DATABASE_URL
+```
+
+**如果密码不一致**：
+- 修改 `docker-compose.yml` 中的 `MYSQL_ROOT_PASSWORD`
+- 重启 MySQL 容器：`docker compose down && docker compose up -d`
+- 更新 `.env` 中的 `DATABASE_URL`（注意 URL 编码）
+
+##### 4. 测试数据库连接
+
+**使用 Docker 命令测试**：
+```bash
+docker exec -it my_doggy_love_mysql mysql -uroot -p
+# 输入密码：Lxw@199802（不编码，原密码）
+```
+
+**使用 Prisma 测试**：
+```bash
+pnpm prisma migrate status
+```
+
+##### 5. 重置 MySQL 密码（最后手段）
+
+如果以上方法都不行，可以重置 MySQL：
+
+```bash
+# 停止并删除容器（⚠️ 会删除数据）
+docker compose down -v
+
+# 修改 docker-compose.yml 中的密码
+
+# 重新启动
+docker compose up -d
+
+# 等待就绪后更新 .env 文件
+```
 
 ### Docker 镜像拉取超时
 
