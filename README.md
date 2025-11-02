@@ -93,13 +93,29 @@ openssl rand -base64 32
 
 ### 快速部署（服务器）
 
+#### 首次部署（完整设置）
+
 ```bash
 # 1. 上传代码到服务器
 cd /opt/my-doggy-love
 
-# 2. 执行一键部署脚本
+# 2. 执行完整部署脚本（包含数据库迁移、环境初始化）
 chmod +x deploy.sh
 ./deploy.sh
+```
+
+#### 日常更新部署（推荐）
+
+```bash
+# 1. 进入项目目录
+cd /opt/my-doggy-love
+
+# 2. 执行快速部署脚本（仅构建和重启应用）
+chmod +x quick-deploy.sh
+./quick-deploy.sh
+
+# 如果需要安装新的依赖
+./quick-deploy.sh --install
 ```
 
 ### 手动部署步骤
