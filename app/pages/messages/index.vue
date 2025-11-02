@@ -25,10 +25,15 @@
       <div v-else class="space-y-3">
         <div v-for="m in items" :key="m.id" class="rounded-xl bg-white p-4 shadow">
           <div class="flex items-start gap-3">
-            <img :src="m.author?.avatarUrl || '/assets/images/xiaobai/xiaobai-2.png'" class="w-8 h-8 rounded-full object-cover" />
-            <div class="flex-1">
+            <img 
+              :src="m.author?.avatarUrl || '/assets/images/xiaobai/xiaobai-2.png'" 
+              :alt="m.author?.nickName || '用户头像'"
+              class="w-10 h-10 rounded-full object-cover border border-#ece7e1 flex-shrink-0"
+              @error="handleImageError"
+            />
+            <div class="flex-1 min-w-0">
               <div class="text-sm text-#777 mb-0.5">{{ m.author?.nickName || '匿名' }} · {{ new Date(m.createdAt).toLocaleString() }}</div>
-              <div>{{ m.content }}</div>
+              <div class="text-#333 whitespace-pre-wrap break-words">{{ m.content }}</div>
               <div class="mt-2 flex items-center gap-3 text-sm">
                 <button class="underline" @click="toggleComments(m.id)">{{ openId===m.id ? '收起评论' : '查看评论' }}</button>
                 <span class="text-#ccc">|</span>
@@ -44,10 +49,15 @@
                 <div v-else class="space-y-2">
                   <div v-for="c in comments" :key="c.id" class="space-y-1">
                     <div class="flex items-start gap-2">
-                      <img :src="c.author?.avatarUrl || '/assets/images/xiaobai/xiaobai-2.png'" class="w-6 h-6 rounded-full object-cover"/>
-                      <div class="flex-1">
+                      <img 
+                        :src="c.author?.avatarUrl || '/assets/images/xiaobai/xiaobai-2.png'" 
+                        :alt="c.author?.nickName || '用户头像'"
+                        class="w-7 h-7 rounded-full object-cover border border-#ece7e1 flex-shrink-0"
+                        @error="handleImageError"
+                      />
+                      <div class="flex-1 min-w-0">
                         <div class="text-xs text-#777">{{ c.author?.nickName || '匿名' }} · {{ new Date(c.createdAt).toLocaleString() }}</div>
-                        <div class="text-sm">{{ c.content }}</div>
+                        <div class="text-sm text-#333 whitespace-pre-wrap break-words">{{ c.content }}</div>
                         <button class="text-xs underline mt-1" @click="toggleReply(c.id)">{{ replyOpenId===c.id ? '收起回复' : '回复' }}</button>
                         <div v-if="replyOpenId===c.id" class="mt-1 flex items-center gap-2">
                           <input v-model="replyContent" placeholder="回复…" class="border rounded px-2 py-1 flex-1 text-sm" @keydown.enter.prevent="submitReply(c.id)" />
@@ -57,10 +67,15 @@
                     </div>
                     <div v-if="(c as any).replies?.length" class="pl-8 space-y-1">
                       <div v-for="r in (c as any).replies" :key="r.id" class="flex items-start gap-2">
-                        <img :src="r.author?.avatarUrl || '/assets/images/xiaobai/xiaobai-2.png'" class="w-5 h-5 rounded-full object-cover"/>
-                        <div class="flex-1">
+                        <img 
+                          :src="r.author?.avatarUrl || '/assets/images/xiaobai/xiaobai-2.png'" 
+                          :alt="r.author?.nickName || '用户头像'"
+                          class="w-6 h-6 rounded-full object-cover border border-#ece7e1 flex-shrink-0"
+                          @error="handleImageError"
+                        />
+                        <div class="flex-1 min-w-0">
                           <div class="text-xs text-#777">{{ r.author?.nickName || '匿名' }} · {{ new Date(r.createdAt).toLocaleString() }}</div>
-                          <div class="text-sm">{{ r.content }}</div>
+                          <div class="text-sm text-#333 whitespace-pre-wrap break-words">{{ r.content }}</div>
                         </div>
                       </div>
                     </div>
@@ -99,6 +114,14 @@ const comments = ref<Array<{ id: string; content: string; createdAt: string; aut
 const loadingComments = ref(false)
 const replyOpenId = ref<string | null>(null)
 const replyContent = ref('')
+
+// 头像加载失败时使用默认头像
+function handleImageError(event: Event) {
+  const img = event.target as HTMLImageElement
+  if (img.src !== '/assets/images/xiaobai/xiaobai-2.png') {
+    img.src = '/assets/images/xiaobai/xiaobai-2.png'
+  }
+}
 
 async function load() {
   loading.value = true
