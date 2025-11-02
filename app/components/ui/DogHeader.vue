@@ -45,7 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted, nextTick } from 'vue'
 import UserStatusSelector from './UserStatusSelector.vue'
 import { useAuthMe, updateStatus, logout } from '@/services/api/auth'
 
@@ -53,23 +53,57 @@ const open = ref(false)
 const menu = ref(false)
 
 // 使用统一的 API
-const { data: meData, refresh: refreshMe } = useAuthMe()
+const { data: meData, refresh: refreshMe, pending } = useAuthMe()
 const me = computed(() => {
   // meData 是 Ref<MeResponse | null>，直接访问 .value.user
   const user = meData.value?.user || null
   return user
 })
 
-// 监听路由变化，登录后刷新用户信息
-const route = useRoute()
-watch(() => route.path, () => {
+// 组件挂载时确保加载数据并设置事件监听
+onMounted(async () => {
   if (process.client) {
-    // 延迟一下，确保 cookie 已设置
-    setTimeout(() => {
-      refreshMe()
-    }, 100)
+    await nextTick()
+    // 立即尝试加载数据
+    await refreshMe()
+    
+    // 监听全局登录成功事件
+    window.addEventListener('user-login-success', async () => {
+      await nextTick()
+      setTimeout(async () => {
+        await refreshMe()
+      }, 200)
+    })
+    
+    // 监听页面可见性变化，从隐藏变为可见时刷新
+    if (typeof document !== 'undefined') {
+      document.addEventListener('visibilitychange', async () => {
+        if (!document.hidden) {
+          await refreshMe()
+        }
+      })
+    }
   }
 })
+
+// 监听路由变化，登录后刷新用户信息
+const route = useRoute()
+watch(() => route.fullPath, async (newPath, oldPath) => {
+  // 从登录页面跳转出来时，确保刷新数据
+  if (process.client && oldPath === '/user/login') {
+    // 延迟一下，确保 cookie 已设置
+    await nextTick()
+    setTimeout(async () => {
+      await refreshMe()
+    }, 300)
+  } else if (process.client && newPath !== oldPath && newPath !== '/user/login' && oldPath !== '/user/login') {
+    // 其他路由变化时也刷新，确保数据最新
+    await nextTick()
+    setTimeout(async () => {
+      await refreshMe()
+    }, 100)
+  }
+}, { immediate: false })
 
 async function doLogout() {
   try {
@@ -84,7 +118,8 @@ async function doLogout() {
 async function updateStatusHandler(status: string | null) {
   try {
     await updateStatus(status)
-    // 状态会通过 useAuthMe 自动更新
+    // 状态更新后刷新用户信息
+    await refreshMe()
   } catch (error) {
     console.error('更新状态失败:', error)
   }

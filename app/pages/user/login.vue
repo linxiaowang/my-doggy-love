@@ -59,7 +59,7 @@
 <script setup lang="ts">
 import DogHeader from '@/components/ui/DogHeader.vue'
 import DogLoginAnimation from '@/components/ui/DogLoginAnimation.vue'
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { login } from '@/services/api/auth'
 import { handleApiError } from '@/services/api'
@@ -97,10 +97,18 @@ async function onSubmit() {
       email: email.value.trim(),
       password: password.value,
     })
+    // 触发登录成功事件，通知 Header 刷新
+    if (process.client) {
+      window.dispatchEvent(new Event('user-login-success'))
+    }
     // 检查是否有重定向参数
     const route = useRoute()
     const redirectTo = route.query.redirect as string || '/'
-    await router.push(redirectTo)
+    // 延迟一下确保事件已处理
+    await nextTick()
+    setTimeout(async () => {
+      await router.push(redirectTo)
+    }, 100)
   } catch (e: any) {
     error.value = e?.friendlyMessage || handleApiError(e)
   } finally {
