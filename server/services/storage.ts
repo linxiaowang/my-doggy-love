@@ -61,13 +61,25 @@ export class OSSStorageService implements StorageService {
       throw new Error('OSS configuration is missing. Please set OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET, and OSS_BUCKET environment variables.')
     }
 
-    this.client = new OSS({
+    // 构建 OSS 配置对象
+    const ossConfig: any = {
       accessKeyId,
       accessKeySecret,
       bucket,
       region: region || 'oss-cn-hangzhou',
-      endpoint,
-    })
+    }
+
+    // 只在 endpoint 有值时才添加（空字符串会导致错误）
+    if (endpoint && endpoint.trim()) {
+      let endpointValue = endpoint.trim()
+      // 如果 endpoint 没有协议前缀，自动添加 https://
+      if (!endpointValue.startsWith('http://') && !endpointValue.startsWith('https://')) {
+        endpointValue = `https://${endpointValue}`
+      }
+      ossConfig.endpoint = endpointValue
+    }
+
+    this.client = new OSS(ossConfig)
   }
 
   async save(file: FileLike, opts?: { prefix?: string }): Promise<StorageSaveResult> {
