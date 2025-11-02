@@ -33,7 +33,7 @@ if (!g.__prisma) {
     throw error
   }
   
-  g.__prisma = new PrismaClient({ datasources: { db: { url } } })
+  g.__prisma = new PrismaClient({ datasources: { db: { url: 'mysql://root:123456@localhost:3306/my_doggy_love' } } })
 }
 
 prisma = g.__prisma as PrismaClient
