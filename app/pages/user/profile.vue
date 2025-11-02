@@ -110,16 +110,18 @@ const { data: meData } = useAuthMe()
 const { data: coupleData } = useCouple()
 
 watch(meData, (newData) => {
-  if (newData?.value?.user) {
-    user.value = newData.value.user
+  // meData 是 Ref<MeResponse | null>，直接访问 .user
+  if (newData?.user) {
+    user.value = newData.user
   }
-})
+}, { immediate: true })
 
 watch(coupleData, (newData) => {
-  if (newData?.value?.couple !== undefined) {
-    couple.value = newData.value.couple
+  // coupleData 是 Ref<CoupleResponse | null>，直接访问 .couple
+  if (newData?.couple !== undefined) {
+    couple.value = newData.couple
   }
-})
+}, { immediate: true })
 
 onMounted(async () => {
   // 数据会通过 watch 自动更新

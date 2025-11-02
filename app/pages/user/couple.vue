@@ -57,6 +57,7 @@ const switchCode = ref('')
 
 // 使用统一的 API
 const { data: coupleData, pending, refresh } = useCouple()
+// coupleData 是 Ref<CoupleResponse | null>，直接访问 .couple
 const couple = computed(() => coupleData.value?.couple || null)
 const loading = computed(() => pending.value)
 

@@ -57,6 +57,7 @@ export function useApiFetch<T>(url: string | (() => string), options: any = {}) 
   // 使用 Nuxt 的 useFetch
   const result = useFetch<T>(url, {
     credentials: 'include', // 自动包含 cookie
+    immediate: true, // 立即执行请求
     ...options,
     onResponseError({ response }) {
       // 统一错误处理

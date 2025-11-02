@@ -45,20 +45,30 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, watch } from 'vue'
 import UserStatusSelector from './UserStatusSelector.vue'
 import { useAuthMe, updateStatus, logout } from '@/services/api/auth'
-import { computed } from 'vue'
 
 const open = ref(false)
 const menu = ref(false)
 
 // 使用统一的 API
-const { data: meData } = useAuthMe()
-const me = computed(() => meData.value?.user || null)
+const { data: meData, refresh: refreshMe } = useAuthMe()
+const me = computed(() => {
+  // meData 是 Ref<MeResponse | null>，直接访问 .value.user
+  const user = meData.value?.user || null
+  return user
+})
 
-onMounted(async () => {
-  // 数据会通过 useAuthMe 自动加载
+// 监听路由变化，登录后刷新用户信息
+const route = useRoute()
+watch(() => route.path, () => {
+  if (process.client) {
+    // 延迟一下，确保 cookie 已设置
+    setTimeout(() => {
+      refreshMe()
+    }, 100)
+  }
 })
 
 async function doLogout() {

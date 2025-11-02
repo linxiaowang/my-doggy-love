@@ -89,8 +89,9 @@ const replyContent = ref('')
 const { data: commentsData, pending: loadingComments, refresh: refreshComments } = useDailyPostComments(() => props.id)
 
 watch(commentsData, (newData) => {
-  if (newData?.value?.items) {
-    comments.value = newData.value.items as any
+  // commentsData 是 Ref<{ items: any[] } | null>，直接访问 .items
+  if (newData?.items) {
+    comments.value = newData.items as any
   }
 }, { immediate: true })
 
