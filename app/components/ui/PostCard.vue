@@ -14,6 +14,8 @@
       <button class="underline" @click="toggleComments">{{ showComments ? '收起评论' : '查看评论' }}</button>
       <span class="text-#ccc">|</span>
       <button class="underline" @click="toggleInput">{{ showInput ? '收起输入' : '写评论' }}</button>
+      <span v-if="canDelete" class="text-#ccc">|</span>
+      <button v-if="canDelete" class="underline text-#b42318 hover:text-#d92d20" @click="handleDelete">删除</button>
     </div>
     <div v-if="showInput" class="mt-2 flex items-center gap-2">
       <input v-model="comment" placeholder="写点评论…" class="border rounded px-3 py-1.5 flex-1" @keydown.enter.prevent="submit" />
@@ -71,11 +73,22 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import { createDailyComment, useDailyPostComments } from '@/services/api/daily'
-import { apiFetch } from '@/services/api'
+import { createDailyComment, useDailyPostComments, deleteDailyPost } from '@/services/api/daily'
+import { useAuthMe } from '@/services/api/auth'
 
-const props = defineProps<{ id: string; content: string; createdAt: string | Date; mediaUrls?: string[]; tags?: string[] }>()
-const emit = defineEmits<{ (e: 'commented'): void }>()
+const props = defineProps<{ 
+  id: string
+  content: string
+  createdAt: string | Date
+  mediaUrls?: string[]
+  tags?: string[]
+  authorId?: string
+}>()
+
+const emit = defineEmits<{ 
+  (e: 'commented'): void
+  (e: 'deleted'): void
+}>()
 
 const dateLabel = computed(() => new Date(props.createdAt).toLocaleString())
 const comment = ref('')
@@ -142,6 +155,27 @@ async function submitReply(parentId: string) {
 
 function toggleReply(id: string) {
   replyOpenId.value = replyOpenId.value === id ? null : id
+}
+
+// 删除功能
+const { data: meData } = useAuthMe()
+const canDelete = computed(() => {
+  const currentUserId = meData.value?.user?.id
+  return props.authorId && currentUserId && props.authorId === currentUserId
+})
+
+async function handleDelete() {
+  if (!confirm('确定要删除这条日常记录吗？')) {
+    return
+  }
+  
+  try {
+    await deleteDailyPost(props.id)
+    emit('deleted')
+  } catch (e: any) {
+    console.error('删除失败:', e)
+    alert(e?.friendlyMessage || '删除失败，请稍后再试')
+  }
 }
 </script>
 

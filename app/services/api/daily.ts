@@ -10,6 +10,12 @@ export interface DailyPost {
   mediaUrls: any
   tags: string[]
   createdAt: string
+  authorId?: string
+  author?: {
+    id: string
+    nickName: string
+    avatarUrl?: string | null
+  }
 }
 
 export interface DailyPostListResponse {
@@ -72,6 +78,15 @@ export async function createDailyComment(postId: string, content: string): Promi
   return apiFetch(`/api/daily/${postId}/comment`, {
     method: 'POST',
     body: { content },
+  })
+}
+
+/**
+ * 删除日常记录
+ */
+export async function deleteDailyPost(id: string): Promise<void> {
+  return apiFetch(`/api/daily/${id}`, {
+    method: 'DELETE',
   })
 }
 

@@ -210,7 +210,16 @@
         <template v-for="group in grouped" :key="group.label">
           <div class="pl-14 text-sm muted mb-2">{{ group.label }}</div>
           <TimelineItem v-for="it in group.items" :key="it.id">
-            <PostCard :id="it.id" :content="it.content" :createdAt="it.createdAt" :media-urls="asArray(it.mediaUrls)" :tags="(it as any).tags || []" @commented="reloadOne(it.id)" />
+            <PostCard 
+              :id="it.id" 
+              :content="it.content" 
+              :createdAt="it.createdAt" 
+              :media-urls="asArray(it.mediaUrls)" 
+              :tags="(it as any).tags || []" 
+              :authorId="it.authorId || it.author?.id"
+              @commented="reloadOne(it.id)"
+              @deleted="handleDelete(it.id)"
+            />
           </TimelineItem>
         </template>
       </Timeline>
@@ -238,7 +247,7 @@ definePageMeta({
   middleware: 'auth',
 })
 
-interface Post { id: string; content: string; mediaUrls: any; createdAt: string }
+interface Post { id: string; content: string; mediaUrls: any; createdAt: string; authorId?: string; author?: { id: string; nickName: string; avatarUrl?: string | null } }
 const items = ref<Post[]>([])
 const loading = ref(true)
 const content = ref('')
@@ -501,6 +510,16 @@ function removeFile(index: number) {
 async function reloadOne(id: string) {
   // 简易刷新：整体重载，避免复杂局部状态同步
   await load()
+}
+
+async function handleDelete(id: string) {
+  // 从列表中移除该项
+  const index = items.value.findIndex(item => item.id === id)
+  if (index >= 0) {
+    items.value.splice(index, 1)
+  }
+  // 如果需要，也可以重新加载整个列表
+  // await load()
 }
 
 const allTags = computed(() => {

@@ -17,7 +17,8 @@ export default defineEventHandler(async (event) => {
     where: { coupleId: member.coupleId },
     orderBy: { createdAt: 'desc' },
     take,
-    ...(cursor ? { skip: 1, cursor } : {})
+    ...(cursor ? { skip: 1, cursor } : {}),
+    include: { author: true }
   })
 
   const storage = createStorageService()
@@ -30,7 +31,14 @@ export default defineEventHandler(async (event) => {
     })
     return {
       ...item,
-      mediaUrls: convertedUrls
+      mediaUrls: convertedUrls,
+      author: {
+        id: item.author.id,
+        nickName: item.author.nickName,
+        avatarUrl: item.author.avatarUrl 
+          ? (storage.toAccessibleUrl ? storage.toAccessibleUrl(item.author.avatarUrl) : item.author.avatarUrl)
+          : null
+      }
     }
   })
 
