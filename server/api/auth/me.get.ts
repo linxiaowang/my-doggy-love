@@ -7,7 +7,16 @@ export default defineEventHandler(async (event) => {
   if (!payload) return { user: null }
   const user = await prisma.user.findUnique({ where: { id: payload.userId } })
   if (!user) return { user: null }
-  return { user: { id: user.id, email: user.email, nickName: user.nickName, avatarUrl: user.avatarUrl } }
+  return {
+    user: {
+      id: user.id,
+      email: user.email,
+      nickName: user.nickName,
+      avatarUrl: user.avatarUrl,
+      status: user.status,
+      statusUpdatedAt: user.statusUpdatedAt,
+    },
+  }
 })
 
 

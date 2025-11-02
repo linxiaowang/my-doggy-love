@@ -1,9 +1,9 @@
 <template>
   <header class="sticky top-0 z-30 w-full flex items-center justify-between px-4 py-3 bg-white/70 backdrop-blur border-b border-#ece7e1">
-    <div class="flex items-center gap-3">
+    <NuxtLink to="/" class="flex items-center gap-3 cursor-pointer hover:opacity-80 transition">
       <img src="/assets/images/couple/couple-1.png" alt="logo" class="w-6 h-6" />
       <span class="font-semibold">My Doggy Love</span>
-    </div>
+    </NuxtLink>
     <nav class="hidden md:flex items-center gap-4 text-sm">
       <NuxtLink to="/" class="hover:underline">首页</NuxtLink>
       <NuxtLink to="/daily" class="hover:underline">日常</NuxtLink>
@@ -13,6 +13,7 @@
     </nav>
     <div class="flex items-center gap-3 relative">
       <template v-if="me">
+        <UserStatusSelector :current-status="me.status" @update="updateStatus" />
         <button class="flex items-center gap-2" @click="menu = !menu">
           <img :src="me.avatarUrl || '/assets/images/xiaobai/xiaobai-2.png'" class="w-7 h-7 rounded-full object-cover" alt="avatar" />
           <span class="hidden md:inline text-sm">{{ me.nickName }}</span>
@@ -45,9 +46,11 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import UserStatusSelector from './UserStatusSelector.vue'
+
 const open = ref(false)
 const menu = ref(false)
-const me = ref<{ id: string; nickName: string; avatarUrl?: string } | null>(null)
+const me = ref<{ id: string; nickName: string; avatarUrl?: string; status?: string | null } | null>(null)
 
 onMounted(async () => {
   try {
@@ -61,6 +64,20 @@ async function doLogout() {
   me.value = null
   menu.value = false
   navigateTo('/user/login')
+}
+
+async function updateStatus(status: string | null) {
+  try {
+    await $fetch('/api/auth/status', {
+      method: 'PATCH',
+      body: { status },
+    })
+    if (me.value) {
+      me.value.status = status
+    }
+  } catch (error) {
+    console.error('更新状态失败:', error)
+  }
 }
 </script>
 

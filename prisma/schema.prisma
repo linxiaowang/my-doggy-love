@@ -13,6 +13,8 @@ model User {
   passwordHash String?
   nickName     String
   avatarUrl    String?
+  status       String?  // 用户状态，如：开心、忙碌、在思考等
+  statusUpdatedAt DateTime?  // 状态更新时间
   createdAt    DateTime @default(now())
 
   coupleMemberships CoupleMember[]
