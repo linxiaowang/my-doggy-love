@@ -1,6 +1,7 @@
 import { defineEventHandler, getQuery } from 'h3'
 import prisma from '../../utils/db'
 import { readAuthFromCookie } from '../../utils/auth'
+import { createStorageService } from '../../services/storage'
 
 export default defineEventHandler(async (event) => {
   const payload = readAuthFromCookie(event)
@@ -18,7 +19,22 @@ export default defineEventHandler(async (event) => {
     take,
     ...(cursor ? { skip: 1, cursor } : {})
   })
-  return { items }
+
+  const storage = createStorageService()
+  // 转换 mediaUrls 中的每个 URL
+  const processedItems = items.map(item => {
+    const mediaUrls = Array.isArray(item.mediaUrls) ? item.mediaUrls : []
+    const convertedUrls = mediaUrls.map((url: any) => {
+      const urlStr = String(url)
+      return storage.toAccessibleUrl ? storage.toAccessibleUrl(urlStr) : urlStr
+    })
+    return {
+      ...item,
+      mediaUrls: convertedUrls
+    }
+  })
+
+  return { items: processedItems }
 })
 
 

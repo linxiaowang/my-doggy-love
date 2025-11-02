@@ -1,6 +1,7 @@
 import { defineEventHandler, createError } from 'h3'
 import prisma from '../../../utils/db'
 import { readAuthFromCookie } from '../../../utils/auth'
+import { createStorageService } from '../../../services/storage'
 
 export default defineEventHandler(async (event) => {
   const payload = readAuthFromCookie(event)
@@ -11,6 +12,7 @@ export default defineEventHandler(async (event) => {
   const member = await prisma.coupleMember.findFirst({ where: { userId: payload.userId } })
   if (!member || member.coupleId !== post.coupleId) throw createError({ statusCode: 403, statusMessage: 'forbidden' })
 
+  const storage = createStorageService()
   const all = await prisma.comment.findMany({
     where: { postId: id },
     orderBy: { createdAt: 'asc' },
@@ -24,7 +26,13 @@ export default defineEventHandler(async (event) => {
       id: c.id,
       content: c.content,
       createdAt: c.createdAt,
-      author: { id: c.author.id, nickName: c.author.nickName, avatarUrl: c.author.avatarUrl },
+      author: { 
+        id: c.author.id, 
+        nickName: c.author.nickName, 
+        avatarUrl: c.author.avatarUrl 
+          ? (storage.toAccessibleUrl ? storage.toAccessibleUrl(c.author.avatarUrl) : c.author.avatarUrl)
+          : null
+      },
       replies: [] as any[],
       parentId: c.parentId,
     }

@@ -1,6 +1,7 @@
 import { defineEventHandler, createError } from 'h3'
 import prisma from '../../utils/db'
 import { readAuthFromCookie } from '../../utils/auth'
+import { createStorageService } from '../../services/storage'
 
 export default defineEventHandler(async (event) => {
   const payload = readAuthFromCookie(event)
@@ -10,7 +11,20 @@ export default defineEventHandler(async (event) => {
   if (!post) return { item: null }
   const member = await prisma.coupleMember.findFirst({ where: { userId: payload.userId } })
   if (!member || member.coupleId !== post.coupleId) throw createError({ statusCode: 403, statusMessage: 'forbidden' })
-  return { item: post }
+  
+  const storage = createStorageService()
+  const mediaUrls = Array.isArray(post.mediaUrls) ? post.mediaUrls : []
+  const convertedUrls = mediaUrls.map((url: any) => {
+    const urlStr = String(url)
+    return storage.toAccessibleUrl ? storage.toAccessibleUrl(urlStr) : urlStr
+  })
+  
+  return { 
+    item: {
+      ...post,
+      mediaUrls: convertedUrls
+    }
+  }
 })
 
 
