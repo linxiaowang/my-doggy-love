@@ -8,7 +8,9 @@
         <div v-else-if="couple" class="space-y-4">
           <div class="flex items-center justify-between">
             <div>邀请码：<span class="font-mono">{{ couple.code }}</span></div>
-            <button class="btn-secondary text-xs" @click="copyCode">复制</button>
+            <button class="btn-secondary text-xs" @click="copyCode">
+              {{ copied ? '已复制' : '复制' }}
+            </button>
           </div>
           <div class="flex items-center gap-3">
             <div class="flex -space-x-3">
@@ -54,6 +56,7 @@ definePageMeta({
 
 const code = ref('')
 const switchCode = ref('')
+const copied = ref(false)
 
 // 使用统一的 API
 const { data: coupleData, pending, refresh } = useCouple()
@@ -89,9 +92,51 @@ async function joinCoupleHandler() {
 
 async function copyCode() {
   if (!couple.value?.code) return
+  
+  const codeToCopy = couple.value.code
+  
   try {
-    await navigator.clipboard.writeText(couple.value.code)
-  } catch {}
+    // 使用 Clipboard API（需要 HTTPS 或 localhost）
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(codeToCopy)
+      copied.value = true
+      setTimeout(() => {
+        copied.value = false
+      }, 2000)
+      return
+    }
+  } catch (e) {
+    console.warn('Clipboard API 失败，使用降级方案:', e)
+  }
+  
+  // 降级方案：使用传统的 execCommand 方法
+  try {
+    const textArea = document.createElement('textarea')
+    textArea.value = codeToCopy
+    textArea.style.position = 'fixed'
+    textArea.style.left = '-999999px'
+    textArea.style.top = '-999999px'
+    document.body.appendChild(textArea)
+    textArea.focus()
+    textArea.select()
+    
+    const successful = document.execCommand('copy')
+    document.body.removeChild(textArea)
+    
+    if (successful) {
+      copied.value = true
+      setTimeout(() => {
+        copied.value = false
+      }, 2000)
+    } else {
+      // 最后的降级：直接提示用户手动复制
+      alert(`邀请码：${codeToCopy}\n\n请手动复制`)
+    }
+  } catch (e) {
+    console.error('复制失败:', e)
+    // 最后的降级：直接提示用户手动复制
+    alert(`邀请码：${codeToCopy}\n\n请手动复制`)
+  }
 }
 
 async function switchToCode() {
