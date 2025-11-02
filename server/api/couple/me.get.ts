@@ -23,7 +23,9 @@ export default defineEventHandler(async (event) => {
         avatarUrl: m.user.avatarUrl 
           ? (storage.toAccessibleUrl ? storage.toAccessibleUrl(m.user.avatarUrl) : m.user.avatarUrl)
           : null,
-        role: m.role
+        role: m.role,
+        status: m.user.status,
+        statusUpdatedAt: m.user.statusUpdatedAt
       }))
     }
   }

@@ -12,12 +12,37 @@
               {{ copied ? '已复制' : '复制' }}
             </button>
           </div>
-          <div class="flex items-center gap-3">
-            <div class="flex -space-x-3">
-              <img v-for="m in couple.members" :key="m.id" :src="m.avatarUrl || '/assets/images/xiaojimao/xiaojimao-2.png'" loading="lazy" class="w-10 h-10 rounded-full border-2 border-white" />
-            </div>
-            <div class="text-sm text-#777">
-              <div v-for="m in couple.members" :key="m.id">{{ m.nickName }}（{{ m.role==='A' ? '发起者' : '伴侣' }}）</div>
+          <div class="space-y-3">
+            <div v-for="m in couple.members" :key="m.id" class="flex items-start gap-3 p-3 rounded-lg bg-#f7f6f3 hover:bg-#f0efe9 transition">
+              <img 
+                :src="m.avatarUrl || '/assets/images/xiaojimao/xiaojimao-2.png'" 
+                :alt="m.nickName"
+                loading="lazy" 
+                class="w-12 h-12 rounded-full border-2 border-white object-cover flex-shrink-0"
+              />
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="font-medium text-#333">{{ m.nickName }}</span>
+                  <span class="text-xs text-#999">（{{ m.role==='A' ? '发起者' : '伴侣' }}）</span>
+                </div>
+                <!-- 状态显示 -->
+                <div v-if="m.status" class="flex items-center gap-2 mb-2">
+                  <span class="px-2 py-0.5 rounded-full bg-#f0e9e2 text-#666 text-sm">{{ m.status }}</span>
+                  <span v-if="m.statusUpdatedAt" class="text-xs text-#999">
+                    {{ formatStatusTime(m.statusUpdatedAt) }}
+                  </span>
+                </div>
+                <div v-else class="text-xs text-#999 mb-2">暂无状态</div>
+                <!-- 操作按钮 -->
+                <div class="flex items-center gap-2">
+                  <button
+                    @click="viewProfile(m.id, m.id === currentUserId)"
+                    class="text-xs text-#d4a574 hover:text-#c49564 underline"
+                  >
+                    {{ m.id === currentUserId ? '查看我的主页' : '查看主页' }}
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
           <div v-if="couple.members.length === 1" class="space-y-2">
@@ -45,9 +70,9 @@
 
 <script setup lang="ts">
 import DogHeader from '@/components/ui/DogHeader.vue'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useCouple, createCouple, joinCouple, switchCouple } from '@/services/api/couple'
-import { computed } from 'vue'
+import { useAuthMe } from '@/services/api/auth'
 
 // 检查登录状态，未登录会自动跳转到登录页
 definePageMeta({
@@ -63,6 +88,31 @@ const { data: coupleData, pending, refresh } = useCouple()
 // coupleData 是 Ref<CoupleResponse | null>，直接访问 .couple
 const couple = computed(() => coupleData.value?.couple || null)
 const loading = computed(() => pending.value)
+
+// 获取当前用户ID
+const { data: meData } = useAuthMe()
+const currentUserId = computed(() => meData.value?.user?.id || null)
+
+// 格式化状态时间
+function formatStatusTime(time: string | Date) {
+  if (!time) return ''
+  const date = new Date(time)
+  const now = new Date()
+  const diff = now.getTime() - date.getTime()
+  const minutes = Math.floor(diff / 60000)
+  const hours = Math.floor(diff / 3600000)
+  const days = Math.floor(diff / 86400000)
+  
+  if (minutes < 1) return '刚刚'
+  if (minutes < 60) return `${minutes}分钟前`
+  if (hours < 24) return `${hours}小时前`
+  if (days < 7) return `${days}天前`
+  
+  // 超过7天显示日期
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+  return `${month}月${day}日`
+}
 
 onMounted(async () => {
   await refresh()
@@ -148,6 +198,14 @@ async function switchToCode() {
   } catch (e: any) {
     console.error('切换情侣失败:', e)
     alert(e?.friendlyMessage || '切换情侣失败，请检查邀请码是否正确')
+  }
+}
+
+async function viewProfile(userId: string, isCurrentUser: boolean) {
+  if (isCurrentUser) {
+    await navigateTo('/user/profile')
+  } else {
+    await navigateTo(`/user/profile/${userId}`)
   }
 }
 </script>

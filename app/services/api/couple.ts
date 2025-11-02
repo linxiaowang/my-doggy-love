@@ -9,6 +9,8 @@ export interface CoupleMember {
   nickName: string
   avatarUrl?: string
   role: string
+  status?: string | null
+  statusUpdatedAt?: string | Date | null
 }
 
 export interface Couple {
