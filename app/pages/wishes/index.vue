@@ -52,6 +52,13 @@ import DogHeader from '@/components/ui/DogHeader.vue'
 import { computed, ref, onMounted } from 'vue'
 import SkeletonList from '@/components/ui/SkeletonList.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'
+import { useWishes, createWish, updateWish } from '@/services/api/wishes'
+import { apiFetch } from '@/services/api'
+
+// 检查登录状态，未登录会自动跳转到登录页
+definePageMeta({
+  middleware: 'auth',
+})
 
 interface Wish { id: string; title: string; status: 'todo'|'done'; finishedAt?: string }
 const items = ref<Wish[]>([])
@@ -69,27 +76,44 @@ const filteredList = computed(() => {
 
 async function load() {
   loading.value = true
-  const res = await $fetch<{ items: Wish[] }>('/api/wishes')
-  items.value = res.items
-  loading.value = false
+  try {
+    const res = await apiFetch<{ items: Wish[] }>('/api/wishes')
+    items.value = res.items
+  } catch (e: any) {
+    console.error('加载愿望列表失败:', e)
+  } finally {
+    loading.value = false
+  }
 }
 onMounted(load)
 
 async function addWish() {
   if (!title.value) return
-  await $fetch('/api/wishes', { method: 'POST', body: { title: title.value } })
-  title.value = ''
-  await load()
+  try {
+    await createWish({ title: title.value })
+    title.value = ''
+    await load()
+  } catch (e: any) {
+    console.error('添加愿望失败:', e)
+  }
 }
 
 async function markDone(id: string) {
-  await $fetch(`/api/wishes/${id}`, { method: 'PATCH', body: { status: 'done' } })
-  await load()
+  try {
+    await updateWish(id, { status: 'done' })
+    await load()
+  } catch (e: any) {
+    console.error('标记完成失败:', e)
+  }
 }
 
 async function markTodo(id: string) {
-  await $fetch(`/api/wishes/${id}`, { method: 'PATCH', body: { status: 'todo' } })
-  await load()
+  try {
+    await updateWish(id, { status: 'todo' })
+    await load()
+  } catch (e: any) {
+    console.error('重置愿望失败:', e)
+  }
 }
 
 async function toggle(w: Wish) {

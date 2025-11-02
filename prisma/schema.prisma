@@ -15,6 +15,10 @@ model User {
   avatarUrl    String?
   status       String?  // 用户状态，如：开心、忙碌、在思考等
   statusUpdatedAt DateTime?  // 状态更新时间
+  wechatOpenId String?  @unique // 微信 OpenID
+  wechatUnionId String?  // 微信 UnionID（可选，用于多平台统一）
+  wechatNickName String? // 微信昵称
+  wechatAvatar String? // 微信头像
   createdAt    DateTime @default(now())
 
   coupleMemberships CoupleMember[]

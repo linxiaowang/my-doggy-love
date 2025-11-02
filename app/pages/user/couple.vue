@@ -29,8 +29,8 @@
         <div v-else class="space-y-4">
           <div class="text-sm text-#777">你还没有绑定情侣。可以创建情侣，或直接输入对方的邀请码加入。</div>
           <div class="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
-            <button class="btn-primary" @click="createCouple">创建情侣</button>
-            <form class="flex gap-2 w-full sm:w-auto" @submit.prevent="joinCouple">
+            <button class="btn-primary" @click="createCoupleHandler">创建情侣</button>
+            <form class="flex gap-2 w-full sm:w-auto" @submit.prevent="joinCoupleHandler">
               <input v-model="code" placeholder="输入邀请码（如 ABC123）" class="input w-full sm:w-56" />
               <button class="btn-secondary">加入</button>
             </form>
@@ -44,30 +44,46 @@
 <script setup lang="ts">
 import DogHeader from '@/components/ui/DogHeader.vue'
 import { ref, onMounted } from 'vue'
+import { useCouple, createCouple, joinCouple, switchCouple } from '@/services/api/couple'
+import { computed } from 'vue'
 
-const couple = ref<any | null>(null)
+// 检查登录状态，未登录会自动跳转到登录页
+definePageMeta({
+  middleware: 'auth',
+})
+
 const code = ref('')
-const loading = ref(true)
 const switchCode = ref('')
 
-async function load() {
-  loading.value = true
-  const res = await $fetch('/api/couple/me')
-  couple.value = res.couple
-  loading.value = false
+// 使用统一的 API
+const { data: coupleData, pending, refresh } = useCouple()
+const couple = computed(() => coupleData.value?.couple || null)
+const loading = computed(() => pending.value)
+
+onMounted(async () => {
+  await refresh()
+})
+
+async function createCoupleHandler() {
+  try {
+    await createCouple()
+    await refresh()
+  } catch (e: any) {
+    console.error('创建情侣失败:', e)
+    alert(e?.friendlyMessage || '创建情侣失败，请稍后再试')
+  }
 }
 
-onMounted(load)
-
-async function createCouple() {
-  await $fetch('/api/couple/create', { method: 'POST' })
-  await load()
-}
-
-async function joinCouple() {
+async function joinCoupleHandler() {
   if (!code.value) return
-  await $fetch('/api/couple/join', { method: 'POST', body: { code: code.value } })
-  await load()
+  try {
+    await joinCouple(code.value)
+    code.value = ''
+    await refresh()
+  } catch (e: any) {
+    console.error('加入情侣失败:', e)
+    alert(e?.friendlyMessage || '加入情侣失败，请检查邀请码是否正确')
+  }
 }
 
 async function copyCode() {
@@ -79,9 +95,14 @@ async function copyCode() {
 
 async function switchToCode() {
   if (!switchCode.value) return
-  await $fetch('/api/couple/switch', { method: 'POST', body: { code: switchCode.value } })
-  switchCode.value = ''
-  await load()
+  try {
+    await switchCouple(switchCode.value)
+    switchCode.value = ''
+    await refresh()
+  } catch (e: any) {
+    console.error('切换情侣失败:', e)
+    alert(e?.friendlyMessage || '切换情侣失败，请检查邀请码是否正确')
+  }
 }
 </script>
 

@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { useAuthMe } from '@/services/api/auth'
+import { apiFetch } from '@/services/api'
 definePageMeta({
   layout: 'home',
 })
@@ -12,11 +14,14 @@ const presetImages = [
 ]
 
 const images = ref<string[]>([...presetImages])
+
+// 使用统一的 API
+const { data: meData } = useAuthMe()
+
 onMounted(async () => {
   try {
-    const me = await $fetch('/api/auth/me')
-    if (me?.user) {
-      const res = await $fetch<{ items: any[] }>('/api/daily')
+    if (meData.value?.user) {
+      const res = await apiFetch<{ items: any[] }>('/api/daily')
       const media = (res.items || []).flatMap(i => Array.isArray(i.mediaUrls) ? i.mediaUrls : [])
       if (media.length) images.value = [...media.slice(0, 6), ...presetImages]
     }

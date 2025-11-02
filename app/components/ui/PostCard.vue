@@ -70,7 +70,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
+import { createDailyComment, useDailyPostComments } from '@/services/api/daily'
+import { apiFetch } from '@/services/api'
 
 const props = defineProps<{ id: string; content: string; createdAt: string | Date; mediaUrls?: string[]; tags?: string[] }>()
 const emit = defineEmits<{ (e: 'commented'): void }>()
@@ -78,39 +80,40 @@ const emit = defineEmits<{ (e: 'commented'): void }>()
 const dateLabel = computed(() => new Date(props.createdAt).toLocaleString())
 const comment = ref('')
 const showComments = ref(false)
-const loading = ref(false)
 const comments = ref<Array<any>>([])
 const showInput = ref(false)
 const replyOpenId = ref<string | null>(null)
 const replyContent = ref('')
 
+// 使用统一的 API
+const { data: commentsData, pending: loadingComments, refresh: refreshComments } = useDailyPostComments(() => props.id)
+
+watch(commentsData, (newData) => {
+  if (newData?.value?.items) {
+    comments.value = newData.value.items as any
+  }
+}, { immediate: true })
+
+const loading = computed(() => loadingComments.value)
+
 async function submit() {
   if (!comment.value) return
-  await $fetch(`/api/daily/${props.id}/comment`, { method: 'POST', body: { content: comment.value } })
-  comment.value = ''
-  showInput.value = false
-  showComments.value = true
-  // 刷新评论列表，确保看到最新一条
-  loading.value = true
   try {
-    const res = await $fetch<{ items: any[] }>(`/api/daily/${props.id}/comments`)
-    comments.value = res.items as any
-  } finally {
-    loading.value = false
+    await createDailyComment(props.id, comment.value)
+    comment.value = ''
+    showInput.value = false
+    showComments.value = true
+    await refreshComments()
+    emit('commented')
+  } catch (e: any) {
+    console.error('发布评论失败:', e)
   }
-  emit('commented')
 }
 
 async function toggleComments() {
   showComments.value = !showComments.value
   if (showComments.value && comments.value.length === 0) {
-    loading.value = true
-    try {
-      const res = await $fetch<{ items: any[] }>(`/api/daily/${props.id}/comments`)
-      comments.value = res.items as any
-    } finally {
-      loading.value = false
-    }
+    await refreshComments()
   }
 }
 
@@ -120,19 +123,19 @@ function toggleInput() {
 
 async function submitReply(parentId: string) {
   if (!replyContent.value) return
-  await $fetch(`/api/daily/comments/${parentId}/reply`, { method: 'POST', body: { content: replyContent.value } })
-  replyContent.value = ''
-  replyOpenId.value = null
-  showComments.value = true
-  // reload
-  if (showComments.value) {
-    loading.value = true
-    try {
-      const res = await $fetch<{ items: any[] }>(`/api/daily/${props.id}/comments`)
-      comments.value = res.items as any
-    } finally {
-      loading.value = false
+  try {
+    await apiFetch(`/api/daily/comments/${parentId}/reply`, {
+      method: 'POST',
+      body: { content: replyContent.value },
+    })
+    replyContent.value = ''
+    replyOpenId.value = null
+    showComments.value = true
+    if (showComments.value) {
+      await refreshComments()
     }
+  } catch (e: any) {
+    console.error('回复评论失败:', e)
   }
 }
 

@@ -69,6 +69,13 @@ import DogHeader from '@/components/ui/DogHeader.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'
 import { ref, onMounted } from 'vue'
 import SkeletonList from '@/components/ui/SkeletonList.vue'
+import { createAnniversary, updateAnniversary, deleteAnniversary } from '@/services/api/anniversaries'
+import { apiFetch } from '@/services/api'
+
+// 检查登录状态，未登录会自动跳转到登录页
+definePageMeta({
+  middleware: 'auth',
+})
 
 interface Anniversary { id: string; title: string; date: string }
 const items = ref<Anniversary[]>([])
@@ -94,23 +101,36 @@ function meta(a: Anniversary) {
 
 async function load() {
   loading.value = true
-  const res = await $fetch<{ items: Anniversary[] }>('/api/anniversaries')
-  items.value = res.items
-  loading.value = false
+  try {
+    const res = await apiFetch<{ items: Anniversary[] }>('/api/anniversaries')
+    items.value = res.items
+  } catch (e: any) {
+    console.error('加载纪念日列表失败:', e)
+  } finally {
+    loading.value = false
+  }
 }
 onMounted(load)
 
 async function create() {
   if (!title.value || !date.value) return
-  await $fetch('/api/anniversaries', { method: 'POST', body: { title: title.value, date: date.value } })
-  title.value = ''
-  date.value = ''
-  await load()
+  try {
+    await createAnniversary({ title: title.value, date: date.value })
+    title.value = ''
+    date.value = ''
+    await load()
+  } catch (e: any) {
+    console.error('创建纪念日失败:', e)
+  }
 }
 
 async function remove(id: string) {
-  await $fetch(`/api/anniversaries/${id}` as any, { method: 'DELETE' })
-  await load()
+  try {
+    await deleteAnniversary(id)
+    await load()
+  } catch (e: any) {
+    console.error('删除纪念日失败:', e)
+  }
 }
 
 function openEdit(a: Anniversary) {
@@ -126,9 +146,13 @@ function closeEdit() {
 
 async function saveEdit() {
   if (!editId.value) return
-  await $fetch(`/api/anniversaries/${editId.value}` as any, { method: 'PATCH', body: { title: editTitle.value, date: editDate.value } })
-  editing.value = false
-  await load()
+  try {
+    await updateAnniversary(editId.value, { title: editTitle.value, date: editDate.value })
+    editing.value = false
+    await load()
+  } catch (e: any) {
+    console.error('更新纪念日失败:', e)
+  }
 }
 </script>
 

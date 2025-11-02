@@ -5,24 +5,41 @@ import { hashPassword, signToken, setAuthCookie } from '../../utils/auth'
 export default defineEventHandler(async (event) => {
   try {
     const body = await readBody<{
-      email?: string
-      password?: string
-      nickName: string
+      email: string
+      password: string
+      nickName?: string
     }>(event)
 
-    const nickName = body?.nickName?.trim()
-    if (!nickName) throw createError({ statusCode: 400, statusMessage: 'nickName required' })
+    const email = body?.email?.trim().toLowerCase()
+    const password = body?.password
+    const nickNameInput = body?.nickName?.trim()
 
-    let email: string | undefined
-    if (body?.email) email = body.email.trim().toLowerCase()
-    let passwordHash: string | undefined
-    if (body?.password) passwordHash = hashPassword(body.password)
-
-    if (email) {
-      const existed = await prisma.user.findUnique({ where: { email } })
-      if (existed) throw createError({ statusCode: 409, statusMessage: 'email exists' })
+    // 必须提供邮箱和密码
+    if (!email || !password) {
+      throw createError({ statusCode: 400, statusMessage: '邮箱和密码都是必需的' })
     }
 
+    // 验证邮箱格式
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      throw createError({ statusCode: 400, statusMessage: '邮箱格式不正确' })
+    }
+
+    // 验证密码长度（至少6位）
+    if (password.length < 6) {
+      throw createError({ statusCode: 400, statusMessage: '密码长度至少需要6位' })
+    }
+
+    // 检查邮箱是否已存在
+    const existed = await prisma.user.findUnique({ where: { email } })
+    if (existed) {
+      throw createError({ statusCode: 409, statusMessage: '该邮箱已被注册' })
+    }
+
+    // 如果未提供昵称，从邮箱自动生成（取@前的部分）
+    const nickName = nickNameInput || email.split('@')[0]
+
+    const passwordHash = hashPassword(password)
     const user = await prisma.user.create({ data: { email, passwordHash, nickName } })
     const token = signToken({ userId: user.id, iat: Date.now() })
     setAuthCookie(event, token)

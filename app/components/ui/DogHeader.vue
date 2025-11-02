@@ -13,7 +13,7 @@
     </nav>
     <div class="flex items-center gap-3 relative">
       <template v-if="me">
-        <UserStatusSelector :current-status="me.status" @update="updateStatus" />
+        <UserStatusSelector :current-status="me?.status" @update="updateStatusHandler" />
         <button class="flex items-center gap-2" @click="menu = !menu">
           <img :src="me.avatarUrl || '/assets/images/xiaobai/xiaobai-2.png'" class="w-7 h-7 rounded-full object-cover" alt="avatar" />
           <span class="hidden md:inline text-sm">{{ me.nickName }}</span>
@@ -47,34 +47,34 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import UserStatusSelector from './UserStatusSelector.vue'
+import { useAuthMe, updateStatus, logout } from '@/services/api/auth'
+import { computed } from 'vue'
 
 const open = ref(false)
 const menu = ref(false)
-const me = ref<{ id: string; nickName: string; avatarUrl?: string; status?: string | null } | null>(null)
+
+// 使用统一的 API
+const { data: meData } = useAuthMe()
+const me = computed(() => meData.value?.user || null)
 
 onMounted(async () => {
-  try {
-    const res = await $fetch('/api/auth/me')
-    me.value = res.user
-  } catch {}
+  // 数据会通过 useAuthMe 自动加载
 })
 
 async function doLogout() {
-  await $fetch('/api/auth/logout', { method: 'POST' })
-  me.value = null
-  menu.value = false
-  navigateTo('/user/login')
+  try {
+    await logout()
+    menu.value = false
+    navigateTo('/user/login')
+  } catch (error) {
+    console.error('退出登录失败:', error)
+  }
 }
 
-async function updateStatus(status: string | null) {
+async function updateStatusHandler(status: string | null) {
   try {
-    await $fetch('/api/auth/status', {
-      method: 'PATCH',
-      body: { status },
-    })
-    if (me.value) {
-      me.value.status = status
-    }
+    await updateStatus(status)
+    // 状态会通过 useAuthMe 自动更新
   } catch (error) {
     console.error('更新状态失败:', error)
   }

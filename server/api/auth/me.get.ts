@@ -23,6 +23,9 @@ export default defineEventHandler(async (event) => {
       avatarUrl,
       status: user.status,
       statusUpdatedAt: user.statusUpdatedAt,
+      wechatOpenId: user.wechatOpenId,
+      wechatNickName: user.wechatNickName,
+      wechatAvatar: user.wechatAvatar,
     },
   }
 })

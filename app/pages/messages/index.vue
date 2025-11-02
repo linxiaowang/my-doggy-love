@@ -3,9 +3,17 @@
     <DogHeader />
     <div class="max-w-2xl mx-auto px-4 py-6 space-y-4">
       <div class="rounded-xl bg-white p-4 shadow">
+        <!-- 错误提示 -->
+        <div v-if="errorMessage" class="mb-3 text-#b42318 bg-#fdecea border border-#f5c2c7 rounded px-3 py-2 text-sm">
+          {{ errorMessage }}
+          <NuxtLink v-if="errorMessage.includes('情侣')" to="/user/couple" class="underline ml-1">去绑定</NuxtLink>
+        </div>
+        
         <form class="flex gap-2" @submit.prevent="submit">
           <input v-model="content" placeholder="留下想说的话…" class="border border-#ece7e1 rounded px-3 py-2 flex-1 bg-white text-#333 placeholder:text-gray-400" />
-          <button class="px-4 py-2 rounded bg-#e9e4de">发布</button>
+          <button class="px-4 py-2 rounded bg-#e9e4de" :disabled="submitting">
+            {{ submitting ? '发布中...' : '发布' }}
+          </button>
         </form>
       </div>
       <div v-if="loading">
@@ -72,6 +80,13 @@ import DogHeader from '@/components/ui/DogHeader.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'
 import { ref, onMounted } from 'vue'
 import SkeletonList from '@/components/ui/SkeletonList.vue'
+import { createMessage, createMessageComment, replyToComment } from '@/services/api/messages'
+import { apiFetch, handleApiError } from '@/services/api'
+
+// 检查登录状态，未登录会自动跳转到登录页
+definePageMeta({
+  middleware: 'auth',
+})
 
 interface Message { id: string; content: string; createdAt: string; author?: { id: string; nickName: string; avatarUrl?: string } }
 const items = ref<Message[]>([])
@@ -87,17 +102,37 @@ const replyContent = ref('')
 
 async function load() {
   loading.value = true
-  const res = await $fetch<{ items: Message[] }>('/api/messages')
-  items.value = res.items
-  loading.value = false
+  try {
+    const res = await apiFetch<{ items: Message[] }>('/api/messages')
+    items.value = res.items
+  } catch (e: any) {
+    console.error('加载留言失败:', e)
+  } finally {
+    loading.value = false
+  }
 }
 onMounted(load)
 
+const errorMessage = ref('')
+const submitting = ref(false)
+
 async function submit() {
   if (!content.value) return
-  await $fetch('/api/messages', { method: 'POST', body: { content: content.value } })
-  content.value = ''
-  await load()
+  
+  errorMessage.value = ''
+  submitting.value = true
+  
+  try {
+    await createMessage({ content: content.value })
+    content.value = ''
+    await load()
+  } catch (e: any) {
+    // 使用统一错误处理
+    errorMessage.value = e?.friendlyMessage || handleApiError(e)
+    console.error('发布留言失败:', e)
+  } finally {
+    submitting.value = false
+  }
 }
 
 function toggleComments(id: string) {
@@ -107,9 +142,14 @@ function toggleComments(id: string) {
 
 async function loadComments(id: string) {
   loadingComments.value = true
-  const res = await $fetch<{ items: any }>(`/api/messages/${id}/comments`)
-  comments.value = res.items
-  loadingComments.value = false
+  try {
+    const res = await apiFetch<{ items: any }>(`/api/messages/${id}/comments`)
+    comments.value = res.items
+  } catch (e: any) {
+    console.error('加载评论失败:', e)
+  } finally {
+    loadingComments.value = false
+  }
 }
 
 function toggleInput(id: string) {
@@ -118,11 +158,15 @@ function toggleInput(id: string) {
 
 async function submitComment(id: string) {
   if (!comment.value) return
-  await $fetch(`/api/messages/${id}/comment`, { method: 'POST', body: { content: comment.value } })
-  comment.value = ''
-  openId.value = id
-  inputOpenId.value = null
-  await loadComments(id)
+  try {
+    await createMessageComment(id, comment.value)
+    comment.value = ''
+    openId.value = id
+    inputOpenId.value = null
+    await loadComments(id)
+  } catch (e: any) {
+    console.error('发布评论失败:', e)
+  }
 }
 
 function toggleReply(id: string) {
@@ -131,9 +175,13 @@ function toggleReply(id: string) {
 
 async function submitReply(commentId: string) {
   if (!replyContent.value) return
-  await $fetch(`/api/messages/comments/${commentId}/reply`, { method: 'POST', body: { content: replyContent.value } })
-  replyContent.value = ''
-  if (openId.value) await loadComments(openId.value)
+  try {
+    await replyToComment(commentId, replyContent.value)
+    replyContent.value = ''
+    if (openId.value) await loadComments(openId.value)
+  } catch (e: any) {
+    console.error('回复评论失败:', e)
+  }
 }
 </script>
 
