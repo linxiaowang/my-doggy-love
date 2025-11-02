@@ -57,7 +57,18 @@ export class OSSStorageService implements StorageService {
     // 签名 URL 有效期（秒），默认 1 年（31536000 秒），可通过环境变量配置
     this.signUrlExpires = parseInt(env?.OSS_SIGN_URL_EXPIRES || '31536000', 10)
 
+    // 调试信息：打印配置（隐藏敏感信息）
+    console.log('[OSS Storage] 初始化配置:')
+    console.log('  - OSS_ACCESS_KEY_ID:', accessKeyId ? `${accessKeyId.substring(0, 8)}...` : '未设置')
+    console.log('  - OSS_ACCESS_KEY_SECRET:', accessKeySecret ? '已设置（已隐藏）' : '未设置')
+    console.log('  - OSS_BUCKET:', bucket || '未设置')
+    console.log('  - OSS_REGION:', region || '未设置（使用默认: oss-cn-hangzhou）')
+    console.log('  - OSS_ENDPOINT:', endpoint || '未设置')
+    console.log('  - OSS_CUSTOM_DOMAIN:', this.customDomain || '未设置')
+    console.log('  - OSS_SIGN_URL_EXPIRES:', this.signUrlExpires)
+
     if (!accessKeyId || !accessKeySecret || !bucket) {
+      console.error('[OSS Storage] 配置缺失!')
       throw new Error('OSS configuration is missing. Please set OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET, and OSS_BUCKET environment variables.')
     }
 
@@ -75,11 +86,27 @@ export class OSSStorageService implements StorageService {
       // 如果 endpoint 没有协议前缀，自动添加 https://
       if (!endpointValue.startsWith('http://') && !endpointValue.startsWith('https://')) {
         endpointValue = `https://${endpointValue}`
+        console.log('[OSS Storage] Endpoint 自动添加 https:// 前缀:', endpointValue)
       }
       ossConfig.endpoint = endpointValue
     }
 
-    this.client = new OSS(ossConfig)
+    console.log('[OSS Storage] 最终 OSS 配置:', {
+      accessKeyId: ossConfig.accessKeyId ? `${ossConfig.accessKeyId.substring(0, 8)}...` : '未设置',
+      accessKeySecret: '已设置（已隐藏）',
+      bucket: ossConfig.bucket,
+      region: ossConfig.region,
+      endpoint: ossConfig.endpoint || '未设置（使用 region 默认）',
+    })
+
+    try {
+      this.client = new OSS(ossConfig)
+      console.log('[OSS Storage] OSS 客户端初始化成功')
+    } catch (error: any) {
+      console.error('[OSS Storage] OSS 客户端初始化失败:', error.message)
+      console.error('[OSS Storage] 错误详情:', error)
+      throw error
+    }
   }
 
   async save(file: FileLike, opts?: { prefix?: string }): Promise<StorageSaveResult> {
