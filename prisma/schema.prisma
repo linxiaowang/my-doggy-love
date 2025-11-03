@@ -25,6 +25,7 @@ model User {
   posts             DailyPost[]      @relation("UserPosts")
   comments          Comment[]
   messages          Message[]
+  notifications     Notification[]
 }
 
 model Couple {
@@ -122,6 +123,21 @@ model Message {
   couple  Couple @relation(fields: [coupleId], references: [id])
   author  User   @relation(fields: [authorId], references: [id])
   comments Comment[]
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String   // 接收通知的用户
+  type      String   // 通知类型：message_posted, daily_posted, daily_comment, daily_comment_reply, message_comment, message_comment_reply
+  relatedId String?  // 相关ID（postId, messageId, commentId等）
+  content   String   @db.Text // 通知内容
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId, read])
+  @@index([userId, createdAt])
 }
 
 
