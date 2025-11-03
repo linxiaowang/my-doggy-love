@@ -77,14 +77,12 @@ export class OSSStorageService implements StorageService {
       // 如果 endpoint 没有协议前缀，自动添加 https://
       if (!endpointValue.startsWith('http://') && !endpointValue.startsWith('https://')) {
         endpointValue = `https://${endpointValue}`
-        console.log('[OSS Storage] Endpoint 自动添加 https:// 前缀:', endpointValue)
       }
       ossConfig.endpoint = endpointValue
     }
 
     try {
       this.client = new OSS(ossConfig)
-      console.log('[OSS Storage] OSS 客户端初始化成功')
     } catch (error: any) {
       console.error('[OSS Storage] OSS 客户端初始化失败:', error.message)
       console.error('[OSS Storage] 错误详情:', error)

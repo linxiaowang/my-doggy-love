@@ -39,7 +39,11 @@ export interface MeResponse {
  * 获取当前用户信息
  */
 export function useAuthMe() {
-  return useApiFetch<MeResponse>('/api/auth/me')
+  return useApiFetch<MeResponse>('/api/auth/me', {
+    // 仅在客户端发起，避免 SSR 阶段拿不到 cookie 导致 user=null
+    server: false,
+    immediate: true,
+  })
 }
 
 /**
