@@ -75,6 +75,7 @@
 import { computed, ref, watch } from 'vue'
 import { createDailyComment, useDailyPostComments, deleteDailyPost } from '@/services/api/daily'
 import { useAuthMe } from '@/services/api/auth'
+import { apiFetch } from '@/services/api'
 
 const props = defineProps<{ 
   id: string
