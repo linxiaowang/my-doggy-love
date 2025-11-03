@@ -23,15 +23,18 @@ export default defineEventHandler(async (event) => {
 
   const storage = createStorageService()
   // 转换 mediaUrls 中的每个 URL
-  const processedItems = items.map(item => {
+  const processedItems = await Promise.all(items.map(async (item) => {
     const mediaUrls = Array.isArray(item.mediaUrls) ? item.mediaUrls : []
     const convertedUrls = mediaUrls.map((url: any) => {
       const urlStr = String(url)
       return storage.toAccessibleUrl ? storage.toAccessibleUrl(urlStr) : urlStr
     })
+    // 统计评论总数（包含回复）
+    const commentCount = await prisma.comment.count({ where: { postId: item.id } })
     return {
       ...item,
       mediaUrls: convertedUrls,
+      commentCount,
       author: {
         id: item.author.id,
         nickName: item.author.nickName,
@@ -40,7 +43,7 @@ export default defineEventHandler(async (event) => {
           : null
       }
     }
-  })
+  }))
 
   return { items: processedItems }
 })

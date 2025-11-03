@@ -115,7 +115,7 @@
       </div>
     </Teleport>
     <div class="mt-3 flex items-center gap-3 text-sm">
-      <button class="underline" @click="toggleComments">{{ showComments ? '收起评论' : '查看评论' }}</button>
+      <button class="underline" @click="toggleComments">{{ showComments ? '收起评论' : `查看评论${displayCount}` }}</button>
       <span class="text-#ccc">|</span>
       <button class="underline" @click="toggleInput">{{ showInput ? '收起输入' : '写评论' }}</button>
       <span v-if="canDelete" class="text-#ccc">|</span>
@@ -186,6 +186,7 @@ const props = defineProps<{
   content: string
   createdAt: string | Date
   mediaUrls?: string[]
+  commentCount?: number
   tags?: string[]
   authorId?: string
 }>()
@@ -199,6 +200,12 @@ const dateLabel = computed(() => new Date(props.createdAt).toLocaleString())
 const comment = ref('')
 const showComments = ref(false)
 const comments = ref<Array<any>>([])
+// 评论数量展示：优先使用后端传入的统计，其次根据已加载的评论树计算
+const totalCount = computed(() => {
+  const sumReplies = (list: any[]): number => list.reduce((sum, c) => sum + 1 + (Array.isArray(c.replies) ? sumReplies(c.replies) : 0), 0)
+  return comments.value.length ? sumReplies(comments.value) : (props.commentCount || 0)
+})
+const displayCount = computed(() => totalCount.value > 0 ? `（${totalCount.value}）` : '')
 const showInput = ref(false)
 const replyOpenId = ref<string | null>(null)
 const replyContent = ref('')

@@ -215,6 +215,7 @@
               :content="it.content" 
               :createdAt="it.createdAt" 
               :media-urls="asArray(it.mediaUrls)" 
+              :comment-count="(it as any).commentCount || 0"
               :tags="(it as any).tags || []" 
               :authorId="it.authorId || it.author?.id"
               @commented="reloadOne(it.id)"
@@ -247,7 +248,7 @@ definePageMeta({
   middleware: 'auth',
 })
 
-interface Post { id: string; content: string; mediaUrls: any; createdAt: string; authorId?: string; author?: { id: string; nickName: string; avatarUrl?: string | null } }
+interface Post { id: string; content: string; mediaUrls: any; createdAt: string; commentCount?: number; authorId?: string; author?: { id: string; nickName: string; avatarUrl?: string | null } }
 const items = ref<Post[]>([])
 const loading = ref(true)
 const content = ref('')

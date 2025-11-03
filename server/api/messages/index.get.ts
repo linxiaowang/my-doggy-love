@@ -15,11 +15,13 @@ export default defineEventHandler(async (event) => {
     orderBy: { createdAt: 'desc' },
     include: { author: true },
   })
-  return {
-    items: items.map(m => ({
+  const mapped = await Promise.all(items.map(async (m) => {
+    const count = await prisma.comment.count({ where: { messageId: m.id } })
+    return {
       id: m.id,
       content: m.content,
       createdAt: m.createdAt,
+      commentCount: count,
       author: { 
         id: m.author.id, 
         nickName: m.author.nickName, 
@@ -27,8 +29,9 @@ export default defineEventHandler(async (event) => {
           ? (storage.toAccessibleUrl ? storage.toAccessibleUrl(m.author.avatarUrl) : m.author.avatarUrl)
           : null
       },
-    }))
-  }
+    }
+  }))
+  return { items: mapped }
 })
 
 

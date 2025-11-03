@@ -35,7 +35,7 @@
               <div class="text-sm text-#777 mb-0.5">{{ m.author?.nickName || '匿名' }} · {{ new Date(m.createdAt).toLocaleString() }}</div>
               <div class="text-#333 whitespace-pre-wrap break-words">{{ m.content }}</div>
               <div class="mt-2 flex items-center gap-3 text-sm">
-                <button class="underline" @click="toggleComments(m.id)">{{ openId===m.id ? '收起评论' : '查看评论' }}</button>
+                <button class="underline" @click="toggleComments(m.id)">{{ openId===m.id ? '收起评论' : `查看评论${formatCount(m.commentCount)}` }}</button>
                 <span class="text-#ccc">|</span>
                 <button class="underline" @click="toggleInput(m.id)">{{ inputOpenId===m.id ? '收起输入' : '写评论' }}</button>
               </div>
@@ -103,7 +103,7 @@ definePageMeta({
   middleware: 'auth',
 })
 
-interface Message { id: string; content: string; createdAt: string; author?: { id: string; nickName: string; avatarUrl?: string } }
+interface Message { id: string; content: string; createdAt: string; commentCount?: number; author?: { id: string; nickName: string; avatarUrl?: string } }
 const items = ref<Message[]>([])
 const content = ref('')
 const loading = ref(true)
@@ -114,6 +114,10 @@ const comments = ref<Array<{ id: string; content: string; createdAt: string; aut
 const loadingComments = ref(false)
 const replyOpenId = ref<string | null>(null)
 const replyContent = ref('')
+
+function formatCount(n?: number) {
+  return n && n > 0 ? `（${n}）` : ''
+}
 
 // 头像加载失败时使用默认头像
 function handleImageError(event: Event) {
