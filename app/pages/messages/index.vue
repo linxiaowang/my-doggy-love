@@ -116,7 +116,7 @@ const replyOpenId = ref<string | null>(null)
 const replyContent = ref('')
 
 function formatCount(n?: number) {
-  return n && n > 0 ? `（${n}）` : ''
+  return n && n > 0 ? `(${n})` : ''
 }
 
 // 头像加载失败时使用默认头像

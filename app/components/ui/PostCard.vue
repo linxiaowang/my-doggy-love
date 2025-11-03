@@ -205,7 +205,7 @@ const totalCount = computed(() => {
   const sumReplies = (list: any[]): number => list.reduce((sum, c) => sum + 1 + (Array.isArray(c.replies) ? sumReplies(c.replies) : 0), 0)
   return comments.value.length ? sumReplies(comments.value) : (props.commentCount || 0)
 })
-const displayCount = computed(() => totalCount.value > 0 ? `（${totalCount.value}）` : '')
+const displayCount = computed(() => totalCount.value > 0 ? `(${totalCount.value})` : '')
 const showInput = ref(false)
 const replyOpenId = ref<string | null>(null)
 const replyContent = ref('')
