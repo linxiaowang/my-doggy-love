@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-#f7f6f3">
-    <DogHeader />
+    <DogHeader :user-override="user" />
     <div class="max-w-2xl mx-auto px-4 py-8">
       <div class="rounded-xl bg-white p-6 shadow space-y-4">
         <div class="text-lg">用户资料</div>
