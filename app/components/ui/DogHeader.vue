@@ -12,7 +12,7 @@
       <NuxtLink to="/messages" class="hover:underline">留言板</NuxtLink>
     </nav>
     <div class="flex items-center gap-3 relative">
-      <template v-if="effectiveUser">
+      <template v-if="me">
         <UserStatusSelector :current-status="me?.status" @update="updateStatusHandler" />
         <!-- 通知图标 -->
         <NuxtLink to="/notifications" class="relative flex items-center justify-center w-8 h-8 hover:opacity-80 transition">
@@ -27,8 +27,8 @@
           </span>
         </NuxtLink>
         <button class="flex items-center gap-2" @click="menu = !menu">
-          <img :src="effectiveUser.avatarUrl || '/assets/images/xiaobai/xiaobai-2.png'" class="w-7 h-7 rounded-full object-cover" alt="avatar" />
-          <span class="hidden md:inline text-sm">{{ effectiveUser.nickName }}</span>
+          <img :src="me.avatarUrl || '/assets/images/xiaobai/xiaobai-2.png'" class="w-7 h-7 rounded-full object-cover" alt="avatar" />
+          <span class="hidden md:inline text-sm">{{ me.nickName }}</span>
         </button>
         <div v-if="menu" class="absolute right-0 top-full mt-2 w-40 rounded-lg border border-#ece7e1 bg-white shadow p-2 z-40">
           <NuxtLink to="/user/profile" class="block px-3 py-2 text-sm hover:bg-#f7f6f3" @click="menu=false">资料</NuxtLink>
@@ -62,9 +62,6 @@ import UserStatusSelector from './UserStatusSelector.vue'
 import { useAuthMe, updateStatus, logout } from '@/services/api/auth'
 import { useUnreadNotificationCount } from '@/services/api/notifications'
 
-// 支持外部覆盖用户（例如在 profile 页面已拿到用户）
-const props = defineProps<{ userOverride?: { id: string; nickName: string; avatarUrl?: string; status?: string | null } | null }>()
-
 const open = ref(false)
 const menu = ref(false)
 
@@ -75,9 +72,6 @@ const me = computed(() => {
   const user = meData.value?.user || null
   return user
 })
-
-// 优先使用外部传入的用户，其次使用自身的 me
-const effectiveUser = computed(() => props.userOverride ?? me.value)
 
 // 获取未读通知数量
 const { data: unreadCountData, refresh: refreshUnreadCount } = useUnreadNotificationCount()

@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
   })
   const mapped = await Promise.all(items.map(async (m) => {
     const count = await prisma.comment.count({ where: { messageId: m.id } })
-    return {
+  return {
       id: m.id,
       content: m.content,
       createdAt: m.createdAt,
@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
           : null
       },
     }
-  }))
+    }))
   return { items: mapped }
 })
 
