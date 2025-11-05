@@ -32,7 +32,30 @@ if (!g.__prisma) {
     console.error('Current process.env keys:', Object.keys(process?.env || {}))
     throw error
   }
-  g.__prisma = new PrismaClient({ datasources: { db: { url: 'mysql://root:Abc12345!@127.0.0.1:3306/my_doggy_love' } } })
+
+  // 打印连接信息（脱敏）
+  try {
+    const masked = url.replace(/(mysql:\/\/[^:]+:)([^@]+)(@)/, (_, a, _pwd, c) => a + '******' + c)
+    console.info('[DB] Connecting to', masked)
+  } catch {}
+
+  // 启用 Prisma 更详细日志以便定位 P1000/P1017 等
+  g.__prisma = new PrismaClient({
+    datasources: { db: { url } },
+    errorFormat: 'pretty',
+    log: [
+      { level: 'error', emit: 'event' },
+      { level: 'warn', emit: 'event' },
+    ],
+  })
+
+  // 输出运行期错误日志
+  g.__prisma.$on('error', (e: any) => {
+    console.error('[Prisma Error]', e?.message || e)
+  })
+  g.__prisma.$on('warn', (e: any) => {
+    console.warn('[Prisma Warn]', e?.message || e)
+  })
 }
 
 prisma = g.__prisma as PrismaClient
