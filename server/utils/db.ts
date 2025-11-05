@@ -32,7 +32,8 @@ if (!g.__prisma) {
     console.error('Current process.env keys:', Object.keys(process?.env || {}))
     throw error
   }
-  
+  console.log('url', url)
+  console.log('process.env', process.env)
   g.__prisma = new PrismaClient({ datasources: { db: { url } } })
 }
 
