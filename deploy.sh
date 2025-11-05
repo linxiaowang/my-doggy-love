@@ -31,6 +31,24 @@ EOF
     echo "✅ .env 文件已创建，请检查配置"
 fi
 
+# 打印 .env 内容与关键变量，便于排查（注意：包含敏感信息）
+echo "🧪 打印 .env 内容（请注意不要外泄日志）："
+if [ -f .env ]; then
+    echo "----- .env BEGIN -----"
+    cat .env || true
+    echo "----- .env END -----"
+else
+    echo "未找到 .env 文件"
+fi
+
+# 展示当前环境中的 DATABASE_URL（若未加载会为空）
+echo "🧪 进程环境中的 DATABASE_URL: ${DATABASE_URL:-'(未在当前环境中)'}"
+# 展示 .env 文件中的 DATABASE_URL（原始值）
+ENV_DB_URL=$(grep -E '^DATABASE_URL=' .env 2>/dev/null | sed -e 's/^DATABASE_URL=//')
+if [ -n "$ENV_DB_URL" ]; then
+    echo "🧪 .env 文件中的 DATABASE_URL: $ENV_DB_URL"
+fi
+
 # 安装依赖
 echo "📦 安装依赖..."
 pnpm install --frozen-lockfile

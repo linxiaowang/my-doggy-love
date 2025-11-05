@@ -8,4 +8,4 @@ dist
 .idea/
 public/assets/fonts
 .pnpm-store
-public/uploads
+/public/uploads/
