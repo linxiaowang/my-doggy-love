@@ -34,7 +34,7 @@ if (!g.__prisma) {
   }
   console.log('url', url)
   console.log('process.env', process.env)
-  g.__prisma = new PrismaClient({ datasources: { db: { url } } })
+  g.__prisma = new PrismaClient({ datasources: { db: { url: "mysql://root:Lxw199802@127.0.0.1:3306/my_doggy_love" } } })
 }
 
 prisma = g.__prisma as PrismaClient
