@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useAuthMe } from '@/services/api/auth'
 import { apiFetch } from '@/services/api'
 import AnniversaryCountdown from '@/components/ui/AnniversaryCountdown.vue'
@@ -20,7 +20,8 @@ const images = ref<string[]>([...presetImages])
 // 使用统一的 API
 const { data: meData } = useAuthMe()
 
-onMounted(async () => {
+// 加载日常照片
+async function loadDailyImages() {
   try {
     if (meData.value?.user) {
       const res = await apiFetch<{ items: any[] }>('/api/daily')
@@ -29,6 +30,20 @@ onMounted(async () => {
     }
   } catch {
     // ignore
+  }
+}
+
+// 监听用户数据变化，加载照片
+watch(meData, (newData) => {
+  if (newData?.user) {
+    loadDailyImages()
+  }
+}, { immediate: true })
+
+onMounted(() => {
+  // 如果用户数据已经加载，立即加载照片
+  if (meData.value?.user) {
+    loadDailyImages()
   }
 })
 

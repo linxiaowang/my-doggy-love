@@ -36,7 +36,17 @@ export function useNotifications(options?: { take?: number; unreadOnly?: boolean
  * 获取未读通知数量
  */
 export function useUnreadNotificationCount() {
-  return useApiFetch<UnreadCountResponse>('/api/notifications/unread-count')
+  return useApiFetch<UnreadCountResponse>('/api/notifications/unread-count', {
+    // 仅在客户端执行，避免 SSR 时 401 错误
+    server: false,
+    // 静默处理 401 错误（未登录时正常）
+    onResponseError({ response }: { response: { status?: number } }) {
+      // 401 错误是正常的（未登录），不记录错误
+      if (response.status === 401) {
+        return
+      }
+    },
+  })
 }
 
 /**
