@@ -1,8 +1,8 @@
 <template>
-  <header class="fixed top-0 left-0 right-0 z-30 w-screen flex items-center justify-between px-6 md:px-8 lg:px-12 py-3 bg-white/70 backdrop-blur border-b border-#ece7e1">
-    <NuxtLink to="/" class="flex items-center gap-3 cursor-pointer hover:opacity-80 transition">
-      <img src="/assets/images/couple/couple-1.png" alt="logo" class="w-6 h-6" />
-      <span class="font-semibold">My Doggy Love</span>
+  <header class="fixed top-0 left-0 right-0 z-30 w-screen flex items-center justify-between px-4 md:px-8 lg:px-12 py-3 bg-white/70 backdrop-blur border-b border-#ece7e1">
+    <NuxtLink to="/" class="flex items-center gap-2 md:gap-3 cursor-pointer hover:opacity-80 transition flex-shrink-0 min-w-0">
+      <img src="/assets/images/couple/couple-1.png" alt="logo" class="w-6 h-6 flex-shrink-0" />
+      <span class="font-semibold text-sm md:text-base truncate">My Doggy Love</span>
     </NuxtLink>
     <nav class="hidden md:flex items-center gap-6 lg:gap-8 text-sm">
       <NuxtLink to="/" class="hover:underline">首页</NuxtLink>
@@ -11,11 +11,14 @@
       <NuxtLink to="/wishes" class="hover:underline">愿望清单</NuxtLink>
       <NuxtLink to="/messages" class="hover:underline">留言板</NuxtLink>
     </nav>
-    <div class="flex items-center gap-3 relative">
+    <div class="flex items-center gap-2 md:gap-3 relative flex-shrink-0">
       <template v-if="me">
-        <UserStatusSelector :current-status="me?.status" @update="updateStatusHandler" />
+        <!-- 移动端隐藏状态选择器，避免换行 -->
+        <div class="md:block">
+          <UserStatusSelector :current-status="me?.status" @update="updateStatusHandler" />
+        </div>
         <!-- 通知图标 -->
-        <NuxtLink to="/notifications" class="relative flex items-center justify-center w-8 h-8 hover:opacity-80 transition">
+        <NuxtLink to="/notifications" class="relative flex items-center justify-center w-8 h-8 hover:opacity-80 transition flex-shrink-0">
           <svg class="w-6 h-6 text-#666" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
           </svg>
@@ -26,7 +29,7 @@
             {{ unreadCount > 99 ? '99+' : unreadCount }}
           </span>
         </NuxtLink>
-        <button class="flex items-center gap-2" @click="menu = !menu">
+        <button class="flex items-center gap-1 md:gap-2 flex-shrink-0" @click="menu = !menu">
           <img :src="me.avatarUrl || '/assets/images/xiaobai/xiaobai-2.png'" class="w-7 h-7 rounded-full object-cover" alt="avatar" />
           <span class="hidden md:inline text-sm">{{ me.nickName }}</span>
         </button>
@@ -37,10 +40,10 @@
         </div>
       </template>
       <template v-else>
-        <NuxtLink to="/user/login" class="text-sm hover:underline">登录</NuxtLink>
-        <NuxtLink to="/user/register" class="text-sm hover:underline">注册</NuxtLink>
+        <NuxtLink to="/user/login" class="text-sm hover:underline whitespace-nowrap">登录</NuxtLink>
+        <NuxtLink to="/user/register" class="text-sm hover:underline whitespace-nowrap">注册</NuxtLink>
       </template>
-      <button class="md:hidden" @click="open = !open" aria-label="menu">☰</button>
+      <button class="md:hidden flex-shrink-0" @click="open = !open" aria-label="menu">☰</button>
     </div>
   </header>
   <div class="fixed top-[57px] left-0 right-0 z-30 w-screen md:hidden">
