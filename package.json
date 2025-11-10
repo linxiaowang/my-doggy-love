@@ -47,6 +47,7 @@
   },
   "dependencies": {
     "@prisma/client": "6.18.0",
-    "ali-oss": "^6.23.0"
+    "ali-oss": "^6.23.0",
+    "vuedraggable": "^4.1.0"
   }
 }

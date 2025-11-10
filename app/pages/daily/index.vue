@@ -116,65 +116,72 @@
             </div>
             
             <!-- 文件预览区域 -->
-            <div v-if="filePreviews.length > 0" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
-              <div
-                v-for="(preview, index) in filePreviews"
-                :key="index"
-                class="relative group aspect-square rounded-lg overflow-hidden bg-#f7f6f3 border border-#ece7e1"
-              >
-                <!-- 图片预览 -->
-                <img
-                  v-if="preview.type.startsWith('image/')"
-                  :src="preview.url"
-                  :alt="preview.name"
-                  class="w-full h-full object-cover"
-                />
-                
-                <!-- 视频预览 -->
+            <draggable
+              v-if="filePreviews.length > 0"
+              v-model="filePreviews"
+              :animation="200"
+              :item-key="(item: FilePreview) => `${item.name}-${item.size}`"
+              class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3"
+              @end="onDragEnd"
+            >
+              <template #item="{ element: preview, index }">
                 <div
-                  v-else-if="preview.type.startsWith('video/')"
-                  class="w-full h-full flex flex-col items-center justify-center bg-#f0f0f0 relative"
+                  class="relative group aspect-square rounded-lg overflow-hidden bg-#f7f6f3 border border-#ece7e1 cursor-move"
                 >
-                  <!-- 如果有缩略图，显示缩略图 -->
+                  <!-- 图片预览 -->
                   <img
-                    v-if="preview.url && preview.url.startsWith('data:image')"
+                    v-if="preview.type.startsWith('image/')"
                     :src="preview.url"
+                    :alt="preview.name"
                     class="w-full h-full object-cover"
-                    alt="视频预览"
                   />
-                  <!-- 否则显示占位符 -->
-                  <template v-else>
-                    <svg class="w-12 h-12 text-#999 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  
+                  <!-- 视频预览 -->
+                  <div
+                    v-else-if="preview.type.startsWith('video/')"
+                    class="w-full h-full flex flex-col items-center justify-center bg-#f0f0f0 relative"
+                  >
+                    <!-- 如果有缩略图，显示缩略图 -->
+                    <img
+                      v-if="preview.url && preview.url.startsWith('data:image')"
+                      :src="preview.url"
+                      class="w-full h-full object-cover"
+                      alt="视频预览"
+                    />
+                    <!-- 否则显示占位符 -->
+                    <template v-else>
+                      <svg class="w-12 h-12 text-#999 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                      </svg>
+                      <span class="text-xs text-#777 px-2 text-center truncate w-full">{{ preview.name }}</span>
+                    </template>
+                    <!-- 视频播放图标覆盖层 -->
+                    <div class="absolute inset-0 flex items-center justify-center bg-black/20">
+                      <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </div>
+                  </div>
+                  
+                  <!-- 删除按钮 -->
+                  <button
+                    type="button"
+                    class="absolute top-1 right-1 w-6 h-6 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition z-10"
+                    @click.stop="removeFile(index)"
+                    title="删除"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
-                    <span class="text-xs text-#777 px-2 text-center truncate w-full">{{ preview.name }}</span>
-                  </template>
-                  <!-- 视频播放图标覆盖层 -->
-                  <div class="absolute inset-0 flex items-center justify-center bg-black/20">
-                    <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
+                  </button>
+                  
+                  <!-- 文件类型标识 -->
+                  <div class="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-black/60 text-white text-xs">
+                    {{ preview.type.startsWith('image/') ? '图片' : '视频' }}
                   </div>
                 </div>
-                
-                <!-- 删除按钮 -->
-                <button
-                  type="button"
-                  class="absolute top-1 right-1 w-6 h-6 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition"
-                  @click="removeFile(index)"
-                  title="删除"
-                >
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-                
-                <!-- 文件类型标识 -->
-                <div class="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-black/60 text-white text-xs">
-                  {{ preview.type.startsWith('image/') ? '图片' : '视频' }}
-                </div>
-              </div>
-            </div>
+              </template>
+            </draggable>
           </div>
         </form>
       </div>
@@ -190,14 +197,13 @@
           </div>
           <button class="btn-secondary ml-auto" @click="clearFilters">清空</button>
         </div>
-        <div class="flex flex-wrap gap-2">
+        <div v-if="allTags.length > 0" class="flex flex-wrap gap-2">
           <span class="text-sm text-#777">标签</span>
           <button
             v-for="t in allTags" :key="t"
             class="chip"
             :class="selectedTags.includes(t) ? 'ring-2 ring-#e6eef5' : ''"
             @click="toggleTag(t)">{{ t }}</button>
-          <input v-model="tag" placeholder="输入关键字回车添加新标签" class="input md:w-48" @keyup.enter="addTagFromInput" />
         </div>
       </div>
       <div v-if="loading">
@@ -242,6 +248,7 @@ import { ref, onMounted, computed, nextTick } from 'vue'
 import { createDailyPost } from '@/services/api/daily'
 import { uploadFiles } from '@/services/api/upload'
 import { apiFetch, handleApiError } from '@/services/api'
+import draggable from 'vuedraggable'
 
 // 检查登录状态，未登录会自动跳转到登录页
 definePageMeta({
@@ -256,13 +263,15 @@ const fileRef = ref<HTMLInputElement | null>(null)
 const start = ref('')
 const end = ref('')
 const tag = ref('')
-const filePreviews = ref<Array<{
+type FilePreview = {
   file: File
   name: string
   type: string
   size: number
   url: string
-}>>([])
+}
+
+const filePreviews = ref<FilePreview[]>([])
 const pageSize = 10
 const loadingMore = ref(false)
 const selectedTags = ref<string[]>([])
@@ -505,6 +514,12 @@ function removeFile(index: number) {
   filePreviews.value.splice(index, 1)
   
   // 同步更新 input 的 files
+  updateFileInput()
+}
+
+// 拖拽结束事件处理
+function onDragEnd() {
+  // 拖拽后同步更新 input 的 files
   updateFileInput()
 }
 
