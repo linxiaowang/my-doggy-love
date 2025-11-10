@@ -3,16 +3,16 @@
     <DogHeader />
     <div class="max-w-3xl mx-auto px-4 py-6 space-y-4">
       <div class="card animate-fade-in">
-        <form class="flex gap-2" @submit.prevent="addWish">
-          <input v-model="title" placeholder="添加一个愿望…" class="input flex-1" />
-          <button class="btn-primary">添加</button>
+        <form class="flex flex-col sm:flex-row gap-2" @submit.prevent="addWish">
+          <input v-model="title" placeholder="添加一个愿望…" class="input flex-1 w-full" />
+          <button class="btn-primary w-full sm:w-auto">添加</button>
         </form>
-        <div class="mt-4 flex items-center justify-between text-sm">
-          <div class="muted font-medium">共 {{ items.length }} 个愿望 · 已完成 {{ doneList.length }} 个</div>
-          <div class="grid grid-cols-3 border border-#ece7e1 rounded-lg overflow-hidden shadow-sm">
-            <button class="py-2 px-4 font-medium transition-colors duration-200" :class="filter==='all' ? 'bg-#f0e9e2 text-#333' : 'bg-white text-#666 hover:bg-#f7f6f3'" @click="filter='all'">全部</button>
-            <button class="py-2 px-4 font-medium transition-colors duration-200" :class="filter==='todo' ? 'bg-#f0e9e2 text-#333' : 'bg-white text-#666 hover:bg-#f7f6f3'" @click="filter='todo'">未完成</button>
-            <button class="py-2 px-4 font-medium transition-colors duration-200" :class="filter==='done' ? 'bg-#f0e9e2 text-#333' : 'bg-white text-#666 hover:bg-#f7f6f3'" @click="filter='done'">已完成</button>
+        <div class="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between text-sm">
+          <div class="muted font-medium text-center sm:text-left">共 {{ items.length }} 个愿望 · 已完成 {{ doneList.length }} 个</div>
+          <div class="grid grid-cols-3 border border-#ece7e1 rounded-lg overflow-hidden shadow-sm text-sm">
+            <button class="py-2 px-3 font-medium transition-colors duration-200" :class="filter==='all' ? 'bg-#f0e9e2 text-#333' : 'bg-white text-#666 hover:bg-#f7f6f3'" @click="filter='all'">全部</button>
+            <button class="py-2 px-3 font-medium transition-colors duration-200" :class="filter==='todo' ? 'bg-#f0e9e2 text-#333' : 'bg-white text-#666 hover:bg-#f7f6f3'" @click="filter='todo'">未完成</button>
+            <button class="py-2 px-3 font-medium transition-colors duration-200" :class="filter==='done' ? 'bg-#f0e9e2 text-#333' : 'bg-white text-#666 hover:bg-#f7f6f3'" @click="filter='done'">已完成</button>
           </div>
         </div>
       </div>
@@ -26,20 +26,20 @@
       </div>
 
       <div v-else class="space-y-3">
-        <div v-for="w in filteredList" :key="w.id" class="rounded-xl bg-white p-5 shadow-sm hover:shadow-md border border-#ece7e1 flex items-center justify-between gap-3 transition-all duration-300 animate-fade-in">
+        <div v-for="w in filteredList" :key="w.id" class="rounded-xl bg-white p-5 shadow-sm hover:shadow-md border border-#ece7e1 flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-all duration-300 animate-fade-in">
           <div class="flex items-start gap-3 flex-1 min-w-0">
             <input type="checkbox" :checked="w.status==='done'" @change="toggle(w)" class="mt-1 w-5 h-5 cursor-pointer" />
             <div class="flex-1 min-w-0">
-              <div class="text-base font-medium" :class="w.status==='done' ? 'line-through text-#999' : 'text-#333'">{{ w.title }}</div>
+              <div class="text-base font-medium break-words" :class="w.status==='done' ? 'line-through text-#999' : 'text-#333'">{{ w.title }}</div>
               <div v-if="w.status==='done' && w.finishedAt" class="text-xs text-#999 mt-2 flex items-center gap-2">
                 <span class="chip-success">已完成</span>
                 <span>{{ new Date(w.finishedAt).toLocaleString() }}</span>
               </div>
             </div>
           </div>
-          <div class="flex items-center gap-2 text-sm flex-shrink-0">
-            <button v-if="w.status==='todo'" class="btn-secondary text-sm" @click="markDone(w.id)">标记完成</button>
-            <button v-else class="btn-secondary text-sm" @click="markTodo(w.id)">重置</button>
+          <div class="flex items-center gap-2 text-sm flex-shrink-0 w-full sm:w-auto">
+            <button v-if="w.status==='todo'" class="btn-secondary text-sm flex-1 sm:flex-none" @click="markDone(w.id)">标记完成</button>
+            <button v-else class="btn-secondary text-sm flex-1 sm:flex-none" @click="markTodo(w.id)">重置</button>
           </div>
         </div>
       </div>
