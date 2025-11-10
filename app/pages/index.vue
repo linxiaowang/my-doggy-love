@@ -2,6 +2,8 @@
 import { ref, onMounted } from 'vue'
 import { useAuthMe } from '@/services/api/auth'
 import { apiFetch } from '@/services/api'
+import AnniversaryCountdown from '@/components/ui/AnniversaryCountdown.vue'
+
 definePageMeta({
   layout: 'home',
 })
@@ -40,10 +42,14 @@ function goQuickRecord() {
     <DogHeader />
     <div class="max-w-6xl mx-auto px-4 md:px-6 py-10 space-y-8">
       <section class="grid md:grid-cols-2 gap-8 items-center">
-        <div>
-          <h1 class="text-3xl md:text-4xl font-serif leading-tight">爱的小事，值得被温柔记录。</h1>
-          <p class="mt-3 text-#6b7280">以“线条小狗”为灵感的情侣纪念与日常记录空间。以留白与软色调，收纳你们的每一帧心动。</p>
-          <div class="mt-5 flex gap-3">
+        <div class="space-y-6">
+          <div>
+            <h1 class="text-3xl md:text-4xl font-serif leading-tight">爱的小事，值得被温柔记录。</h1>
+            <p class="mt-3 text-#6b7280">以"线条小狗"为灵感的情侣纪念与日常记录空间。以留白与软色调，收纳你们的每一帧心动。</p>
+          </div>
+          <!-- 纪念日倒计时提示 -->
+          <AnniversaryCountdown v-if="meData?.user" />
+          <div class="flex gap-3">
             <button class="btn-primary" @click="goQuickRecord">开始记录</button>
             <NuxtLink to="/daily" class="btn-secondary">查看日常</NuxtLink>
           </div>

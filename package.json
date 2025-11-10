@@ -48,6 +48,7 @@
   "dependencies": {
     "@prisma/client": "6.18.0",
     "ali-oss": "^6.23.0",
+    "dayjs": "^1.11.19",
     "vuedraggable": "^4.1.0"
   }
 }
