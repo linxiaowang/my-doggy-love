@@ -13,7 +13,6 @@
     </nav>
     <div class="flex items-center gap-2 md:gap-3 relative flex-shrink-0">
       <template v-if="me">
-        <!-- 移动端隐藏状态选择器，避免换行 -->
         <div class="md:block">
           <UserStatusSelector :current-status="me?.status" @update="updateStatusHandler" />
         </div>

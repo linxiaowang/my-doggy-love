@@ -1,17 +1,17 @@
 <template>
-  <div class="min-h-screen bg-#f7f6f3">
+  <div class="min-h-screen bg-gradient-to-br from-#f7f6f3 via-#faf9f7 to-#f7f6f3">
     <DogHeader />
     <div class="max-w-2xl mx-auto px-4 py-6 space-y-4">
-      <div class="rounded-xl bg-white p-4 shadow">
+      <div class="rounded-xl bg-white p-5 shadow-sm hover:shadow-md border border-#ece7e1 transition-all duration-300 animate-fade-in">
         <!-- 错误提示 -->
-        <div v-if="errorMessage" class="mb-3 text-#b42318 bg-#fdecea border border-#f5c2c7 rounded px-3 py-2 text-sm">
+        <div v-if="errorMessage" class="mb-4 text-#b42318 bg-#fdecea border border-#f5c2c7 rounded-lg px-4 py-2.5 text-sm">
           {{ errorMessage }}
-          <NuxtLink v-if="errorMessage.includes('情侣')" to="/user/couple" class="underline ml-1">去绑定</NuxtLink>
+          <NuxtLink v-if="errorMessage.includes('情侣')" to="/user/couple" class="underline ml-1 font-medium hover:text-#d92d20 transition-colors">去绑定</NuxtLink>
         </div>
         
         <form class="flex gap-2" @submit.prevent="submit">
-          <input v-model="content" placeholder="留下想说的话…" class="border border-#ece7e1 rounded px-3 py-2 flex-1 bg-white text-#333 placeholder:text-gray-400" />
-          <button class="px-4 py-2 rounded bg-#e9e4de" :disabled="submitting">
+          <input v-model="content" placeholder="留下想说的话…" class="input flex-1" />
+          <button class="btn-primary" :disabled="submitting">
             {{ submitting ? '发布中...' : '发布' }}
           </button>
         </form>
@@ -23,25 +23,25 @@
         <EmptyState text="还没有留言" img="/assets/images/xiaobai/xiaobai-3.png" cta-text="去发表第一条" cta-to="/messages" />
       </div>
       <div v-else class="space-y-3">
-        <div v-for="m in items" :key="m.id" class="rounded-xl bg-white p-4 shadow">
+        <div v-for="m in items" :key="m.id" class="rounded-xl bg-white p-5 shadow-sm hover:shadow-md border border-#ece7e1 transition-all duration-300 animate-fade-in">
           <div class="flex items-start gap-3">
             <img 
               :src="m.author?.avatarUrl || '/assets/images/xiaobai/xiaobai-2.png'" 
               :alt="m.author?.nickName || '用户头像'"
-              class="w-10 h-10 rounded-full object-cover border border-#ece7e1 flex-shrink-0"
+              class="w-10 h-10 rounded-full object-cover border-2 border-#ece7e1 flex-shrink-0 hover:border-#ddd6cf transition-colors duration-200"
               @error="handleImageError"
             />
             <div class="flex-1 min-w-0">
-              <div class="text-sm text-#777 mb-0.5">{{ m.author?.nickName || '匿名' }} · {{ new Date(m.createdAt).toLocaleString() }}</div>
-              <div class="text-#333 whitespace-pre-wrap break-words">{{ m.content }}</div>
-              <div class="mt-2 flex items-center gap-3 text-sm">
-                <button class="underline" @click="toggleComments(m.id)">{{ openId===m.id ? '收起评论' : `查看评论${formatCount(m.commentCount)}` }}</button>
-                <span class="text-#ccc">|</span>
-                <button class="underline" @click="toggleInput(m.id)">{{ inputOpenId===m.id ? '收起输入' : '写评论' }}</button>
+              <div class="text-sm text-#777 mb-1.5 font-medium">{{ m.author?.nickName || '匿名' }} · {{ new Date(m.createdAt).toLocaleString() }}</div>
+              <div class="text-#333 whitespace-pre-wrap break-words leading-relaxed">{{ m.content }}</div>
+              <div class="mt-3 flex items-center gap-3 text-sm border-t border-#f0f0f0 pt-3">
+                <button class="text-#666 hover:text-#333 transition-colors duration-200 font-medium" @click="toggleComments(m.id)">{{ openId===m.id ? '收起评论' : `查看评论${formatCount(m.commentCount)}` }}</button>
+                <span class="text-#ddd">|</span>
+                <button class="text-#666 hover:text-#333 transition-colors duration-200 font-medium" @click="toggleInput(m.id)">{{ inputOpenId===m.id ? '收起输入' : '写评论' }}</button>
               </div>
-              <div v-if="inputOpenId===m.id" class="mt-2 flex items-center gap-2">
-                <input v-model="comment" placeholder="写点评论…" class="border rounded px-3 py-1.5 flex-1" @keydown.enter.prevent="submitComment(m.id)" />
-                <button class="px-3 py-1.5 rounded bg-#e9e4de" @click="submitComment(m.id)">发布</button>
+              <div v-if="inputOpenId===m.id" class="mt-3 flex items-center gap-2 animate-fade-in">
+                <input v-model="comment" placeholder="写点评论…" class="input flex-1 text-sm" @keydown.enter.prevent="submitComment(m.id)" />
+                <button class="px-4 py-2 rounded-lg bg-#e9e4de hover:bg-#e1dbd4 transition-colors duration-200 font-medium" @click="submitComment(m.id)">发布</button>
               </div>
               <div v-if="openId===m.id" class="mt-2">
                 <div v-if="loadingComments" class="text-sm text-#999">加载中…</div>

@@ -1,12 +1,12 @@
 <template>
-  <div class="min-h-screen bg-#f7f6f3">
+  <div class="min-h-screen bg-gradient-to-br from-#f7f6f3 via-#faf9f7 to-#f7f6f3">
     <DogHeader />
     <div class="max-w-3xl mx-auto px-4 py-6">
-      <div class="rounded-xl bg-white p-4 shadow mb-4">
+      <div class="rounded-xl bg-white p-5 shadow-sm hover:shadow-md border border-#ece7e1 mb-4 transition-all duration-300">
         <!-- 错误提示 -->
-        <div v-if="errorMessage" class="mb-3 text-#b42318 bg-#fdecea border border-#f5c2c7 rounded px-3 py-2 text-sm">
+        <div v-if="errorMessage" class="mb-4 text-#b42318 bg-#fdecea border border-#f5c2c7 rounded-lg px-4 py-2.5 text-sm animate-fade-in">
           {{ errorMessage }}
-          <NuxtLink v-if="errorMessage.includes('情侣')" to="/user/couple" class="underline ml-1">去绑定</NuxtLink>
+          <NuxtLink v-if="errorMessage.includes('情侣')" to="/user/couple" class="underline ml-1 font-medium hover:text-#d92d20 transition-colors">去绑定</NuxtLink>
         </div>
         
         <form class="flex flex-col gap-3" @submit.prevent="create">
@@ -102,12 +102,12 @@
                   class="hidden"
                   @change="onFilesChange" 
                 />
-                <div class="px-4 py-2 rounded-lg border border-#ece7e1 bg-white hover:bg-#f7f6f3 transition flex items-center gap-2 cursor-pointer">
+                <div class="px-4 py-2.5 rounded-lg border border-#ece7e1 bg-white hover:bg-#f7f6f3 hover:border-#ddd6cf hover:shadow-sm transition-all duration-200 flex items-center gap-2 cursor-pointer">
                   <svg class="w-5 h-5 text-#666" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
-                  <span class="text-sm text-#666">添加图片/视频</span>
-                  <span v-if="filePreviews.length > 0" class="text-xs text-#999">({{ filePreviews.length }})</span>
+                  <span class="text-sm text-#666 font-medium">添加图片/视频</span>
+                  <span v-if="filePreviews.length > 0" class="text-xs text-#999 bg-#f0f0f0 px-2 py-0.5 rounded-full">({{ filePreviews.length }})</span>
                 </div>
               </label>
               <button type="submit" class="btn-primary flex-1" :disabled="creating">

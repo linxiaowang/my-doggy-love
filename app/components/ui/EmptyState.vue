@@ -1,8 +1,11 @@
 <template>
-  <div class="w-full py-12 flex flex-col items-center justify-center text-center text-#777">
-    <img :src="img" loading="lazy" alt="empty" class="w-40 h-40 object-contain mb-4 opacity-90" />
-    <div class="text-sm">{{ text }}</div>
-    <NuxtLink v-if="ctaTo && ctaText" :to="ctaTo" class="mt-3 btn-secondary text-sm">{{ ctaText }}</NuxtLink>
+  <div class="w-full py-16 flex flex-col items-center justify-center text-center text-#777 animate-fade-in">
+    <div class="relative mb-6">
+      <img :src="img" loading="lazy" alt="empty" class="w-40 h-40 object-contain opacity-80 hover:opacity-100 transition-opacity duration-300" />
+      <div class="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-#f7f6f3/50 pointer-events-none"></div>
+    </div>
+    <div class="text-base font-medium text-#666 mb-2">{{ text }}</div>
+    <NuxtLink v-if="ctaTo && ctaText" :to="ctaTo" class="mt-4 btn-secondary text-sm">{{ ctaText }}</NuxtLink>
   </div>
   
 </template>
