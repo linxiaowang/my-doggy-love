@@ -32,7 +32,7 @@ if (!g.__prisma) {
     console.error('Current process.env keys:', Object.keys(process?.env || {}))
     throw error
   }
-  g.__prisma = new PrismaClient({ datasources: { db: { url: 'mysql://appuser:AppPass123!@127.0.0.1:3306/my_doggy_love' } } })
+  g.__prisma = new PrismaClient({ datasources: { db: { url } } })
 }
 
 prisma = g.__prisma as PrismaClient

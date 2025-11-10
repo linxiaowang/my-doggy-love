@@ -66,9 +66,10 @@
         
         <!-- 上一张按钮 -->
         <button
-          v-if="mediaUrls && mediaUrls.length > 1 && previewIndex > 0"
-          class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center z-10"
-          @click.stop="prevMedia"
+          v-if="mediaUrls && mediaUrls.length > 1 && previewIndex !== null && previewIndex > 0"
+          class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center z-20 cursor-pointer"
+          @click.stop.prevent="prevMedia"
+          type="button"
         >
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
@@ -77,9 +78,10 @@
         
         <!-- 下一张按钮 -->
         <button
-          v-if="mediaUrls && mediaUrls.length > 1 && previewIndex < mediaUrls.length - 1"
-          class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center z-10"
-          @click.stop="nextMedia"
+          v-if="mediaUrls && mediaUrls.length > 1 && previewIndex !== null && previewIndex < mediaUrls.length - 1"
+          class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center z-20 cursor-pointer"
+          @click.stop.prevent="nextMedia"
+          type="button"
         >
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />

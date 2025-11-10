@@ -1,10 +1,10 @@
 <template>
-  <header class="sticky top-0 z-30 w-full flex items-center justify-between px-4 py-3 bg-white/70 backdrop-blur border-b border-#ece7e1">
+  <header class="fixed top-0 left-0 right-0 z-30 w-screen flex items-center justify-between px-6 md:px-8 lg:px-12 py-3 bg-white/70 backdrop-blur border-b border-#ece7e1">
     <NuxtLink to="/" class="flex items-center gap-3 cursor-pointer hover:opacity-80 transition">
       <img src="/assets/images/couple/couple-1.png" alt="logo" class="w-6 h-6" />
       <span class="font-semibold">My Doggy Love</span>
     </NuxtLink>
-    <nav class="hidden md:flex items-center gap-4 text-sm">
+    <nav class="hidden md:flex items-center gap-6 lg:gap-8 text-sm">
       <NuxtLink to="/" class="hover:underline">首页</NuxtLink>
       <NuxtLink to="/daily" class="hover:underline">日常</NuxtLink>
       <NuxtLink to="/anniversaries" class="hover:underline">纪念日</NuxtLink>
@@ -43,8 +43,9 @@
       <button class="md:hidden" @click="open = !open" aria-label="menu">☰</button>
     </div>
   </header>
-  <transition name="fade">
-    <div v-if="open" class="md:hidden px-4 py-2 border-b border-#ece7e1 bg-white/90 backdrop-blur">
+  <div class="fixed top-[57px] left-0 right-0 z-30 w-screen md:hidden">
+    <transition name="fade">
+      <div v-if="open" class="px-6 py-2 border-b border-#ece7e1 bg-white/90 backdrop-blur">
       <nav class="flex flex-col gap-2 text-sm">
         <NuxtLink to="/" @click="open=false">首页</NuxtLink>
         <NuxtLink to="/daily" @click="open=false">日常</NuxtLink>
@@ -52,8 +53,11 @@
         <NuxtLink to="/wishes" @click="open=false">愿望清单</NuxtLink>
         <NuxtLink to="/messages" @click="open=false">留言板</NuxtLink>
       </nav>
-    </div>
-  </transition>
+      </div>
+    </transition>
+  </div>
+  <!-- 占位元素，避免内容被固定头部遮挡 -->
+  <div :class="open ? 'h-[105px]' : 'h-[57px]'" class="md:h-[57px]"></div>
 </template>
 
 <script setup lang="ts">
