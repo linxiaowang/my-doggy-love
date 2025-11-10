@@ -26,7 +26,19 @@ async function loadDailyImages() {
     if (meData.value?.user) {
       const res = await apiFetch<{ items: any[] }>('/api/daily')
       const media = (res.items || []).flatMap(i => Array.isArray(i.mediaUrls) ? i.mediaUrls : [])
-      if (media.length) images.value = [...media.slice(0, 6), ...presetImages]
+      if (media.length > 3) {
+        // 如果超过3张，只用日常照片
+        images.value = media.slice(0, 6)
+      } else if (media.length > 0) {
+        // 如果1-3张，日常照片 + 默认照片
+        images.value = [...media.slice(0, 6), ...presetImages]
+      } else {
+        // 如果没有日常照片，使用默认照片
+        images.value = [...presetImages]
+      }
+    } else {
+      // 未登录时使用默认照片
+      images.value = [...presetImages]
     }
   } catch {
     // ignore
