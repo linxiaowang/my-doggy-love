@@ -1,8 +1,8 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-#f7f6f3 via-#faf9f7 to-#f7f6f3">
     <DogHeader />
-    <div class="max-w-3xl mx-auto px-4 py-6">
-      <div class="rounded-xl bg-white p-5 shadow-sm hover:shadow-md border border-#ece7e1 mb-4 transition-all duration-300">
+    <div class="max-w-3xl mx-auto px-4 py-6 space-y-4">
+      <div class="rounded-xl bg-white p-5 shadow-sm hover:shadow-md border border-#ece7e1 transition-all duration-300">
         <!-- 错误提示 -->
         <div v-if="errorMessage" class="mb-4 text-#b42318 bg-#fdecea border border-#f5c2c7 rounded-lg px-4 py-2.5 text-sm animate-fade-in">
           {{ errorMessage }}
@@ -185,17 +185,20 @@
           </div>
         </form>
       </div>
-      <div class="rounded-xl bg-white p-4 shadow mb-4 space-y-3">
-        <div class="flex flex-col md:flex-row gap-2 md:items-center">
-          <div class="text-sm text-#777">筛选</div>
-          <input v-model="start" type="date" class="border border-#ece7e1 rounded px-2 py-1 bg-white text-#333" />
-          <input v-model="end" type="date" class="border border-#ece7e1 rounded px-2 py-1 bg-white text-#333" />
-          <div class="flex gap-1 text-xs">
-            <button class="btn-secondary px-2 py-1" @click="presetDays(0)">今天</button>
-            <button class="btn-secondary px-2 py-1" @click="presetDays(7)">近7天</button>
-            <button class="btn-secondary px-2 py-1" @click="presetDays(30)">近30天</button>
+      <div class="rounded-xl bg-white p-5 shadow-sm hover:shadow-md border border-#ece7e1 transition-all duration-300 space-y-3">
+        <div class="flex flex-wrap items-center gap-2 md:gap-4">
+          <div class="text-sm text-#777 font-medium">筛选</div>
+          <div class="flex flex-col sm:flex-row gap-2 sm:items-center flex-1 min-w-[180px]">
+            <input v-model="start" type="date" class="input h-10 text-sm w-full sm:w-auto" />
+            <span class="hidden sm:block text-#ccc">—</span>
+            <input v-model="end" type="date" class="input h-10 text-sm w-full sm:w-auto" />
           </div>
-          <button class="btn-secondary ml-auto" @click="clearFilters">清空</button>
+          <div class="flex flex-wrap items-center gap-2">
+            <button class="btn-secondary px-3 py-1.5 text-xs font-medium" @click="presetDays(0)">今天</button>
+            <button class="btn-secondary px-3 py-1.5 text-xs font-medium" @click="presetDays(7)">近7天</button>
+            <button class="btn-secondary px-3 py-1.5 text-xs font-medium" @click="presetDays(30)">近30天</button>
+          </div>
+          <button class="btn-secondary px-3 py-1.5 text-sm leading-none md:ml-auto" @click="clearFilters">清空</button>
         </div>
         <div v-if="allTags.length > 0" class="flex flex-wrap gap-2">
           <span class="text-sm text-#777">标签</span>
