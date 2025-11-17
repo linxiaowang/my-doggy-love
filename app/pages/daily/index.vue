@@ -252,6 +252,7 @@ import { createDailyPost } from '@/services/api/daily'
 import { uploadFiles } from '@/services/api/upload'
 import { apiFetch, handleApiError } from '@/services/api'
 import draggable from 'vuedraggable'
+import { compressImages, shouldCompress } from '@/utils/imageCompress'
 
 // 检查登录状态，未登录会自动跳转到登录页
 definePageMeta({
@@ -317,8 +318,28 @@ async function create() {
     let mediaUrls: string[] = []
     if (fileRef.value?.files && fileRef.value.files.length) {
       const files = Array.from(fileRef.value.files)
-      const up = await uploadFiles(files)
-      mediaUrls = up.urls
+      
+      // 压缩图片（仅压缩需要压缩的图片）
+      // 使用 compressorjs，会自动将大于 5MB 的 PNG 转换为 JPEG
+      const filesToUpload = await compressImages(files, {
+        maxWidth: 1920,
+        maxHeight: 1920,
+        quality: 0.8, // compressorjs 推荐值
+        checkOrientation: true, // 自动纠正图片方向
+        retainExif: false, // 不保留 EXIF 以减小体积
+        convertTypes: ['image/png'], // 大 PNG 自动转 JPEG
+        convertSize: 5 * 1024 * 1024, // 5MB 阈值
+        keepOriginalFormat: false, // 统一转换为 JPEG 以减小体积
+      })
+      
+      const up = await uploadFiles(filesToUpload)
+      // 处理新的返回格式（可能包含缩略图）
+      mediaUrls = up.urls.map(item => {
+        if (typeof item === 'string') {
+          return item
+        }
+        return item.url // 使用原图 URL
+      })
     }
     
     await createDailyPost({
@@ -421,7 +442,7 @@ async function loadMore() {
   }
 }
 
-function onFilesChange() {
+async function onFilesChange() {
   if (!fileRef.value?.files || !fileRef.value.files.length) {
     return
   }
@@ -437,6 +458,15 @@ function onFilesChange() {
   
   if (filesToAdd.length === 0) {
     return
+  }
+  
+  // 对于图片文件，显示压缩提示
+  const imageFiles = filesToAdd.filter(f => f.type.startsWith('image/'))
+  const needsCompression = imageFiles.filter(f => shouldCompress(f))
+  
+  if (needsCompression.length > 0) {
+    // 可以在这里显示一个提示，告知用户图片将被压缩
+    console.log(`将压缩 ${needsCompression.length} 张图片以优化上传速度`)
   }
   
   filesToAdd.forEach((file) => {

@@ -13,10 +13,12 @@ export interface FileLike {
 export interface StorageSaveResult {
   url: string
   path: string
+  thumbnailUrl?: string
+  thumbnailPath?: string
 }
 
 export interface StorageService {
-  save(file: FileLike, opts?: { prefix?: string }): Promise<StorageSaveResult>
+  save(file: FileLike, opts?: { prefix?: string; generateThumbnail?: boolean }): Promise<StorageSaveResult>
   getSignedUrl?(path: string, expires?: number): string
   toAccessibleUrl?(storedUrl: string, expires?: number): string
 }
@@ -24,7 +26,7 @@ export interface StorageService {
 export class LocalStorageService implements StorageService {
   constructor(private baseDir: string = (globalThis as any).process?.env?.UPLOAD_DIR || 'public/uploads') {}
 
-  async save(file: FileLike, opts?: { prefix?: string }): Promise<StorageSaveResult> {
+  async save(file: FileLike, opts?: { prefix?: string; generateThumbnail?: boolean }): Promise<StorageSaveResult> {
     const now = new Date()
     const yyyy = String(now.getFullYear())
     const mm = String(now.getMonth() + 1).padStart(2, '0')
@@ -36,7 +38,36 @@ export class LocalStorageService implements StorageService {
     await fs.mkdir(dirname(absPath), { recursive: true })
     await fs.writeFile(absPath, file.data)
     const publicUrl = `/uploads/${relPath}`
-    return { url: publicUrl, path: absPath }
+    
+    const result: StorageSaveResult = { url: publicUrl, path: absPath }
+    
+    // 如果需要生成缩略图且是图片文件
+    if (opts?.generateThumbnail && file.type?.startsWith('image/')) {
+      try {
+        const sharp = await import('sharp')
+        const thumbnailName = `thumb_${safeName}`
+        const thumbnailRelPath = `${prefix}${yyyy}/${mm}/${dd}/${thumbnailName}`
+        const thumbnailAbsPath = join(this.baseDir, thumbnailRelPath)
+        
+        // 生成 400x400 的缩略图
+        const thumbnailBuffer = await sharp.default(file.data)
+          .resize(400, 400, {
+            fit: 'inside',
+            withoutEnlargement: true,
+          })
+          .jpeg({ quality: 80 })
+          .toBuffer()
+        
+        await fs.writeFile(thumbnailAbsPath, thumbnailBuffer)
+        result.thumbnailUrl = `/uploads/${thumbnailRelPath}`
+        result.thumbnailPath = thumbnailAbsPath
+      } catch (error) {
+        console.warn('生成缩略图失败:', error)
+        // 缩略图生成失败不影响主文件保存
+      }
+    }
+    
+    return result
   }
 }
 
@@ -90,7 +121,7 @@ export class OSSStorageService implements StorageService {
     }
   }
 
-  async save(file: FileLike, opts?: { prefix?: string }): Promise<StorageSaveResult> {
+  async save(file: FileLike, opts?: { prefix?: string; generateThumbnail?: boolean }): Promise<StorageSaveResult> {
     const now = new Date()
     const yyyy = String(now.getFullYear())
     const mm = String(now.getMonth() + 1).padStart(2, '0')
@@ -107,10 +138,40 @@ export class OSSStorageService implements StorageService {
     // 这样可以避免数据库字段长度限制问题
     const storedUrl = `${this.OSS_PREFIX}${objectName}`
 
-    return {
+    const result: StorageSaveResult = {
       url: storedUrl,
       path: objectName,
     }
+    
+    // 如果需要生成缩略图且是图片文件
+    if (opts?.generateThumbnail && file.type?.startsWith('image/')) {
+      try {
+        const sharp = await import('sharp')
+        const thumbnailName = `thumb_${safeName}`
+        const thumbnailObjectName = `${prefix}${yyyy}/${mm}/${dd}/${thumbnailName}`
+        
+        // 生成 400x400 的缩略图
+        const thumbnailBuffer = await sharp.default(file.data)
+          .resize(400, 400, {
+            fit: 'inside',
+            withoutEnlargement: true,
+          })
+          .jpeg({ quality: 80 })
+          .toBuffer()
+        
+        await this.client.put(thumbnailObjectName, thumbnailBuffer, {
+          mime: 'image/jpeg',
+        })
+        
+        result.thumbnailUrl = `${this.OSS_PREFIX}${thumbnailObjectName}`
+        result.thumbnailPath = thumbnailObjectName
+      } catch (error) {
+        console.warn('生成缩略图失败:', error)
+        // 缩略图生成失败不影响主文件保存
+      }
+    }
+    
+    return result
   }
 
   getSignedUrl(path: string, expires: number = 3600): string {

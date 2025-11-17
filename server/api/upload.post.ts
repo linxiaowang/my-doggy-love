@@ -9,12 +9,23 @@ export default defineEventHandler(async (event) => {
   const files = await parseMultipartToFileLikes(event)
   if (!files.length) throw createError({ statusCode: 400, statusMessage: 'file required' })
   const storage = createStorageService()
-  const results = []
+  const results: Array<string | { url: string; thumbnailUrl?: string }> = []
   for (const f of files) {
-    const saved = await storage.save(f, { prefix: 'media' })
+    // 为图片文件生成缩略图
+    const saved = await storage.save(f, { 
+      prefix: 'media',
+      generateThumbnail: f.type?.startsWith('image/') || false
+    })
     // 返回存储的 URL（可能包含 oss: 前缀），前端在显示时才转换为签名 URL
-    // 但为了兼容，这里也返回可访问的 URL
-    results.push(saved.url)
+    // 为了兼容旧版本，如果有缩略图则返回对象，否则返回字符串
+    if (saved.thumbnailUrl) {
+      results.push({
+        url: saved.url,
+        thumbnailUrl: saved.thumbnailUrl,
+      })
+    } else {
+      results.push(saved.url)
+    }
   }
   return { urls: results }
 })

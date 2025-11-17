@@ -4,8 +4,13 @@
 
 import { apiFetch } from './index'
 
+export interface UploadItem {
+  url: string
+  thumbnailUrl?: string
+}
+
 export interface UploadResponse {
-  urls: string[]
+  urls: (string | UploadItem)[]
 }
 
 /**

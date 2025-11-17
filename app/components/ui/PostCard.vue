@@ -17,9 +17,11 @@
         <!-- 图片 -->
         <img
           v-if="isImage(u)"
-          :src="u"
+          :src="getThumbnailUrl(u)"
+          :data-original="u"
           loading="lazy"
           class="w-full h-28 object-cover transition-transform duration-300 group-hover:scale-110"
+          @error="handleThumbnailError"
         />
         <!-- 视频 -->
         <div
@@ -182,6 +184,7 @@ import { computed, ref, watch, onMounted, onUnmounted } from 'vue'
 import { createDailyComment, useDailyPostComments, deleteDailyPost } from '@/services/api/daily'
 import { useAuthMe } from '@/services/api/auth'
 import { apiFetch } from '@/services/api'
+import { getThumbnailUrl } from '@/utils/imageUrl'
 
 const props = defineProps<{ 
   id: string
@@ -243,6 +246,15 @@ function isVideo(url: string): boolean {
 function handleVideoMetadata(event: Event) {
   const video = event.target as HTMLVideoElement
   // 视频加载完成后可以做一些处理
+}
+
+// 处理缩略图加载失败，回退到原图
+function handleThumbnailError(event: Event) {
+  const img = event.target as HTMLImageElement
+  const originalUrl = img.getAttribute('data-original')
+  if (originalUrl && img.src !== originalUrl) {
+    img.src = originalUrl
+  }
 }
 
 // 打开预览
