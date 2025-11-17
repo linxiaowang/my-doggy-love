@@ -62,6 +62,18 @@ export default defineNuxtConfig({
       routes: ['/'],
       ignore: ['/hi'],
     },
+    // 将 sharp 标记为外部依赖，避免在构建时打包原生模块
+    // sharp 会在运行时动态加载（使用动态 import）
+    // 这样可以避免构建时编译原生模块导致的卡顿
+    rollupConfig: {
+      external: (id) => {
+        // 排除 sharp 及其依赖
+        if (id === 'sharp' || id.startsWith('sharp/')) {
+          return true
+        }
+        return false
+      },
+    },
   },
 
   eslint: {
