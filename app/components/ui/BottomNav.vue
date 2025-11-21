@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const route = useRoute()
+const { isAuthenticated } = useAuth()
 
 const navItems = [
   { name: '首页', path: '/', icon: 'i-carbon-home' },
@@ -16,7 +17,7 @@ function isActive(path: string) {
 </script>
 
 <template>
-  <nav class="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-md border-t border-gray-100 pb-[env(safe-area-inset-bottom)] z-50 md:hidden">
+  <nav v-if="isAuthenticated" class="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-md border-t border-gray-100 pb-[env(safe-area-inset-bottom)] z-50 md:hidden">
     <div class="flex justify-around items-center h-16">
       <NuxtLink
         v-for="item in navItems"

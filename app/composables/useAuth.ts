@@ -4,8 +4,8 @@
  */
 
 export const useAuth = () => {
-  const user = ref<{ id: string; email?: string; nickName: string; avatarUrl?: string } | null>(null)
-  const loading = ref(true)
+  const user = useState<{ id: string; email?: string; nickName: string; avatarUrl?: string } | null>('auth-user', () => null)
+  const loading = useState<boolean>('auth-loading', () => true)
   const isAuthenticated = computed(() => !!user.value)
 
   /**
@@ -57,7 +57,10 @@ export const useAuth = () => {
 
   // 初始化时检查登录状态
   if (process.client) {
-    checkAuth()
+    // 只有在用户状态未知时才检查，避免重复检查
+    if (loading.value) {
+      checkAuth()
+    }
   }
 
   return {
