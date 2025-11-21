@@ -65,16 +65,16 @@ function goQuickRecord() {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-#f7f6f3 via-#faf9f7 to-#f7f6f3">
+  <div class="min-h-screen bg-gradient-to-br from-surface-100 via-surface-50 to-surface-100">
     <DogHeader />
     <div class="max-w-6xl mx-auto px-4 md:px-6 py-12 md:py-16 space-y-8">
       <section class="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
         <div class="space-y-6 animate-fade-in">
           <div class="space-y-4">
-            <h1 class="text-3xl md:text-5xl font-serif leading-tight text-#2d3748 tracking-tight">
+            <h1 class="text-3xl md:text-5xl font-serif leading-tight text-text-main tracking-tight">
               爱的小事，<br class="hidden md:block" />值得被温柔记录。
             </h1>
-            <p class="text-base md:text-lg text-#6b7280 leading-relaxed">
+            <p class="text-base md:text-lg text-text-secondary leading-relaxed">
               以"线条小狗"为灵感的情侣纪念与日常记录空间。<br class="hidden md:block" />
               以留白与软色调，收纳你们的每一帧心动。
             </p>

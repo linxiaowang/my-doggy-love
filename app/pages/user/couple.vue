@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-#f7f6f3">
     <DogHeader />
     <div class="max-w-xl mx-auto px-4 py-8">
-      <div class="rounded-xl bg-white p-6 shadow space-y-4">
+      <div class="card space-y-4">
         <div class="text-lg">情侣绑定</div>
         <div v-if="loading" class="text-sm text-#777">加载中…</div>
         <div v-else-if="couple" class="space-y-4">

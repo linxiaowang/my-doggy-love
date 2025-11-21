@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-#f7f6f3">
     <DogHeader />
     <div class="max-w-3xl mx-auto px-4 py-6 space-y-4">
-      <div class="rounded-xl bg-white p-4 shadow">
+      <div class="card">
         <form class="grid md:grid-cols-4 gap-2 items-center" @submit.prevent="create">
           <input v-model="title" placeholder="纪念日标题" class="border border-#ece7e1 rounded px-3 py-2 md:col-span-2 bg-white text-#333 placeholder:text-gray-400" />
           <input v-model="date" type="date" class="border border-#ece7e1 rounded px-3 py-2 bg-white text-#333" />

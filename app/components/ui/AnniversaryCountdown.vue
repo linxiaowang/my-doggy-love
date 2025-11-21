@@ -1,24 +1,24 @@
 <template>
-  <div v-if="!loading && upcomingAnniversary" class="rounded-xl bg-gradient-to-br from-#fff to-#f6f9fd border border-#e1e9f5 p-4 shadow-sm hover:shadow transition-shadow">
+  <div v-if="!loading && upcomingAnniversary" class="card">
     <div class="flex items-center justify-between gap-4">
       <div class="flex-1 min-w-0">
-        <div class="text-xs text-#999 mb-1.5">纪念日提醒</div>
-        <div class="text-base font-semibold text-#333 mb-1 truncate">{{ upcomingAnniversary.title }}</div>
-        <div class="text-xs text-#777">
+        <div class="text-xs text-text-muted mb-1.5">纪念日提醒</div>
+        <div class="text-base font-semibold text-text-main mb-1 truncate">{{ upcomingAnniversary.title }}</div>
+        <div class="text-xs text-text-secondary">
           {{ formatDate(upcomingAnniversary.date) }}
         </div>
       </div>
       <div class="text-right flex-shrink-0">
         <div 
           v-if="countdown.days === 0"
-          class="text-xl font-bold text-#127a3e bg-#e7f6ec px-3 py-1.5 rounded-lg whitespace-nowrap"
+          class="text-xl font-bold text-green-700 bg-green-50 px-3 py-1.5 rounded-lg whitespace-nowrap"
         >
           🎉 就是今天！
         </div>
         <div v-else-if="countdown.overdue" class="text-right">
-          <div class="text-xs text-#999 mb-0.5">已经</div>
+          <div class="text-xs text-text-muted mb-0.5">已经</div>
           <div 
-            class="text-xl font-bold text-#b42318 cursor-pointer hover:opacity-80 transition-opacity"
+            class="text-xl font-bold text-red-600 cursor-pointer hover:opacity-80 transition-opacity"
             @click="toggleFormat"
             title="点击切换显示格式"
           >
@@ -26,9 +26,9 @@
           </div>
         </div>
         <div v-else class="text-right">
-          <div class="text-xs text-#999 mb-0.5">还有</div>
+          <div class="text-xs text-text-muted mb-0.5">还有</div>
           <div 
-            class="text-xl font-bold text-#335b8c cursor-pointer hover:opacity-80 transition-opacity"
+            class="text-xl font-bold text-primary-800 cursor-pointer hover:opacity-80 transition-opacity"
             @click="toggleFormat"
             title="点击切换显示格式"
           >
@@ -39,7 +39,7 @@
     </div>
     <NuxtLink 
       to="/anniversaries" 
-      class="mt-3 block text-center text-xs text-#666 hover:text-#335b8c underline transition-colors"
+      class="mt-3 block text-center text-xs text-text-secondary hover:text-primary-700 underline transition-colors"
     >
       查看所有纪念日 →
     </NuxtLink>
@@ -227,7 +227,7 @@ const upcomingAnniversary = computed<Anniversary | null>(() => {
     .filter(item => !item.countdown.overdue)
     .sort((a, b) => a.countdown.days - b.countdown.days)
   
-  if (future.length > 0) {
+  if (future.length > 0 && future[0]) {
     return future[0].anniversary
   }
   
@@ -237,7 +237,7 @@ const upcomingAnniversary = computed<Anniversary | null>(() => {
     .filter(item => item.countdown.overdue)
     .sort((a, b) => b.countdown.days - a.countdown.days)
   
-  return past.length > 0 ? past[0].anniversary : null
+  return (past.length > 0 && past[0]) ? past[0].anniversary : null
 })
 
 // 当前选中纪念日的倒计时

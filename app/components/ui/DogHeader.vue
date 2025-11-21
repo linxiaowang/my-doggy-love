@@ -1,5 +1,5 @@
 <template>
-  <header class="fixed top-0 left-0 right-0 z-30 w-screen flex items-center justify-between px-4 md:px-8 lg:px-12 py-3 bg-white/70 backdrop-blur border-b border-#ece7e1">
+  <header class="fixed top-0 left-0 right-0 z-30 w-screen flex items-center justify-between px-4 md:px-8 lg:px-12 py-3 glass">
     <NuxtLink to="/" class="flex items-center gap-2 md:gap-3 cursor-pointer hover:opacity-80 transition flex-shrink-0 min-w-0">
       <img src="/assets/images/couple/couple-1.png" alt="logo" class="w-6 h-6 flex-shrink-0" />
       <span class="font-semibold text-sm md:text-base truncate">My Doggy Love</span>
@@ -63,13 +63,34 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted, nextTick, provide } from 'vue'
 import UserStatusSelector from './UserStatusSelector.vue'
 import { useAuthMe, updateStatus, logout } from '@/services/api/auth'
 import { useUnreadNotificationCount } from '@/services/api/notifications'
 
 const open = ref(false)
 const menu = ref(false)
+
+// 提供关闭所有弹窗的方法给子组件
+const closeAllPopups = () => {
+  menu.value = false
+  open.value = false
+}
+
+provide('closeOtherPopups', closeAllPopups)
+
+// 监听弹窗状态变化，当打开一个弹窗时关闭其他弹窗
+watch(menu, (newVal) => {
+  if (newVal) {
+    open.value = false
+  }
+})
+
+watch(open, (newVal) => {
+  if (newVal) {
+    menu.value = false
+  }
+})
 
 // 使用统一的 API
 const { data: meData, refresh: refreshMe, pending } = useAuthMe()

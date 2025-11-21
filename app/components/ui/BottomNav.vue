@@ -17,24 +17,26 @@ function isActive(path: string) {
 </script>
 
 <template>
-  <nav v-if="isAuthenticated" class="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-md border-t border-gray-100 pb-[env(safe-area-inset-bottom)] z-50 md:hidden">
-    <div class="flex justify-around items-center h-16">
+  <nav v-if="isAuthenticated" class="fixed bottom-0 left-0 right-0 glass pb-[env(safe-area-inset-bottom)] z-50 md:hidden animate-slide-up">
+    <div class="flex justify-around items-center h-16 px-2">
       <NuxtLink
         v-for="item in navItems"
         :key="item.path"
         :to="item.path"
-        class="flex flex-col items-center justify-center w-full h-full space-y-1 text-gray-400 transition-colors duration-200"
-        :class="{ 'text-primary-500': isActive(item.path) }"
+        class="relative flex flex-col items-center justify-center w-full h-full space-y-1 transition-all duration-300"
+        :class="isActive(item.path) ? 'text-text-main' : 'text-text-muted hover:text-text-secondary'"
       >
-        <div :class="[item.icon, isActive(item.path) ? 'text-xl' : 'text-xl']" />
-        <span class="text-[10px] font-medium">{{ item.name }}</span>
+        <!-- Active Pill Background -->
+        <div 
+          v-if="isActive(item.path)"
+          class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-primary-200 rounded-2xl -z-10 animate-fade-in"
+        />
+        
+        <div :class="[item.icon, isActive(item.path) ? 'text-xl scale-110' : 'text-xl']" class="transition-transform duration-300" />
+        <span class="text-[10px] font-medium transition-colors duration-300">{{ item.name }}</span>
       </NuxtLink>
     </div>
   </nav>
 </template>
 
-<style scoped>
-.router-link-active {
-  @apply text-primary-600;
-}
-</style>
+

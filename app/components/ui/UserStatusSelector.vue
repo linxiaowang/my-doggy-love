@@ -97,7 +97,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, nextTick } from 'vue'
+import { ref, watch, nextTick, inject } from 'vue'
 
 interface StatusOption {
   key: string
@@ -117,6 +117,16 @@ const showPicker = ref(false)
 const showCustomInput = ref(false)
 const customStatusText = ref('')
 const customInputRef = ref<HTMLInputElement | null>(null)
+
+// 注入父组件提供的关闭其他弹窗的方法
+const closeOtherPopups = inject<() => void>('closeOtherPopups', () => {})
+
+// 监听 showPicker 变化，打开时关闭其他弹窗
+watch(showPicker, (newVal) => {
+  if (newVal) {
+    closeOtherPopups()
+  }
+})
 
 // 当显示自定义输入时，自动聚焦输入框
 watch(showCustomInput, async (newVal) => {

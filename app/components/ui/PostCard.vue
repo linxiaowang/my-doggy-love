@@ -1,12 +1,12 @@
 <template>
-  <article class="rounded-xl bg-white p-5 shadow-sm hover:shadow-md border border-#ece7e1 transition-all duration-300 ease-out">
-    <div class="flex items-center gap-2 text-sm text-#999 mb-2">
+  <article class="card">
+    <div class="flex items-center gap-2 text-sm text-text-muted mb-2">
       <span>{{ dateLabel }}</span>
       <span v-if="tags?.length" class="ml-auto inline-flex flex-wrap gap-1.5">
-        <span v-for="t in tags" :key="t" class="px-2.5 py-1 rounded-full bg-#f3efe9 text-#666 text-xs font-medium hover:bg-#e9e4de transition-colors duration-200">{{ t }}</span>
+        <span v-for="t in tags" :key="t" class="chip hover:bg-surface-300">{{ t }}</span>
       </span>
     </div>
-    <div class="mt-2 text-#333 leading-relaxed whitespace-pre-wrap break-words">{{ content }}</div>
+    <div class="mt-2 text-text-main leading-relaxed whitespace-pre-wrap break-words">{{ content }}</div>
     <div v-if="mediaUrls?.length" class="mt-3 grid grid-cols-3 gap-2">
       <div
         v-for="(u, i) in mediaUrls"
@@ -20,13 +20,13 @@
           :src="getThumbnailUrl(u)"
           :data-original="u"
           loading="lazy"
-          class="w-full h-28 object-cover transition-transform duration-300 group-hover:scale-110"
+          class="w-full h-28 object-cover transition-transform duration-500 group-hover:scale-110"
           @error="handleThumbnailError"
         />
         <!-- 视频 -->
         <div
           v-else-if="isVideo(u)"
-          class="w-full h-28 bg-#f0f0f0 flex items-center justify-center relative group-hover:bg-#e8e8e8 transition-colors duration-300"
+          class="w-full h-28 bg-surface-200 flex items-center justify-center relative group-hover:bg-surface-300 transition-colors duration-300"
         >
           <video
             :src="u"
@@ -42,8 +42,8 @@
           </div>
         </div>
         <!-- 其他类型 -->
-        <div v-else class="w-full h-28 bg-#f0f0f0 flex items-center justify-center">
-          <span class="text-xs text-#999">未知类型</span>
+        <div v-else class="w-full h-28 bg-surface-200 flex items-center justify-center">
+          <span class="text-xs text-text-muted">未知类型</span>
         </div>
       </div>
     </div>
@@ -52,7 +52,7 @@
     <Teleport to="body">
       <div
         v-if="previewIndex !== null"
-        class="fixed inset-0 z-50 bg-black/90 flex items-center justify-center"
+        class="fixed inset-0 z-50 bg-black/90 flex items-center justify-center backdrop-blur-sm"
         @click.self="closePreview"
         @keydown.esc="closePreview"
       >
@@ -96,14 +96,14 @@
           <img
             v-if="currentMedia && isImage(currentMedia)"
             :src="currentMedia"
-            class="max-w-full max-h-[90vh] object-contain"
+            class="max-w-full max-h-[90vh] object-contain shadow-2xl rounded-lg"
             alt="预览"
           />
           <!-- 视频预览 -->
           <video
             v-else-if="currentMedia && isVideo(currentMedia)"
             :src="currentMedia"
-            class="max-w-full max-h-[90vh]"
+            class="max-w-full max-h-[90vh] shadow-2xl rounded-lg"
             controls
             autoplay
           />
@@ -118,16 +118,16 @@
         </div>
       </div>
     </Teleport>
-    <div class="mt-4 flex items-center gap-3 text-sm border-t border-#f0f0f0 pt-3">
-      <button class="text-#666 hover:text-#333 transition-colors duration-200 font-medium" @click="toggleComments">{{ showComments ? '收起评论' : `查看评论${displayCount}` }}</button>
-      <span class="text-#ddd">|</span>
-      <button class="text-#666 hover:text-#333 transition-colors duration-200 font-medium" @click="toggleInput">{{ showInput ? '收起输入' : '写评论' }}</button>
-      <span v-if="canDelete" class="text-#ddd">|</span>
-      <button v-if="canDelete" class="text-#b42318 hover:text-#d92d20 transition-colors duration-200 font-medium" @click="handleDelete">删除</button>
+    <div class="mt-4 flex items-center gap-3 text-sm border-t border-border pt-3">
+      <button class="text-text-secondary hover:text-text-main transition-colors duration-200 font-medium" @click="toggleComments">{{ showComments ? '收起评论' : `查看评论${displayCount}` }}</button>
+      <span class="text-border">|</span>
+      <button class="text-text-secondary hover:text-text-main transition-colors duration-200 font-medium" @click="toggleInput">{{ showInput ? '收起输入' : '写评论' }}</button>
+      <span v-if="canDelete" class="text-border">|</span>
+      <button v-if="canDelete" class="text-red-600 hover:text-red-700 transition-colors duration-200 font-medium" @click="handleDelete">删除</button>
     </div>
     <div v-if="showInput" class="mt-3 flex items-center gap-2 animate-fade-in">
       <input v-model="comment" placeholder="写点评论…" class="input flex-1 text-sm" @keydown.enter.prevent="submit" />
-      <button class="px-4 py-2 rounded-lg bg-#e9e4de hover:bg-#e1dbd4 transition-colors duration-200 font-medium" @click="submit">发布</button>
+      <button class="btn-primary py-1.5 text-sm" @click="submit">发布</button>
     </div>
     <div class="mt-2">
       <div v-if="showComments" class="mt-2 space-y-2">

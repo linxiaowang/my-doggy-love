@@ -27,30 +27,33 @@ html.dark {
 }
 
 /* 全局基础文本颜色，避免白底白字不可见 */
+/* 全局基础文本颜色，避免白底白字不可见 */
 body { 
-  color: #333; 
+  color: theme('colors.text.main'); 
+  background-color: theme('colors.surface.100');
+  font-family: 'DM Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 /* 常见表单元素默认文字颜色 */
-input, textarea, select, button { color: #333; }
+input, textarea, select, button { color: theme('colors.text.main'); }
 /* 占位符颜色在各页面已单独指定；这里兜底一层 */
-::placeholder { color: #9aa0a6; }
+::placeholder { color: theme('colors.text.muted'); }
 
 /* 页面过渡动画 */
 .page-enter-active,
 .page-leave-active {
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
 .page-enter-from {
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateY(8px);
 }
 
 .page-leave-to {
   opacity: 0;
-  transform: translateY(-10px);
+  transform: translateY(-8px);
 }
 
 /* 平滑滚动 */

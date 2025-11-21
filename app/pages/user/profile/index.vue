@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-#f7f6f3">
     <DogHeader :user-override="user" />
     <div class="max-w-2xl mx-auto px-4 py-8">
-      <div class="rounded-xl bg-white p-6 shadow space-y-4">
+      <div class="card space-y-4">
         <div class="text-lg">用户资料</div>
         <div v-if="user" class="flex items-center gap-4">
           <img :src="user.avatarUrl || '/assets/images/xiaobai/xiaobai-2.png'" loading="lazy" class="w-16 h-16 rounded-full object-cover" />
