@@ -54,9 +54,9 @@
       <button ref="hamburgerBtnRef" class="md:hidden flex-shrink-0" @click="open = !open" aria-label="menu">☰</button>
     </div>
   </header>
-  <div class="fixed top-[57px] left-0 right-0 z-30 w-screen md:hidden pt-[env(safe-area-inset-top)]">
+  <div class="fixed top-[57px] left-0 right-0 z-30 w-screen md:hidden pt-[env(safe-area-inset-top)] pointer-events-none">
     <transition name="fade">
-      <div ref="mobileMenuRef" v-if="open" class="px-6 py-2 border-b border-#ece7e1 bg-white/90 backdrop-blur">
+      <div ref="mobileMenuRef" v-if="open" class="px-6 py-2 border-b border-#ece7e1 bg-white/90 backdrop-blur pointer-events-auto">
       <nav class="flex flex-col gap-2 text-sm">
         <NuxtLink to="/" @click="open=false">首页</NuxtLink>
         <NuxtLink to="/daily" @click="open=false">日常</NuxtLink>
@@ -90,11 +90,11 @@ const mobileMenuRef = ref(null)
 const hamburgerBtnRef = ref(null)
 
 onClickOutside(userMenuRef, () => {
-  menu.value = false
+  if (menu.value) menu.value = false
 }, { ignore: [avatarBtnRef] })
 
 onClickOutside(mobileMenuRef, () => {
-  open.value = false
+  if (open.value) open.value = false
 }, { ignore: [hamburgerBtnRef] })
 
 // 提供关闭所有弹窗的方法给子组件
