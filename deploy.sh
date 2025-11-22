@@ -31,6 +31,19 @@ EOF
     echo "✅ .env 文件已创建，请检查配置"
 fi
 
+# 检查并追加 VAPID 配置
+if ! grep -q "NUXT_PUBLIC_VAPID_KEY" .env; then
+    echo "⚠️  未找到 VAPID 配置，正在追加..."
+    cat >> .env << EOF
+
+# VAPID Keys for Web Push
+NUXT_PUBLIC_VAPID_KEY=BBGhYj2WKnDgciP5-jR2I3VXizVuaTl1gngCyUmyq0aOoY8muPkABjPamHKKmoO7UG98m3NJDLXiJJHct2JIkmU
+NUXT_VAPID_PRIVATE_KEY=5lMKO4RiXJE6pnOQCPpiZbqP6ZCL5qZQeeejhGsGVEc
+NUXT_VAPID_SUBJECT=mailto:admin@mydoggy.love
+EOF
+    echo "✅ VAPID 配置已追加"
+fi
+
 # 打印 .env 内容与关键变量，便于排查（注意：包含敏感信息）
 echo "🧪 打印 .env 内容（请注意不要外泄日志）："
 if [ -f .env ]; then
@@ -218,7 +231,7 @@ fi
 
 # 数据库迁移
 echo "🗄️  执行数据库迁移..."
-pnpm prisma migrate deploy
+pnpm prisma db push
 pnpm prisma generate
 
 # 创建上传目录
