@@ -5,6 +5,8 @@
         <span>© {{ new Date().getFullYear() }} My Doggy Love</span>
         <span text="gray4">·</span>
         <span>以爱为名，记录每一帧心动</span>
+        <span text="gray4">·</span>
+        <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" class="hover:underline">闽ICP备2025120753号</a>
       </div>
 
       <div flex="~ items-center gap3">
