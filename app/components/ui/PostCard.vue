@@ -15,14 +15,17 @@
         @click="openPreview(i)"
       >
         <!-- 图片 -->
-        <img
-          v-if="isImage(u)"
-          :src="getThumbnailUrl(u)"
-          :data-original="u"
-          loading="lazy"
-          class="w-full h-28 object-cover transition-transform duration-500 group-hover:scale-110"
-          @error="handleThumbnailError"
-        />
+        <div v-if="isImage(u)" class="relative w-full h-28 bg-surface-200">
+          <img
+            :src="getThumbnailUrl(u)"
+            :data-original="u"
+            loading="lazy"
+            decoding="async"
+            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-0 transition-opacity duration-300"
+            @error="handleThumbnailError"
+            @load="(e) => (e.target as HTMLElement).classList.remove('opacity-0')"
+          />
+        </div>
         <!-- 视频 -->
         <div
           v-else-if="isVideo(u)"
