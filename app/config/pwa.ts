@@ -39,6 +39,7 @@ export const pwa: ModuleOptions = {
     ],
   },
   workbox: {
+    importScripts: ['/custom-sw.js'],
     globPatterns: ['**/*.{js,css,html,txt,png,ico,svg}'],
     navigateFallbackDenylist: [/^\/api\//],
     navigateFallback: '/',
@@ -77,7 +78,7 @@ export const pwa: ModuleOptions = {
   registerWebManifestInRouteRules: true,
   writePlugin: true,
   devOptions: {
-    enabled: process.env.VITE_PLUGIN_PWA === 'true',
+    enabled: true,
     navigateFallback: scope,
   },
 }

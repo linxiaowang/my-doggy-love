@@ -1,5 +1,5 @@
 <template>
-  <div class="relative">
+  <div class="relative" ref="containerRef">
     <!-- 状态显示按钮 -->
     <button
       v-if="currentStatus"
@@ -84,20 +84,12 @@
         </div>
       </div>
     </transition>
-
-    <!-- 遮罩层，点击关闭弹窗 -->
-    <transition name="fade">
-      <div
-        v-if="showPicker"
-        class="fixed inset-0 z-40"
-        @click="showPicker = false"
-      />
-    </transition>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, watch, nextTick, inject } from 'vue'
+import { onClickOutside } from '@vueuse/core'
 
 interface StatusOption {
   key: string
@@ -117,6 +109,11 @@ const showPicker = ref(false)
 const showCustomInput = ref(false)
 const customStatusText = ref('')
 const customInputRef = ref<HTMLInputElement | null>(null)
+const containerRef = ref(null)
+
+onClickOutside(containerRef, () => {
+  showPicker.value = false
+})
 
 // 注入父组件提供的关闭其他弹窗的方法
 const closeOtherPopups = inject<() => void>('closeOtherPopups', () => {})

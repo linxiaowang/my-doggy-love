@@ -23,6 +23,7 @@
     "@nuxtjs/color-mode": "catalog:build",
     "@pinia/nuxt": "catalog:build",
     "@types/node": "^24.9.2",
+    "@types/web-push": "^3.6.4",
     "@unocss/eslint-config": "catalog:build",
     "@unocss/nuxt": "catalog:build",
     "@vite-pwa/nuxt": "catalog:build",
@@ -51,6 +52,7 @@
     "compressorjs": "^1.2.1",
     "dayjs": "^1.11.19",
     "sharp": "^0.34.5",
-    "vuedraggable": "^4.1.0"
+    "vuedraggable": "^4.1.0",
+    "web-push": "^3.6.7"
   }
 }

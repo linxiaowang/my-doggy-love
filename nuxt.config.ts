@@ -15,6 +15,14 @@ export default defineNuxtConfig({
     enabled: true,
   },
 
+  runtimeConfig: {
+    vapidPrivateKey: process.env.NUXT_VAPID_PRIVATE_KEY,
+    vapidSubject: process.env.NUXT_VAPID_SUBJECT,
+    public: {
+      vapidPublicKey: process.env.NUXT_PUBLIC_VAPID_KEY,
+    },
+  },
+
   app: {
     head: {
       viewport: 'width=device-width,initial-scale=1',
