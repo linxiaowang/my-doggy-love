@@ -1,6 +1,6 @@
 import { defineEventHandler, getQuery, createError, getCookie, setCookie, sendRedirect } from 'h3'
 import prisma from '../../../utils/db'
-import { signToken, setAuthCookie } from '../../../utils/auth'
+import { signToken, setAuthCookie, getDeviceInfo, TOKEN_EXPIRY_SECONDS } from '../../../utils/auth'
 
 /**
  * 微信登录回调处理
@@ -86,8 +86,21 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // 生成 token 并设置 cookie
-    const token = signToken({ userId: user.id, iat: Date.now() })
+    // 获取设备信息并创建 session 记录，支持多设备登录
+    const { userAgent, ipAddress, deviceInfo } = getDeviceInfo(event)
+    const expiresAt = new Date(Date.now() + TOKEN_EXPIRY_SECONDS * 1000)
+    const session = await prisma.session.create({
+      data: {
+        userId: user.id,
+        deviceInfo,
+        userAgent,
+        ipAddress,
+        expiresAt,
+      },
+    })
+    
+    // 在 token 中包含 sessionId
+    const token = signToken({ userId: user.id, sessionId: session.id, iat: Date.now() })
     setAuthCookie(event, token)
 
     // 重定向到保存的路径或首页

@@ -27,6 +27,7 @@ model User {
   messages          Message[]
   notifications     Notification[]
   pushSubscriptions PushSubscription[]
+  sessions          Session[]
 }
 
 model PushSubscription {
@@ -152,6 +153,22 @@ model Notification {
 
   @@index([userId, read])
   @@index([userId, createdAt])
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  deviceInfo String? // 设备信息（浏览器、操作系统等）
+  userAgent String?  @db.Text // User-Agent 字符串
+  ipAddress String?  // IP 地址
+  lastActiveAt DateTime @default(now()) @updatedAt // 最后活跃时间
+  expiresAt DateTime // 过期时间
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([userId, expiresAt])
 }
 
 
