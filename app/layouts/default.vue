@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import BottomNav from '@/components/ui/BottomNav.vue'
+import Toast from '@/components/ui/Toast.vue'
 </script>
 
 <template>
@@ -9,5 +10,6 @@ import BottomNav from '@/components/ui/BottomNav.vue'
       <Footer />
     </div>
     <BottomNav />
+    <Toast />
   </main>
 </template>

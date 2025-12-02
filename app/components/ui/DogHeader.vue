@@ -33,6 +33,7 @@
           <span class="hidden md:inline text-sm">{{ me.nickName }}</span>
         </button>
         <div ref="userMenuRef" v-if="menu" class="absolute right-0 top-full mt-2 w-40 rounded-lg border border-#ece7e1 bg-white shadow p-2 z-40">
+          <NuxtLink to="/user/profile" class="block px-3 py-2 text-sm hover:bg-#f7f6f3" @click="menu=false">用户资料</NuxtLink>
           <NuxtLink to="/user/couple" class="block px-3 py-2 text-sm hover:bg-#f7f6f3" @click="menu=false">情侣绑定</NuxtLink>
           <button 
             class="block w-full text-left px-3 py-2 text-sm hover:bg-#f7f6f3 flex items-center justify-between" 

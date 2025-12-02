@@ -5,7 +5,19 @@
       <div class="card space-y-4">
         <div class="text-lg">用户资料</div>
         <div v-if="user" class="flex items-center gap-4">
-          <img :src="user.avatarUrl || '/assets/images/xiaobai/xiaobai-2.png'" loading="lazy" class="w-16 h-16 rounded-full object-cover" />
+          <div class="relative group">
+            <img :src="user.avatarUrl || '/assets/images/xiaobai/xiaobai-2.png'" loading="lazy" class="w-16 h-16 rounded-full object-cover" />
+            <button
+              class="absolute inset-0 w-16 h-16 rounded-full bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+              @click="showAvatarModal = true"
+              title="修改头像"
+            >
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </button>
+          </div>
           <div class="flex-1">
             <!-- 昵称显示和编辑 -->
             <div class="flex items-center gap-2">
@@ -37,21 +49,92 @@
               <div v-else class="font-medium flex items-center gap-2">
                 <span>{{ user.nickName }}</span>
                 <button
-                  class="text-xs text-#999 hover:text-#666 ml-1"
+                  class="text-xs text-#999 hover:text-#666 ml-1 transition p-0.5"
                   @click="startEditNickname"
                   title="点击编辑昵称"
                 >
-                  ✏️
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
                 </button>
               </div>
             </div>
             <div class="text-sm text-#777">{{ user.email }}</div>
           </div>
         </div>
-        <form class="flex items-center gap-3" @submit.prevent="onUpload">
-          <input ref="fileRef" type="file" accept="image/*" />
-          <button class="px-3 py-1 rounded bg-#e9e4de">上传头像</button>
-        </form>
+        
+        <!-- 上传头像弹窗 -->
+        <Teleport to="body">
+          <transition name="fade">
+            <div
+              v-if="showAvatarModal"
+              class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+              @click.self="cancelUploadAvatar"
+            >
+              <div ref="avatarModalRef" class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 overflow-hidden">
+                <div class="p-6">
+                  <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold">修改头像</h3>
+                    <button
+                      class="text-#999 hover:text-#666 transition"
+                      @click="cancelUploadAvatar"
+                      :disabled="uploadingAvatar"
+                    >
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                  
+                  <!-- 预览区域 -->
+                  <div class="mb-4 flex justify-center">
+                    <div class="relative">
+                      <img
+                        :src="avatarPreview || user?.avatarUrl || '/assets/images/xiaobai/xiaobai-2.png'"
+                        class="w-32 h-32 rounded-full object-cover border-2 border-#ece7e1"
+                        alt="头像预览"
+                      />
+                    </div>
+                  </div>
+                  
+                  <!-- 文件选择 -->
+                  <form @submit.prevent="onUpload" class="space-y-4">
+                    <div>
+                      <label class="block mb-2 text-sm text-#666">选择图片</label>
+                      <input
+                        ref="fileRef"
+                        type="file"
+                        accept="image/*"
+                        class="block w-full text-sm text-#666 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-#d4a574 file:text-white hover:file:bg-#c49564 file:cursor-pointer cursor-pointer"
+                        @change="handleFileSelect"
+                      />
+                      <p class="mt-1 text-xs text-#999">支持 JPG、PNG、GIF 格式，建议尺寸 200x200 像素</p>
+                    </div>
+                    
+                    <div class="flex gap-3">
+                      <button
+                        type="button"
+                        class="flex-1 px-4 py-2 rounded-lg bg-#f7f6f3 hover:bg-#e8e8e8 transition text-sm"
+                        @click="cancelUploadAvatar"
+                        :disabled="uploadingAvatar"
+                      >
+                        取消
+                      </button>
+                      <button
+                        type="submit"
+                        class="flex-1 px-4 py-2 rounded-lg bg-#d4a574 text-white hover:bg-#c49564 transition text-sm"
+                        :disabled="uploadingAvatar || !selectedFile"
+                      >
+                        {{ uploadingAvatar ? '上传中...' : '上传' }}
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </transition>
+        </Teleport>
+        
         <div class="border-t border-#ece7e1 pt-4 space-y-3">
           <div class="text-base">情侣关系</div>
           <template v-if="couple">
@@ -89,6 +172,8 @@ import DogHeader from '@/components/ui/DogHeader.vue'
 import { ref, onMounted, nextTick, watch } from 'vue'
 import { updateNickname, uploadAvatar, logout } from '@/services/api/auth'
 import { useCouple } from '@/services/api/couple'
+import { onClickOutside } from '@vueuse/core'
+import { useToast } from '@/composables/useToast'
 
 // 检查登录状态，未登录会自动跳转到登录页
 definePageMeta({
@@ -103,6 +188,16 @@ const isEditingNickname = ref(false)
 const editingNickname = ref('')
 const nicknameInputRef = ref<HTMLInputElement | null>(null)
 const savingNickname = ref(false)
+
+// 头像上传相关
+const showAvatarModal = ref(false)
+const uploadingAvatar = ref(false)
+const selectedFile = ref<File | null>(null)
+const avatarPreview = ref<string | null>(null)
+const avatarModalRef = ref<HTMLElement | null>(null)
+
+// Toast 提示
+const toast = useToast()
 
 // 使用 Pinia store 获取用户信息
 const authStore = useAuthStore()
@@ -122,15 +217,69 @@ onMounted(async () => {
   // 数据会通过 watch 自动更新
 })
 
+// 点击外部关闭弹窗
+onClickOutside(avatarModalRef, () => {
+  if (showAvatarModal.value && !uploadingAvatar.value) {
+    cancelUploadAvatar()
+  }
+})
+
+function handleFileSelect(event: Event) {
+  const target = event.target as HTMLInputElement
+  const file = target.files?.[0]
+  
+  if (file) {
+    // 验证文件类型
+    if (!file.type.startsWith('image/')) {
+      alert('请选择图片文件')
+      return
+    }
+    
+    // 验证文件大小（限制为 5MB）
+    if (file.size > 5 * 1024 * 1024) {
+      alert('图片大小不能超过 5MB')
+      return
+    }
+    
+    selectedFile.value = file
+    
+    // 创建预览
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      avatarPreview.value = e.target?.result as string
+    }
+    reader.readAsDataURL(file)
+  }
+}
+
+function cancelUploadAvatar() {
+  showAvatarModal.value = false
+  uploadingAvatar.value = false
+  selectedFile.value = null
+  avatarPreview.value = null
+  // 清空文件选择
+  if (fileRef.value) {
+    fileRef.value.value = ''
+  }
+}
+
 async function onUpload() {
-  if (!fileRef.value?.files?.length) return
+  if (!selectedFile.value) {
+    return
+  }
+  
+  uploadingAvatar.value = true
   try {
-    const file = fileRef.value.files[0] as File
-    await uploadAvatar(file)
+    await uploadAvatar(selectedFile.value)
     // uploadAvatar 会自动更新 store，无需手动更新
+    // 上传成功后关闭弹窗并显示成功提示
+    cancelUploadAvatar()
+    toast.success('头像上传成功！')
   } catch (e: any) {
     console.error('上传头像失败:', e)
-    alert(e?.friendlyMessage || '上传头像失败，请稍后再试')
+    toast.error(e?.friendlyMessage || '上传头像失败，请稍后再试')
+  } finally {
+    uploadingAvatar.value = false
   }
 }
 
@@ -172,8 +321,9 @@ async function saveNickname() {
     // updateNickname 会自动更新 store，无需手动更新
     isEditingNickname.value = false
     editingNickname.value = ''
+    toast.success('昵称修改成功！')
   } catch (e: any) {
-    alert(e?.friendlyMessage || '修改昵称失败，请稍后再试')
+    toast.error(e?.friendlyMessage || '修改昵称失败，请稍后再试')
   } finally {
     savingNickname.value = false
   }
@@ -190,4 +340,16 @@ async function doLogout() {
 }
 </script>
 
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+</style>
 
