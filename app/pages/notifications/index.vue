@@ -105,7 +105,7 @@ watch(pending, (newPending) => {
 })
 
 onMounted(async () => {
-  await refreshNotifications()
+  // useNotifications 已经会自动执行请求，无需手动调用 refreshNotifications
   await refreshUnreadCount()
 })
 
