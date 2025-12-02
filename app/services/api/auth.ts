@@ -50,49 +50,81 @@ export function useAuthMe() {
  * 登录
  */
 export async function login(data: LoginRequest): Promise<AuthResponse> {
-  return apiFetch<AuthResponse>('/api/auth/login', {
+  const result = await apiFetch<AuthResponse>('/api/auth/login', {
     method: 'POST',
     body: data,
   })
+  // 登录成功后更新 store
+  if (process.client) {
+    const authStore = useAuthStore()
+    authStore.setUser(result.user)
+  }
+  return result
 }
 
 /**
  * 注册
  */
 export async function register(data: RegisterRequest): Promise<AuthResponse> {
-  return apiFetch<AuthResponse>('/api/auth/register', {
+  const result = await apiFetch<AuthResponse>('/api/auth/register', {
     method: 'POST',
     body: data,
   })
+  // 注册成功后更新 store
+  if (process.client) {
+    const authStore = useAuthStore()
+    authStore.setUser(result.user)
+  }
+  return result
 }
 
 /**
  * 退出登录
  */
 export async function logout(): Promise<void> {
-  return apiFetch('/api/auth/logout', {
+  await apiFetch('/api/auth/logout', {
     method: 'POST',
   })
+  // 登出成功后清空 store
+  if (process.client) {
+    const authStore = useAuthStore()
+    authStore.clearUser()
+  }
 }
 
 /**
  * 更新用户状态
  */
 export async function updateStatus(status: string | null): Promise<{ status: string | null; statusUpdatedAt: string | null }> {
-  return apiFetch('/api/auth/status', {
+  const result = await apiFetch<{ status: string | null; statusUpdatedAt: string | null }>('/api/auth/status', {
     method: 'PATCH',
     body: { status },
   })
+  // 更新成功后同步 store
+  if (process.client) {
+    const authStore = useAuthStore()
+    authStore.updateUser({
+      status: result.status,
+      statusUpdatedAt: result.statusUpdatedAt,
+    })
+  }
+  return result
 }
 
 /**
  * 更新用户昵称
  */
 export async function updateNickname(nickName: string): Promise<{ id: string; nickName: string }> {
-  return apiFetch('/api/auth/nickname', {
+  const result = await apiFetch<{ id: string; nickName: string }>('/api/auth/nickname', {
     method: 'PATCH',
     body: { nickName },
   })
+  // 更新成功后同步 store
+  if (process.client) {
+    const authStore = useAuthStore()
+    authStore.updateUser({ nickName: result.nickName })
+  }
+  return result
 }
 
 /**
@@ -101,9 +133,15 @@ export async function updateNickname(nickName: string): Promise<{ id: string; ni
 export async function uploadAvatar(file: File): Promise<{ avatarUrl: string }> {
   const formData = new FormData()
   formData.append('file', file)
-  return apiFetch<{ avatarUrl: string }>('/api/auth/avatar', {
+  const result = await apiFetch<{ avatarUrl: string }>('/api/auth/avatar', {
     method: 'POST',
     body: formData,
   })
+  // 更新成功后同步 store
+  if (process.client) {
+    const authStore = useAuthStore()
+    authStore.updateUser({ avatarUrl: result.avatarUrl })
+  }
+  return result
 }
 

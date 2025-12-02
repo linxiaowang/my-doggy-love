@@ -75,7 +75,7 @@
 import { ref, computed, watch, onMounted, onUnmounted, nextTick, provide } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import UserStatusSelector from './UserStatusSelector.vue'
-import { useAuthMe, updateStatus, logout } from '@/services/api/auth'
+import { updateStatus, logout } from '@/services/api/auth'
 import { useUnreadNotificationCount } from '@/services/api/notifications'
 import { apiFetch } from '@/services/api'
 
@@ -119,13 +119,9 @@ watch(open, (newVal) => {
   }
 })
 
-// 使用统一的 API
-const { data: meData, refresh: refreshMe, pending } = useAuthMe()
-const me = computed(() => {
-  // meData 是 Ref<MeResponse | null>，直接访问 .value.user
-  const user = meData.value?.user || null
-  return user
-})
+// 使用 Pinia store 获取用户信息
+const authStore = useAuthStore()
+const me = computed(() => authStore.user)
 
 // 获取未读通知数量
 const { data: unreadCountData, refresh: refreshUnreadCount } = useUnreadNotificationCount()
@@ -149,12 +145,10 @@ watch(unreadCount, (count) => {
 // 轮询获取未读通知数量（每30秒刷新一次）
 let pollInterval: ReturnType<typeof setInterval> | null = null
 
-// 组件挂载时确保加载数据并设置事件监听
+// 组件挂载时设置事件监听
 onMounted(async () => {
   if (process.client) {
     await nextTick()
-    // 立即尝试加载数据
-    await refreshMe()
     await refreshUnreadCount()
     checkPushStatus()
     
@@ -163,21 +157,19 @@ onMounted(async () => {
       refreshUnreadCount()
     }, 30000) // 每30秒刷新一次
     
-    // 监听全局登录成功事件
+    // 监听全局登录成功事件（登录后 store 会自动更新，这里只需要刷新通知）
     window.addEventListener('user-login-success', async () => {
       await nextTick()
       setTimeout(async () => {
-        await refreshMe()
         await refreshUnreadCount()
         checkPushStatus()
       }, 200)
     })
     
-    // 监听页面可见性变化，从隐藏变为可见时刷新
+    // 监听页面可见性变化，从隐藏变为可见时刷新通知
     if (typeof document !== 'undefined') {
       document.addEventListener('visibilitychange', async () => {
         if (!document.hidden) {
-          await refreshMe()
           await refreshUnreadCount()
           checkPushStatus()
         }
@@ -193,27 +185,13 @@ onUnmounted(() => {
   }
 })
 
-// 监听路由变化，登录后刷新用户信息
+// 监听路由变化，从通知页面返回时刷新未读数量
 const route = useRoute()
 watch(() => route.fullPath, async (newPath, oldPath) => {
-  // 从登录页面跳转出来时，确保刷新数据
-  if (process.client && oldPath === '/user/login') {
-    // 延迟一下，确保 cookie 已设置
+  if (process.client && newPath !== oldPath && oldPath === '/notifications') {
+    // 从通知页面返回时，刷新未读数量
     await nextTick()
-    setTimeout(async () => {
-      await refreshMe()
-      await refreshUnreadCount()
-    }, 300)
-  } else if (process.client && newPath !== oldPath && newPath !== '/user/login' && oldPath !== '/user/login') {
-    // 其他路由变化时也刷新，确保数据最新
-    await nextTick()
-    setTimeout(async () => {
-      await refreshMe()
-      // 从通知页面返回时，刷新未读数量
-      if (oldPath === '/notifications') {
-        await refreshUnreadCount()
-      }
-    }, 100)
+    await refreshUnreadCount()
   }
 }, { immediate: false })
 
@@ -230,8 +208,7 @@ async function doLogout() {
 async function updateStatusHandler(status: string | null) {
   try {
     await updateStatus(status)
-    // 状态更新后刷新用户信息
-    await refreshMe()
+    // updateStatus 会自动更新 store，无需手动刷新
   } catch (error) {
     console.error('更新状态失败:', error)
   }

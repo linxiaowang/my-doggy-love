@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
-import { useAuthMe } from '@/services/api/auth'
 import { apiFetch } from '@/services/api'
 import AnniversaryCountdown from '@/components/ui/AnniversaryCountdown.vue'
 
@@ -17,13 +16,13 @@ const presetImages = [
 
 const images = ref<string[]>([...presetImages])
 
-// 使用统一的 API
-const { data: meData } = useAuthMe()
+// 使用 Pinia store 获取用户信息
+const authStore = useAuthStore()
 
 // 加载日常照片
 async function loadDailyImages() {
   try {
-    if (meData.value?.user) {
+    if (authStore.user) {
       const res = await apiFetch<{ items: any[] }>('/api/daily')
       const media = (res.items || []).flatMap(i => Array.isArray(i.mediaUrls) ? i.mediaUrls : [])
       if (media.length > 3) {
@@ -46,15 +45,17 @@ async function loadDailyImages() {
 }
 
 // 监听用户数据变化，加载照片
-watch(meData, (newData) => {
-  if (newData?.user) {
+watch(() => authStore.user, (newUser) => {
+  if (newUser) {
     loadDailyImages()
+  } else {
+    images.value = [...presetImages]
   }
 }, { immediate: true })
 
 onMounted(() => {
   // 如果用户数据已经加载，立即加载照片
-  if (meData.value?.user) {
+  if (authStore.user) {
     loadDailyImages()
   }
 })
@@ -80,7 +81,7 @@ function goQuickRecord() {
             </p>
           </div>
           <!-- 纪念日倒计时提示 -->
-          <div v-if="meData?.user" class="animate-slide-up" style="animation-delay: 0.1s">
+          <div v-if="authStore.user" class="animate-slide-up" style="animation-delay: 0.1s">
             <AnniversaryCountdown />
           </div>
           <div class="flex flex-col sm:flex-row gap-3 animate-slide-up" style="animation-delay: 0.2s">

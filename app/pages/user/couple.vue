@@ -72,7 +72,6 @@
 import DogHeader from '@/components/ui/DogHeader.vue'
 import { ref, onMounted, computed } from 'vue'
 import { useCouple, createCouple, joinCouple, switchCouple } from '@/services/api/couple'
-import { useAuthMe } from '@/services/api/auth'
 
 // 检查登录状态，未登录会自动跳转到登录页
 definePageMeta({
@@ -90,8 +89,8 @@ const couple = computed(() => coupleData.value?.couple || null)
 const loading = computed(() => pending.value)
 
 // 获取当前用户ID
-const { data: meData } = useAuthMe()
-const currentUserId = computed(() => meData.value?.user?.id || null)
+const authStore = useAuthStore()
+const currentUserId = computed(() => authStore.user?.id || null)
 
 // 格式化状态时间
 function formatStatusTime(time: string | Date) {

@@ -185,7 +185,6 @@
 <script setup lang="ts">
 import { computed, ref, watch, onMounted, onUnmounted } from 'vue'
 import { createDailyComment, useDailyPostComments, deleteDailyPost } from '@/services/api/daily'
-import { useAuthMe } from '@/services/api/auth'
 import { apiFetch } from '@/services/api'
 import { getThumbnailUrl } from '@/utils/imageUrl'
 
@@ -376,9 +375,9 @@ function toggleReply(id: string) {
 }
 
 // 删除功能
-const { data: meData } = useAuthMe()
+const authStore = useAuthStore()
 const canDelete = computed(() => {
-  const currentUserId = meData.value?.user?.id
+  const currentUserId = authStore.user?.id
   return props.authorId && currentUserId && props.authorId === currentUserId
 })
 
