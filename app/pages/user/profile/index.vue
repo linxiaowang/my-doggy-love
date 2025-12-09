@@ -6,7 +6,7 @@
         <div class="text-lg">用户资料</div>
         <div v-if="user" class="flex items-center gap-4">
           <div class="relative group">
-            <img :src="user.avatarUrl || '/assets/images/xiaobai/xiaobai-2.png'" loading="lazy" class="w-16 h-16 rounded-full object-cover" />
+          <img :src="user.avatarUrl || '/assets/images/xiaobai/xiaobai-2.png'" loading="lazy" class="w-16 h-16 rounded-full object-cover" />
             <button
               class="absolute inset-0 w-16 h-16 rounded-full bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
               @click="showAvatarModal = true"
@@ -128,7 +128,7 @@
                         {{ uploadingAvatar ? '上传中...' : '上传' }}
                       </button>
                     </div>
-                  </form>
+        </form>
                 </div>
               </div>
             </div>

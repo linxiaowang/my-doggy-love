@@ -2,6 +2,7 @@
 import { ref, onMounted, watch } from 'vue'
 import { apiFetch } from '@/services/api'
 import AnniversaryCountdown from '@/components/ui/AnniversaryCountdown.vue'
+import Calendar from '@/components/ui/Calendar.vue'
 
 definePageMeta({
   layout: 'home',
@@ -92,6 +93,11 @@ function goQuickRecord() {
         <div class="animate-fade-in" style="animation-delay: 0.15s">
           <DogCarousel :images="images" />
         </div>
+      </section>
+      
+      <!-- 日历组件 -->
+      <section v-if="authStore.user" class="animate-fade-in" style="animation-delay: 0.3s">
+        <Calendar />
       </section>
     </div>
     <QuickRecordButton @click="goQuickRecord" />

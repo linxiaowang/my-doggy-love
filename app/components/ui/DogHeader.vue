@@ -28,10 +28,10 @@
             {{ unreadCount > 99 ? '99+' : unreadCount }}
           </span>
         </NuxtLink>
-        <button ref="avatarBtnRef" class="flex items-center gap-1 md:gap-2 flex-shrink-0" @click="menu = !menu">
+        <div ref="avatarBtnRef" class="flex items-center gap-1 md:gap-2 flex-shrink-0 cursor-pointer" @click="menu = !menu">
           <img :src="me.avatarUrl || '/assets/images/xiaobai/xiaobai-2.png'" class="w-7 h-7 rounded-full object-cover" alt="avatar" />
           <span class="hidden md:inline text-sm">{{ me.nickName }}</span>
-        </button>
+        </div>
         <div ref="userMenuRef" v-if="menu" class="absolute right-0 top-full mt-2 w-40 rounded-lg border border-#ece7e1 bg-white shadow p-2 z-40">
           <NuxtLink to="/user/profile" class="block px-3 py-2 text-sm hover:bg-#f7f6f3" @click="menu=false">用户资料</NuxtLink>
           <NuxtLink to="/user/couple" class="block px-3 py-2 text-sm hover:bg-#f7f6f3" @click="menu=false">情侣绑定</NuxtLink>
@@ -149,6 +149,11 @@ let pollInterval: ReturnType<typeof setInterval> | null = null
 // 组件挂载时设置事件监听
 onMounted(async () => {
   if (process.client) {
+    // 确保用户信息已拉取，避免首页头像为空
+    if (!authStore.initialized) {
+      await authStore.fetchUser()
+    }
+
     await nextTick()
     await refreshUnreadCount()
     checkPushStatus()

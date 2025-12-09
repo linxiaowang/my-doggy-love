@@ -23,15 +23,15 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
   // 检查用户是否已登录
   if (!authStore.user) {
-    // 开发模式下，如果未登录也允许继续加载，避免热更新时的频繁跳转
-    // 让页面组件在 onMounted 时处理认证检查
-    if (process.dev) {
-      return
-    }
-    return navigateTo({
-      path: '/user/login',
-      query: { redirect: to.fullPath },
-    })
+      // 开发模式下，如果未登录也允许继续加载，避免热更新时的频繁跳转
+      // 让页面组件在 onMounted 时处理认证检查
+      if (process.dev) {
+        return
+      }
+      return navigateTo({
+        path: '/user/login',
+        query: { redirect: to.fullPath },
+      })
   }
 })
 
