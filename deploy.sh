@@ -60,6 +60,36 @@ echo "🧪 进程环境中的 DATABASE_URL: ${DATABASE_URL:-'(未在当前环境
 ENV_DB_URL=$(grep -E '^DATABASE_URL=' .env 2>/dev/null | sed -e 's/^DATABASE_URL=//')
 if [ -n "$ENV_DB_URL" ]; then
     echo "🧪 .env 文件中的 DATABASE_URL: $ENV_DB_URL"
+    echo "🧪 .env 文件中的 DATABASE_URL: $ENV_DB_URL"
+fi
+
+# 检查并配置 Swap (解决小内存机器构建卡死问题)
+SWAP_SIZE=$(free -m | grep Swap | awk '{print $2}')
+if [ "$SWAP_SIZE" -lt 1000 ]; then
+    echo "⚠️  检测到 Swap 空间不足 ($SWAP_SIZE MB)，正在创建 4GB Swap 交换空间..."
+    
+    # 检查是否已有 swapfile
+    if [ -f /swapfile ]; then
+        echo "   发现现有的 /swapfile，先禁用..."
+        sudo swapoff /swapfile || true
+        sudo rm -f /swapfile
+    fi
+    
+    # 创建 4GB swap
+    echo "   创建 swap 文件 (可能需要几分钟)..."
+    sudo dd if=/dev/zero of=/swapfile bs=1M count=4096 status=progress
+    sudo chmod 600 /swapfile
+    sudo mkswap /swapfile
+    sudo swapon /swapfile
+    
+    # 写入 /etc/fstab 确保重启生效
+    if ! grep -q "/swapfile" /etc/fstab; then
+        echo "/swapfile none swap sw 0 0" | sudo tee -a /etc/fstab
+    fi
+    
+    echo "✅ Swap 空间创建成功: $(free -h | grep Swap | awk '{print $2}')"
+else
+    echo "✅ Swap 空间充足: $SWAP_SIZE MB"
 fi
 
 # 安装依赖
