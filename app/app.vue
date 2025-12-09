@@ -13,6 +13,7 @@ useHead({
   <VitePwaManifest />
   <NuxtLayout>
     <NuxtPage />
+    <UiAnniversaryMode />
   </NuxtLayout>
 </template>
 
