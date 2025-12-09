@@ -69,44 +69,64 @@ function goQuickRecord() {
 <template>
   <div class="min-h-screen bg-gradient-to-br from-surface-100 via-surface-50 to-surface-100">
     <DogHeader />
-    <div class="max-w-6xl mx-auto px-4 md:px-6 py-12 md:py-16 space-y-8">
-      <section class="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
-        <div class="space-y-6 animate-fade-in">
-          <div class="space-y-4">
-            <h1 class="text-3xl md:text-5xl font-serif leading-tight text-text-main tracking-tight">
-              爱的小事，<br class="hidden md:block" />值得被温柔记录。
-            </h1>
-            <p class="text-base md:text-lg text-text-secondary leading-relaxed">
-              以"线条小狗"为灵感的情侣纪念与日常记录空间。<br class="hidden md:block" />
-              以留白与软色调，收纳你们的每一帧心动。
-            </p>
-          </div>
-          <!-- 纪念日倒计时提示 -->
-          <div v-if="authStore.user" class="animate-slide-up" style="animation-delay: 0.1s">
-            <AnniversaryCountdown />
-          </div>
-          <div class="flex flex-col sm:flex-row gap-3 animate-slide-up" style="animation-delay: 0.2s">
-            <button class="btn-primary" @click="goQuickRecord">开始记录</button>
-            <NuxtLink to="/daily" class="btn-secondary text-center">查看日常</NuxtLink>
-          </div>
-        </div>
-        <div class="animate-fade-in" style="animation-delay: 0.15s">
-          <DogCarousel :images="images" />
-        </div>
-      </section>
+    
+    <!-- Main Content Container - ensuring centering -->
+    <div class="min-h-screen flex flex-col items-center pt-12 pb-8 px-4 relative">
       
-      <!-- 日历组件 -->
-      <section v-if="authStore.user" class="animate-fade-in" style="animation-delay: 0.3s">
-        <Calendar />
-      </section>
+      <!-- Decorative background blooms -->
+      <div class="fixed top-20 left-10 w-64 h-64 bg-rose-200/20 rounded-full blur-3xl pointer-events-none z-0"></div>
+      <div class="fixed bottom-20 right-10 w-80 h-80 bg-orange-100/20 rounded-full blur-3xl pointer-events-none z-0"></div>
+
+      <div class="w-full max-w-4xl z-10 flex flex-col items-center space-y-8">
+        
+        <!-- Slogan -->
+        <div class="bg-white/40 backdrop-blur-sm px-6 py-2 rounded-full border border-white/50 shadow-sm animate-fade-in shrink-0">
+          <h1 class="text-xl md:text-2xl font-serif text-text-secondary tracking-widest text-center opacity-90">
+            爱的小事，值得被温柔记录
+          </h1>
+        </div>
+
+        <!-- Memory Tree Hero - blended (no box) -->
+        <div class="w-full animate-fade-in shrink-0" style="animation-delay: 0.2s">
+          <MemoryTree :images="images" class="h-[400px] md:h-[500px] !rounded-xl" />
+        </div>
+
+        <!-- Action Strip -->
+        <div class="flex flex-col items-center space-y-8 w-full animate-slide-up shrink-0" style="animation-delay: 0.4s">
+          
+          <!-- Buttons (Primary Action) -->
+          <div class="flex gap-6">
+             <button class="px-8 py-2.5 rounded-full bg-stone-800 text-stone-50 font-medium hover:bg-stone-700 hover:scale-105 transition-all shadow-lg active:scale-95 text-sm md:text-base" @click="goQuickRecord">
+               开始记录
+             </button>
+             <NuxtLink to="/daily" class="px-8 py-2.5 rounded-full bg-white text-stone-600 font-medium border border-stone-200 hover:bg-stone-50 hover:border-stone-300 transition-all shadow-sm text-sm md:text-base">
+               查看日常
+             </NuxtLink>
+          </div>
+
+          <!-- Countdown (Secondary Info) -->
+          <div v-if="authStore.user" class="w-full max-w-md opacity-90 hover:opacity-100 transition-opacity">
+             <AnniversaryCountdown class="!bg-transparent !shadow-none !backdrop-blur-none" />
+          </div>
+
+        </div>
+
+        <!-- Calendar Section -->
+         <section v-if="authStore.user" class="w-full pt-4 animate-fade-in opacity-90 shrink-0" style="animation-delay: 0.6s">
+          <Calendar />
+        </section>
+
+      </div>
     </div>
+    
     <QuickRecordButton @click="goQuickRecord" />
   </div>
 </template>
 
 <script lang="ts">
 import DogHeader from '@/components/ui/DogHeader.vue'
-import DogCarousel from '@/components/ui/DogCarousel.vue'
+// import DogCarousel from '@/components/ui/DogCarousel.vue' // Deprecated
+import MemoryTree from '@/components/ui/MemoryTree.vue'
 import QuickRecordButton from '@/components/ui/QuickRecordButton.vue'
 export default {}
 </script>
