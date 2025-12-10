@@ -377,10 +377,7 @@ function createDayData(date: Date, isCurrentMonth: boolean, todayStr: string) {
     const lunarObj = solar.getLunar()
     
     // 农历日期（简化显示）
-    const lunarDay = lunarObj.getDayInChinese()
-    // 提取农历日期部分（如"初五"、"十五"、"廿三"等），去掉其他信息
-    const dayMatch = lunarDay.match(/[初十廿卅一二三四五六七八九十]+/)
-    lunar = dayMatch ? dayMatch[0] : lunarDay.split(' ')[0] || lunarDay
+    lunar = lunarObj.getDayInChinese()
     
     // 完整农历信息
     lunarFull = lunarObj.toFullString()
@@ -516,6 +513,15 @@ function closeDetailModal() {
     selectedDate.value = null
   }, 300)
 }
+
+// 监听弹窗状态，控制背景滚动
+watch(showDetailModal, (val) => {
+  if (val) {
+    document.body.style.overflow = 'hidden'
+  } else {
+    document.body.style.overflow = ''
+  }
+})
 </script>
 
 <style scoped>
@@ -642,7 +648,7 @@ function closeDetailModal() {
 }
 
 .day-cell {
-  @apply relative min-h-[60px] md:min-h-[80px] p-2 rounded border border-transparent hover:border-#d4a574/50 hover:bg-#fff9f0 transition-all cursor-pointer;
+  @apply relative min-h-[60px] md:min-h-[80px] p-2 rounded border border-transparent hover:border-#d4a574/50 hover:bg-#fff9f0 transition-all cursor-pointer flex flex-col items-center;
 }
 
 .day-cell.other-month {
@@ -662,7 +668,7 @@ function closeDetailModal() {
 }
 
 .day-number {
-  @apply text-sm md:text-base font-semibold text-#333 mb-1;
+  @apply text-sm md:text-base font-semibold text-#333 mb-0.5;
 }
 
 .day-number.weekend-date {
@@ -670,7 +676,7 @@ function closeDetailModal() {
 }
 
 .lunar-date {
-  @apply text-xs text-#666 whitespace-nowrap overflow-hidden text-ellipsis;
+  @apply text-xs text-#666 whitespace-nowrap w-full text-center;
 }
 
 .lunar-date.festival-text {

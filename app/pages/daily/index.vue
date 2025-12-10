@@ -188,10 +188,10 @@
       <div class="rounded-xl bg-white p-5 shadow-sm hover:shadow-md border border-#ece7e1 transition-all duration-300 space-y-3">
         <div class="flex flex-wrap items-center gap-2 md:gap-4">
           <div class="text-sm text-#777 font-medium">筛选</div>
-          <div class="flex flex-col sm:flex-row gap-2 sm:items-center flex-1 min-w-[180px]">
-            <input v-model="start" type="date" class="input h-10 text-sm w-full sm:w-auto" />
+          <div class="grid grid-cols-2 sm:flex sm:flex-row gap-2 sm:items-center flex-1 min-w-0 w-full sm:w-auto">
+            <input v-model="start" type="date" class="input h-10 text-sm w-full sm:w-auto min-w-0" />
             <span class="hidden sm:block text-#ccc">—</span>
-            <input v-model="end" type="date" class="input h-10 text-sm w-full sm:w-auto" />
+            <input v-model="end" type="date" class="input h-10 text-sm w-full sm:w-auto min-w-0" />
           </div>
           <div class="flex flex-wrap items-center gap-2">
             <button class="btn-secondary px-3 py-1.5 text-xs font-medium" @click="presetDays(0)">今天</button>
