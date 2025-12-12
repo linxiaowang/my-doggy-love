@@ -22,11 +22,10 @@
     "@nuxt/eslint": "catalog:build",
     "@nuxtjs/color-mode": "catalog:build",
     "@pinia/nuxt": "catalog:build",
+    "@tailwindcss/vite": "^4.1.17",
     "@types/canvas-confetti": "^1.9.0",
     "@types/node": "^24.9.2",
     "@types/web-push": "^3.6.4",
-    "@unocss/eslint-config": "catalog:build",
-    "@unocss/nuxt": "catalog:build",
     "@vite-pwa/nuxt": "catalog:build",
     "@vueuse/core": "catalog:frontend",
     "@vueuse/nuxt": "catalog:build",
@@ -35,8 +34,10 @@
     "nuxt": "catalog:build",
     "pinia": "catalog:frontend",
     "prisma": "6.18.0",
+    "shadcn-nuxt": "2.4.2",
+    "tailwindcss": "^4.1.17",
+    "tw-animate-css": "^1.4.0",
     "typescript": "catalog:dev",
-    "unocss": "catalog:build",
     "vue": "catalog:frontend",
     "vue-tsc": "catalog:dev"
   },
@@ -49,13 +50,22 @@
   },
   "dependencies": {
     "@prisma/client": "6.18.0",
+    "@vee-validate/zod": "^4.15.1",
     "ali-oss": "^6.23.0",
     "canvas-confetti": "^1.9.4",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "compressorjs": "^1.2.1",
     "dayjs": "^1.11.19",
+    "embla-carousel-vue": "^8.6.0",
+    "lucide-vue-next": "^0.556.0",
     "lunar-typescript": "^1.8.6",
+    "reka-ui": "^2.6.1",
     "sharp": "^0.34.5",
+    "tailwind-merge": "^3.4.0",
+    "vee-validate": "^4.15.1",
     "vuedraggable": "^4.1.0",
-    "web-push": "^3.6.7"
+    "web-push": "^3.6.7",
+    "zod": "3.25.76"
   }
 }

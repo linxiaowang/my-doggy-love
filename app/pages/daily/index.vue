@@ -2,118 +2,127 @@
   <div class="min-h-screen bg-gradient-to-br from-#f7f6f3 via-#faf9f7 to-#f7f6f3">
     <DogHeader />
     <div class="max-w-3xl mx-auto px-4 py-6 space-y-4">
-      <div class="rounded-xl bg-white p-5 shadow-sm hover:shadow-md border border-#ece7e1 transition-all duration-300">
-        <!-- 错误提示 -->
-        <div v-if="errorMessage" class="mb-4 text-#b42318 bg-#fdecea border border-#f5c2c7 rounded-lg px-4 py-2.5 text-sm animate-fade-in">
-          {{ errorMessage }}
-          <NuxtLink v-if="errorMessage.includes('情侣')" to="/user/couple" class="underline ml-1 font-medium hover:text-#d92d20 transition-colors">去绑定</NuxtLink>
-        </div>
-        
-        <form class="flex flex-col gap-3" @submit.prevent="create">
-          <input v-model="content" placeholder="今天想记录点什么…" class="input" />
-          
-          <!-- 标签选择区域 -->
-          <div class="space-y-2">
-            <div class="text-sm text-#777">选择标签</div>
-            <div class="flex flex-wrap gap-2">
-              <!-- 预设标签 -->
-              <button
-                v-for="tag in presetTags"
-                :key="tag"
-                type="button"
-                class="chip"
-                :class="selectedTagsForPost.includes(tag) ? 'bg-#d4a574 text-white' : 'bg-#f7f6f3 hover:bg-#e9e4de'"
-                @click="togglePostTag(tag)"
-              >
-                {{ tag }}
-              </button>
-              
-              <!-- 自定义标签输入 -->
-              <div v-if="!showCustomTagInput" class="flex items-center">
-                <button
-                  type="button"
-                  class="chip bg-white border border-#ece7e1 hover:bg-#f7f6f3 flex items-center gap-1"
-                  @click="startCustomTag"
-                >
-                  <span>+</span>
-                  <span>自定义</span>
-                </button>
-              </div>
-              
-              <!-- 自定义标签输入框 -->
-              <div v-else class="flex items-center gap-2">
-                <input
-                  ref="customTagInputRef"
-                  v-model="customTagInput"
-                  type="text"
-                  placeholder="输入标签名称"
-                  maxlength="10"
-                  class="input w-32"
-                  @keyup.enter="addCustomTag"
-                  @keyup.esc="cancelCustomTag"
-                  @blur="handleCustomTagBlur"
-                />
-                <button
-                  type="button"
-                  class="px-2 py-1 text-xs rounded bg-#d4a574 text-white hover:bg-#c49564"
-                  @click="addCustomTag"
-                >
-                  添加
-                </button>
-                <button
-                  type="button"
-                  class="px-2 py-1 text-xs rounded bg-#f7f6f3 hover:bg-#e8e8e8"
-                  @click="cancelCustomTag"
-                >
-                  取消
-                </button>
-              </div>
-            </div>
-            
-            <!-- 已选标签显示 -->
-            <div v-if="selectedTagsForPost.length > 0" class="flex flex-wrap gap-2 items-center">
-              <span class="text-xs text-#777">已选：</span>
-              <span
-                v-for="tag in selectedTagsForPost"
-                :key="tag"
-                class="chip bg-#d4a574 text-white flex items-center gap-1"
-              >
-                {{ tag }}
-                <button
-                  type="button"
-                  class="ml-1 hover:opacity-70"
-                  @click="removePostTag(tag)"
-                >
-                  ×
-                </button>
-              </span>
-            </div>
+      <Card>
+        <CardContent class="px-4">
+          <!-- 错误提示 -->
+          <div v-if="errorMessage" class="mb-4 p-3 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-lg animate-fade-in">
+            {{ errorMessage }}
+            <NuxtLink v-if="errorMessage.includes('情侣')" to="/user/couple" class="underline ml-1 font-medium hover:opacity-80">去绑定</NuxtLink>
           </div>
           
-          <!-- 文件上传区域 -->
-          <div class="space-y-2">
-            <div class="flex items-center gap-2">
-              <label class="cursor-pointer">
-                <input 
-                  ref="fileRef" 
-                  type="file" 
-                  accept="image/*,video/*" 
-                  multiple 
-                  class="hidden"
-                  @change="onFilesChange" 
-                />
-                <div class="px-4 py-2.5 rounded-lg border border-#ece7e1 bg-white hover:bg-#f7f6f3 hover:border-#ddd6cf hover:shadow-sm transition-all duration-200 flex items-center gap-2 cursor-pointer">
-                  <svg class="w-5 h-5 text-#666" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                  <span class="text-sm text-#666 font-medium">添加图片/视频</span>
-                  <span v-if="filePreviews.length > 0" class="text-xs text-#999 bg-#f0f0f0 px-2 py-0.5 rounded-full">({{ filePreviews.length }})</span>
-                </div>
-              </label>
-              <button type="submit" class="btn-primary flex-1" :disabled="creating">
-                {{ creating ? '发布中...' : '发布' }}
-              </button>
+          <form class="flex flex-col gap-4" @submit.prevent="create">
+            <div class="space-y-2">
+              <Label for="content">记录内容</Label>
+              <Textarea id="content" v-model="content" placeholder="今天想记录点什么…" class="min-h-[100px]" />
             </div>
+          
+            <!-- 标签选择区域 -->
+            <div class="space-y-2">
+              <Label>选择标签</Label>
+              <div class="flex flex-wrap gap-2">
+                <!-- 预设标签 -->
+                <Badge
+                  v-for="tag in presetTags"
+                  :key="tag"
+                  variant="outline"
+                  class="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors"
+                  :class="selectedTagsForPost.includes(tag) ? 'bg-primary text-primary-foreground' : ''"
+                  @click="togglePostTag(tag)"
+                >
+                  {{ tag }}
+                </Badge>
+                
+                <!-- 自定义标签输入 -->
+                <Badge
+                  v-if="!showCustomTagInput"
+                  variant="outline"
+                  class="cursor-pointer hover:bg-muted"
+                  @click="startCustomTag"
+                >
+                  <span class="mr-1">+</span>
+                  <span>自定义</span>
+                </Badge>
+                
+                <!-- 自定义标签输入框 -->
+                <div v-else class="flex items-center gap-2">
+                  <Input
+                    ref="customTagInputRef"
+                    v-model="customTagInput"
+                    type="text"
+                    placeholder="输入标签名称"
+                    maxlength="10"
+                    class="h-8 w-32"
+                    @keyup.enter="addCustomTag"
+                    @keyup.esc="cancelCustomTag"
+                    @blur="handleCustomTagBlur"
+                  />
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="default"
+                    class="h-8 px-3"
+                    @click="addCustomTag"
+                  >
+                    添加
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    class="h-8 px-3"
+                    @click="cancelCustomTag"
+                  >
+                    取消
+                  </Button>
+                </div>
+              </div>
+              
+              <!-- 已选标签显示 -->
+              <div v-if="selectedTagsForPost.length > 0" class="flex flex-wrap gap-2 items-center">
+                <span class="text-xs text-muted-foreground">已选：</span>
+                <Badge
+                  v-for="tag in selectedTagsForPost"
+                  :key="tag"
+                  class="gap-1"
+                >
+                  {{ tag }}
+                  <button
+                    type="button"
+                    class="ml-1 hover:opacity-70"
+                    @click="removePostTag(tag)"
+                  >
+                    ×
+                  </button>
+                </Badge>
+              </div>
+            </div>
+          
+            <!-- 文件上传区域 -->
+            <div class="space-y-3">
+              <div class="flex items-center gap-2">
+                <Button variant="outline" as-child class="flex-1">
+                  <label class="cursor-pointer">
+                    <input 
+                      ref="fileRef" 
+                      type="file" 
+                      accept="image/*,video/*" 
+                      multiple 
+                      class="hidden"
+                      @change="onFilesChange" 
+                    />
+                    <div class="flex items-center gap-2">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      <span>添加图片/视频</span>
+                      <Badge v-if="filePreviews.length > 0" variant="secondary" class="ml-auto">{{ filePreviews.length }}</Badge>
+                    </div>
+                  </label>
+                </Button>
+                <Button type="submit" class="flex-1" :disabled="creating">
+                  {{ creating ? '发布中...' : '发布' }}
+                </Button>
+              </div>
             
             <!-- 文件预览区域 -->
             <draggable
@@ -183,32 +192,37 @@
               </template>
             </draggable>
           </div>
-        </form>
-      </div>
-      <div class="rounded-xl bg-white p-5 shadow-sm hover:shadow-md border border-#ece7e1 transition-all duration-300 space-y-3">
-        <div class="flex flex-wrap items-center gap-2 md:gap-4">
-          <div class="text-sm text-#777 font-medium">筛选</div>
-          <div class="grid grid-cols-2 sm:flex sm:flex-row gap-2 sm:items-center flex-1 min-w-0 w-full sm:w-auto">
-            <input v-model="start" type="date" class="input h-10 text-sm w-full sm:w-auto min-w-0" />
-            <span class="hidden sm:block text-#ccc">—</span>
-            <input v-model="end" type="date" class="input h-10 text-sm w-full sm:w-auto min-w-0" />
+          </form>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardContent class="space-y-4">
+          <div class="flex flex-wrap items-center gap-3">
+            <Label class="text-sm font-medium">筛选</Label>
+            <div class="grid grid-cols-2 sm:flex sm:flex-row gap-2 sm:items-center flex-1 min-w-0 w-full sm:w-auto">
+              <Input v-model="start" type="date" class="h-9 text-sm" />
+              <span class="hidden sm:block text-muted-foreground">—</span>
+              <Input v-model="end" type="date" class="h-9 text-sm" />
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <Button variant="outline" size="sm" @click="presetDays(0)">今天</Button>
+              <Button variant="outline" size="sm" @click="presetDays(7)">近7天</Button>
+              <Button variant="outline" size="sm" @click="presetDays(30)">近30天</Button>
+            </div>
+            <Button variant="outline" size="sm" class="md:ml-auto" @click="clearFilters">清空</Button>
           </div>
-          <div class="flex flex-wrap items-center gap-2">
-            <button class="btn-secondary px-3 py-1.5 text-xs font-medium" @click="presetDays(0)">今天</button>
-            <button class="btn-secondary px-3 py-1.5 text-xs font-medium" @click="presetDays(7)">近7天</button>
-            <button class="btn-secondary px-3 py-1.5 text-xs font-medium" @click="presetDays(30)">近30天</button>
+          <div v-if="allTags.length > 0" class="flex flex-wrap gap-2 items-center">
+            <Label class="text-sm">标签</Label>
+            <Badge
+              v-for="t in allTags" :key="t"
+              variant="outline"
+              class="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors"
+              :class="selectedTags.includes(t) ? 'bg-primary text-primary-foreground' : ''"
+              @click="toggleTag(t)"
+            >{{ t }}</Badge>
           </div>
-          <button class="btn-secondary px-3 py-1.5 text-sm leading-none md:ml-auto" @click="clearFilters">清空</button>
-        </div>
-        <div v-if="allTags.length > 0" class="flex flex-wrap gap-2">
-          <span class="text-sm text-#777">标签</span>
-          <button
-            v-for="t in allTags" :key="t"
-            class="chip"
-            :class="selectedTags.includes(t) ? 'ring-2 ring-#e6eef5' : ''"
-            @click="toggleTag(t)">{{ t }}</button>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
       <div v-if="loading">
         <SkeletonList :count="3" />
       </div>
@@ -234,7 +248,7 @@
         </template>
       </Timeline>
       <div v-if="hasMore && !loading" class="mt-4 flex justify-center">
-        <button class="btn-secondary" @click="loadMore" :disabled="loadingMore">{{ loadingMore ? '加载中…' : '加载更多' }}</button>
+        <Button variant="outline" @click="loadMore" :disabled="loadingMore">{{ loadingMore ? '加载中…' : '加载更多' }}</Button>
       </div>
     </div>
   </div>
@@ -247,6 +261,12 @@ import SkeletonList from '@/components/ui/SkeletonList.vue'
 import PostCard from '@/components/ui/PostCard.vue'
 import Timeline from '@/components/ui/Timeline.vue'
 import TimelineItem from '@/components/ui/TimelineItem.vue'
+import { Card, CardContent } from '@/components/ui/card'
+import { Textarea } from '@/components/ui/textarea'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { ref, onMounted, computed, nextTick } from 'vue'
 import { createDailyPost } from '@/services/api/daily'
 import { uploadFiles } from '@/services/api/upload'

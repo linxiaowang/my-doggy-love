@@ -1,35 +1,89 @@
 <template>
-  <div class="relative w-full overflow-hidden rounded-xl shadow-sm">
-    <div class="flex transition-transform duration-500" :style="{ transform: `translateX(-${index * 100}%)` }">
-      <div v-for="(img, i) in images" :key="i" class="min-w-full">
-        <img :src="img" :loading="i === 0 ? 'eager' : 'lazy'" decoding="async" class="w-full h-56 md:h-80 object-contain bg-#f7f6f3" :alt="`slide-${i}`" />
+  <div class="relative w-full">
+    <Carousel
+      class="w-full relative"
+      @init-api="setApi"
+      :opts="{
+        loop: true,
+      }"
+    >
+      <CarouselContent>
+        <CarouselItem v-for="(img, i) in images" :key="i">
+          <div class="p-1">
+             <div class="flex items-center justify-center">
+                <img 
+                  :src="img" 
+                  :loading="i === 0 ? 'eager' : 'lazy'" 
+                  decoding="async" 
+                  class="w-full h-56 md:h-80 object-contain rounded-xl bg-muted/20" 
+                  :alt="`slide-${i}`" 
+                />
+             </div>
+          </div>
+        </CarouselItem>
+      </CarouselContent>
+      <!-- Indicators -->
+      <div class="absolute bottom-2 left-0 right-0 flex justify-center gap-2 py-2">
+        <button 
+          v-for="(_, i) in images" 
+          :key="i" 
+          class="w-2 h-2 rounded-full transition-colors duration-200" 
+          :class="i === current ? 'bg-primary' : 'bg-muted-foreground/30'" 
+          @click="api?.scrollTo(i)" 
+        />
       </div>
-    </div>
-    <div class="absolute bottom-2 left-0 right-0 flex justify-center gap-2">
-      <button v-for="(img, i) in images" :key="i" class="w-2 h-2 rounded-full" :class="i===index ? 'bg-#333' : 'bg-#c9c8c4'" @click="index=i" />
-    </div>
+    </Carousel>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, watch, onMounted, onUnmounted } from 'vue'
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
+import type { CarouselApi } from '@/components/ui/carousel'
 
 const props = defineProps<{ images: string[] }>()
-const index = ref(0)
+const api = ref<CarouselApi>()
+const current = ref(0)
+const count = ref(0)
+let autoplayTimer: any = null
+
+function setApi(val: CarouselApi) {
+  api.value = val
+}
+
+watch(api, (api) => {
+  if (!api) return
+
+  count.value = api.scrollSnapList().length
+  current.value = api.selectedScrollSnap()
+
+  api.on('select', () => {
+    current.value = api.selectedScrollSnap()
+  })
+})
+
+function startAutoplay() {
+  stopAutoplay()
+  autoplayTimer = setInterval(() => {
+    if (api.value) {
+      api.value.scrollNext()
+    }
+  }, 4000)
+}
+
+function stopAutoplay() {
+  if (autoplayTimer) {
+    clearInterval(autoplayTimer)
+    autoplayTimer = null
+  }
+}
 
 onMounted(() => {
-  // 预加载第二张图片
-  if (props.images && props.images.length > 1) {
-    const nextImg = props.images[1]
-    if (nextImg) {
-      const img = new Image()
-      img.src = nextImg
-    }
-  }
+  startAutoplay()
+})
 
-  setInterval(() => {
-    index.value = (index.value + 1) % (props.images?.length || 1)
-  }, 4000)
+onUnmounted(() => {
+  stopAutoplay()
 })
 </script>
 

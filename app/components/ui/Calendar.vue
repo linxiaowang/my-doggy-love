@@ -1,34 +1,34 @@
 <template>
-  <div class="calendar-container">
-    <div class="calendar-layout">
+  <div class="bg-white rounded-lg shadow-lg border-2 border-black overflow-hidden">
+    <div class="flex flex-col md:flex-row">
 
       <!-- 右侧/底部：日历主体 -->
-      <div class="calendar-main">
+      <div class="flex-1 p-3 md:p-4">
         <!-- 日历头部：年月切换 -->
-        <div class="calendar-header">
-          <div class="header-top">
-            <div class="header-left">
-              <button class="year-display" @click="showYearPicker = !showYearPicker">
+        <div class="relative mb-4">
+          <div class="flex items-start justify-between mb-3">
+            <div class="flex flex-col">
+              <button class="text-2xl md:text-3xl font-bold text-red-600 hover:text-red-700 transition-colors cursor-pointer drop-shadow-sm" @click="showYearPicker = !showYearPicker">
                 {{ currentYear }}
               </button>
-              <div class="ganzhi-display">{{ ganzhiYear }}</div>
+              <div class="text-xs md:text-sm text-[#666] mt-1 font-medium">{{ ganzhiYear }}</div>
             </div>
-            <div class="header-right">
-              <button class="month-display" @click="showMonthPicker = !showMonthPicker">
+            <div class="flex items-center">
+              <button class="text-2xl md:text-3xl font-bold text-yellow-500 hover:text-yellow-600 transition-colors cursor-pointer drop-shadow-sm" @click="showMonthPicker = !showMonthPicker">
                 {{ currentMonth + 1 }}月
               </button>
             </div>
           </div>
-          <div class="header-nav">
-            <button class="nav-btn" @click="prevMonth" title="上一个月">
+          <div class="flex items-center justify-end gap-2">
+            <button class="p-2 rounded hover:bg-[#f7f6f3] transition-colors text-[#666] hover:text-[#333]" @click="prevMonth" title="上一个月">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
               </svg>
             </button>
-            <button v-if="!isCurrentMonth" class="nav-btn today-btn" @click="goToToday" title="回到今天">
+            <button v-if="!isCurrentMonth" class="ml-auto px-3 py-1 text-sm bg-[#d4a574] text-white hover:bg-[#c49564] shadow-sm rounded" @click="goToToday" title="回到今天">
               今天
             </button>
-            <button class="nav-btn" @click="nextMonth" title="下一个月">
+            <button class="p-2 rounded hover:bg-[#f7f6f3] transition-colors text-[#666] hover:text-[#333]" @click="nextMonth" title="下一个月">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
               </svg>
@@ -36,13 +36,13 @@
           </div>
           
           <!-- 年份选择器 -->
-          <div v-if="showYearPicker" ref="yearPickerRef" class="picker-dropdown year-picker">
-            <div class="picker-grid">
+          <div v-if="showYearPicker" ref="yearPickerRef" class="absolute top-full left-1/2 -translate-x-1/2 w-64 mt-2 bg-white/95 backdrop-blur-md border border-[#ece7e1] rounded-lg shadow-lg z-20 p-4 max-h-64 overflow-y-auto">
+            <div class="grid grid-cols-4 gap-2">
               <button
                 v-for="year in yearRange"
                 :key="year"
-                class="picker-item"
-                :class="{ active: year === currentYear }"
+                class="px-3 py-2 text-sm rounded hover:bg-[#f7f6f3] transition-colors text-[#666]"
+                :class="year === currentYear ? 'bg-[#d4a574] text-white hover:bg-[#c49564]' : ''"
                 @click="selectYear(year)"
               >
                 {{ year }}
@@ -51,13 +51,13 @@
           </div>
           
           <!-- 月份选择器 -->
-          <div v-if="showMonthPicker" ref="monthPickerRef" class="picker-dropdown month-picker">
-            <div class="picker-grid">
+          <div v-if="showMonthPicker" ref="monthPickerRef" class="absolute top-full left-1/2 -translate-x-1/2 w-64 mt-2 bg-white/95 backdrop-blur-md border border-[#ece7e1] rounded-lg shadow-lg z-20 p-4 max-h-64 overflow-y-auto">
+            <div class="grid grid-cols-4 gap-2">
               <button
                 v-for="(month, index) in monthNames"
                 :key="index"
-                class="picker-item"
-                :class="{ active: index === currentMonth }"
+                class="px-3 py-2 text-sm rounded hover:bg-[#f7f6f3] transition-colors text-[#666]"
+                :class="index === currentMonth ? 'bg-[#d4a574] text-white hover:bg-[#c49564]' : ''"
                 @click="selectMonth(index)"
               >
                 {{ month }}
@@ -67,40 +67,40 @@
         </div>
         
         <!-- 日历网格 -->
-        <div class="calendar-grid">
+        <div class="w-full relative">
           <!-- 星期标题 -->
-          <div class="weekday-header">
+          <div class="grid grid-cols-7 gap-1 mb-2">
             <div
               v-for="(day, index) in weekdays"
               :key="day"
-              class="weekday"
-              :class="{ 'weekend': index >= 5 }"
+              class="text-center text-sm md:text-base font-semibold text-[#333] py-2"
+              :class="index >= 5 ? 'bg-red-500 text-white rounded-full w-8 h-8 mx-auto flex items-center justify-center shadow-sm' : ''"
             >
               {{ day }}
             </div>
           </div>
           
           <!-- 日期单元格 -->
-          <div class="calendar-days">
+          <div class="grid grid-cols-7 gap-1">
             <div
               v-for="(day, index) in calendarDays"
               :key="index"
-              class="day-cell"
+              class="relative min-h-[60px] md:min-h-[80px] p-2 rounded border border-transparent hover:border-[#d4a574]/50 hover:bg-[#fff9f0] transition-all cursor-pointer flex flex-col items-center"
               :class="{
-                'other-month': !day.isCurrentMonth,
-                'today': day.isToday,
-                'has-anniversary': day.anniversaries && day.anniversaries.length > 0,
-                'weekend-cell': day.isWeekend,
+                'opacity-40': !day.isCurrentMonth,
+                'bg-[#fff5e6] border-2 border-[#d4a574] shadow-sm': day.isToday,
+                'bg-pink-50/50': day.anniversaries && day.anniversaries.length > 0,
+                'bg-red-50/20': day.isWeekend,
               }"
               @click="selectDate(day)"
             >
-              <div class="day-number" :class="{ 'weekend-date': day.isWeekend }">{{ day.date }}</div>
-              <div v-if="day.displayText" class="lunar-date" :class="{ 'festival-text': day.isFestival }">
+              <div class="text-sm md:text-base font-semibold text-[#333] mb-0.5" :class="{ 'text-red-600': day.isWeekend, 'text-[#d4a574] font-bold': day.isToday }">{{ day.date }}</div>
+              <div v-if="day.displayText" class="text-xs text-[#666] whitespace-nowrap w-full text-center" :class="{ 'text-red-600 font-medium': day.isFestival }">
                 {{ day.displayText }}
               </div>
-              <div v-else-if="day.lunar" class="lunar-date">{{ day.lunar }}</div>
-              <div v-if="day.anniversaries && day.anniversaries.length > 0" class="anniversary-marker">
-                <AnniversaryIcon :date="day.date" />
+              <div v-else-if="day.lunar" class="text-xs text-[#666] whitespace-nowrap w-full text-center">{{ day.lunar }}</div>
+              <div v-if="day.anniversaries && day.anniversaries.length > 0" class="absolute top-1 right-1">
+                <AnniversaryIcon :date="day.date" class="text-pink-400 drop-shadow-sm" />
               </div>
             </div>
           </div>
@@ -113,64 +113,64 @@
       <transition name="fade">
         <div
           v-if="selectedDate && showDetailModal"
-          class="modal-overlay"
+          class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
           @click.self="closeDetailModal"
         >
-          <div class="modal-content">
-            <div class="modal-header">
-              <h3 class="modal-title">黄历详情</h3>
-              <button class="modal-close" @click="closeDetailModal">
+          <div class="bg-white/95 backdrop-blur-md rounded-lg shadow-xl max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto border border-white/20">
+            <div class="flex items-center justify-between p-4 border-b border-[#ece7e1]">
+              <h3 class="text-lg font-semibold text-[#333]">黄历详情</h3>
+              <button class="p-1 rounded hover:bg-[#f7f6f3] transition-colors text-[#666]" @click="closeDetailModal">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
             
-            <div v-if="selectedDate" class="modal-body">
+            <div v-if="selectedDate" class="p-4 space-y-4">
               <!-- 公历日期 -->
-              <div class="detail-section">
-                <div class="detail-label">公历</div>
-                <div class="detail-value">{{ selectedDate.fullDate }}</div>
+              <div class="space-y-2">
+                <div class="text-sm font-medium text-[#666] mb-1">公历</div>
+                <div class="text-base text-[#333]">{{ selectedDate.fullDate }}</div>
               </div>
               
               <!-- 农历日期 -->
-              <div v-if="selectedDate.lunarFull" class="detail-section">
-                <div class="detail-label">农历</div>
-                <div class="detail-value">{{ selectedDate.lunarFull }}</div>
+              <div v-if="selectedDate.lunarFull" class="space-y-2">
+                <div class="text-sm font-medium text-[#666] mb-1">农历</div>
+                <div class="text-base text-[#333]">{{ selectedDate.lunarFull }}</div>
               </div>
               
               <!-- 干支纪年 -->
-              <div v-if="selectedDate.ganzhi" class="detail-section">
-                <div class="detail-label">干支</div>
-                <div class="detail-value">{{ selectedDate.ganzhi }}</div>
+              <div v-if="selectedDate.ganzhi" class="space-y-2">
+                <div class="text-sm font-medium text-[#666] mb-1">干支</div>
+                <div class="text-base text-[#333]">{{ selectedDate.ganzhi }}</div>
               </div>
               
               <!-- 宜忌 -->
-              <div v-if="selectedDate.yi || selectedDate.ji" class="detail-section">
-                <div v-if="selectedDate.yi" class="yi-ji">
-                  <div class="yi-ji-label">宜</div>
-                  <div class="yi-ji-content">{{ selectedDate.yi }}</div>
+              <div v-if="selectedDate.yi || selectedDate.ji" class="space-y-2">
+                <div v-if="selectedDate.yi" class="mb-2">
+                  <div class="inline-block px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded mr-2">宜</div>
+                  <div class="text-sm text-[#666] mt-1">{{ selectedDate.yi }}</div>
                 </div>
-                <div v-if="selectedDate.ji" class="yi-ji">
-                  <div class="yi-ji-label ji">忌</div>
-                  <div class="yi-ji-content">{{ selectedDate.ji }}</div>
+                <div v-if="selectedDate.ji" class="mb-2">
+                  <div class="inline-block px-2 py-1 text-xs font-medium bg-red-100 text-red-700 rounded mr-2">忌</div>
+                  <div class="text-sm text-[#666] mt-1">{{ selectedDate.ji }}</div>
                 </div>
               </div>
               
               <!-- 节气 -->
-              <div v-if="selectedDate.jieqi" class="detail-section">
-                <div class="detail-label">节气</div>
-                <div class="detail-value jieqi">{{ selectedDate.jieqi }}</div>
+              <div v-if="selectedDate.jieqi" class="space-y-2">
+                <div class="text-sm font-medium text-[#666] mb-1">节气</div>
+                <div class="text-base text-[#d4a574] font-semibold">{{ selectedDate.jieqi }}</div>
               </div>
               
               <!-- 纪念日 -->
-              <div v-if="selectedDate.anniversaries && selectedDate.anniversaries.length > 0" class="detail-section">
-                <div class="detail-label">纪念日</div>
-                <div class="anniversary-list">
+              <div v-if="selectedDate.anniversaries && selectedDate.anniversaries.length > 0" class="space-y-2">
+                <div class="text-sm font-medium text-[#666] mb-1">纪念日</div>
+                <div class="space-y-2">
                   <div
                     v-for="anniversary in selectedDate.anniversaries"
                     :key="anniversary.id"
-                    class="anniversary-item"
+                    class="px-3 py-2 bg-[#fff9f0] border border-[#d4a574]/30 rounded text-sm text-[#333]"
                   >
                     {{ anniversary.title }}
                   </div>
@@ -524,241 +524,8 @@ watch(showDetailModal, (val) => {
 })
 </script>
 
+
 <style scoped>
-.calendar-container {
-  @apply bg-white rounded-lg shadow-lg border-2 border-black overflow-hidden;
-}
-
-.calendar-layout {
-  @apply flex flex-col md:flex-row;
-}
-
-.calendar-illustration {
-  @apply w-full md:w-2/5 lg:w-1/3 bg-#fff9f0 border-b-2 md:border-b-0 md:border-r-2 border-black overflow-hidden;
-  min-height: 200px;
-}
-
-.illustration-wrapper {
-  @apply w-full h-full flex items-center justify-center p-4;
-}
-
-.month-image {
-  @apply w-full h-full object-contain max-h-[300px] md:max-h-[500px] transition-all duration-500;
-}
-
-.image-placeholder {
-  @apply w-full h-full flex items-center justify-center bg-#fff5e6 text-#d4a574 font-bold text-2xl;
-  min-height: 200px;
-}
-
-.calendar-main {
-  @apply flex-1 p-3 md:p-4;
-}
-
-.calendar-header {
-  @apply relative mb-4;
-}
-
-.header-top {
-  @apply flex items-start justify-between mb-3;
-}
-
-.header-left {
-  @apply flex flex-col;
-}
-
-.year-display {
-  @apply text-2xl md:text-3xl font-bold text-red-600 hover:text-red-700 transition-colors cursor-pointer drop-shadow-sm;
-}
-
-.ganzhi-display {
-  @apply text-xs md:text-sm text-#666 mt-1 font-medium;
-}
-
-.header-right {
-  @apply flex items-center;
-}
-
-.month-display {
-  @apply text-2xl md:text-3xl font-bold text-yellow-500 hover:text-yellow-600 transition-colors cursor-pointer drop-shadow-sm;
-}
-
-.header-nav {
-  @apply flex items-center justify-end gap-2;
-}
-
-.nav-btn {
-  @apply p-2 rounded hover:bg-#f7f6f3 transition-colors text-#666 hover:text-#333;
-}
-
-.today-btn {
-  @apply ml-auto px-3 py-1 text-sm bg-#d4a574 text-white hover:bg-#c49564 shadow-sm;
-}
-
-.current-date {
-  @apply flex items-center gap-2 flex-1 justify-center;
-}
-
-.date-selector {
-  @apply px-3 py-1 text-lg font-semibold text-#333 hover:text-#d4a574 transition-colors;
-}
-
-.picker-dropdown {
-  @apply absolute top-full left-0 right-0 mt-2 bg-white/95 backdrop-blur-md border border-#ece7e1 rounded-lg shadow-lg z-20 p-4 max-h-64 overflow-y-auto;
-}
-
-.year-picker {
-  @apply left-1/2 -translate-x-1/2 w-64;
-}
-
-.month-picker {
-  @apply left-1/2 -translate-x-1/2 w-64;
-}
-
-.picker-grid {
-  @apply grid grid-cols-4 gap-2;
-}
-
-.picker-item {
-  @apply px-3 py-2 text-sm rounded hover:bg-#f7f6f3 transition-colors text-#666;
-}
-
-.picker-item.active {
-  @apply bg-#d4a574 text-white hover:bg-#c49564;
-}
-
-.calendar-grid {
-  @apply w-full relative;
-}
-
-.weekday-header {
-  @apply grid grid-cols-7 gap-1 mb-2;
-}
-
-.weekday {
-  @apply text-center text-sm md:text-base font-semibold text-#333 py-2;
-}
-
-.weekday.weekend {
-  @apply bg-red-500 text-white rounded-full w-8 h-8 mx-auto flex items-center justify-center shadow-sm;
-}
-
-.calendar-days {
-  @apply grid grid-cols-7 gap-1;
-}
-
-.day-cell {
-  @apply relative min-h-[60px] md:min-h-[80px] p-2 rounded border border-transparent hover:border-#d4a574/50 hover:bg-#fff9f0 transition-all cursor-pointer flex flex-col items-center;
-}
-
-.day-cell.other-month {
-  @apply opacity-40;
-}
-
-.day-cell.today {
-  @apply bg-#fff5e6 border-2 border-#d4a574 shadow-sm;
-}
-
-.day-cell.today .day-number {
-  @apply text-#d4a574 font-bold;
-}
-
-.day-cell.has-anniversary {
-  @apply bg-pink-50/50;
-}
-
-.day-number {
-  @apply text-sm md:text-base font-semibold text-#333 mb-0.5;
-}
-
-.day-number.weekend-date {
-  @apply text-red-600;
-}
-
-.lunar-date {
-  @apply text-xs text-#666 whitespace-nowrap w-full text-center;
-}
-
-.lunar-date.festival-text {
-  @apply text-red-600 font-medium;
-}
-
-.anniversary-marker {
-  @apply absolute top-1 right-1;
-}
-
-.anniversary-icon {
-  @apply text-pink-400 drop-shadow-sm;
-}
-
-.day-cell.weekend-cell {
-  @apply bg-red-50/20;
-}
-
-.modal-overlay {
-  @apply fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm;
-}
-
-.modal-content {
-  @apply bg-white/95 backdrop-blur-md rounded-lg shadow-xl max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto border border-white/20;
-}
-
-.modal-header {
-  @apply flex items-center justify-between p-4 border-b border-#ece7e1;
-}
-
-.modal-title {
-  @apply text-lg font-semibold text-#333;
-}
-
-.modal-close {
-  @apply p-1 rounded hover:bg-#f7f6f3 transition-colors text-#666;
-}
-
-.modal-body {
-  @apply p-4 space-y-4;
-}
-
-.detail-section {
-  @apply space-y-2;
-}
-
-.detail-label {
-  @apply text-sm font-medium text-#666 mb-1;
-}
-
-.detail-value {
-  @apply text-base text-#333;
-}
-
-.detail-value.jieqi {
-  @apply text-#d4a574 font-semibold;
-}
-
-.yi-ji {
-  @apply mb-2;
-}
-
-.yi-ji-label {
-  @apply inline-block px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded mr-2;
-}
-
-.yi-ji-label.ji {
-  @apply bg-red-100 text-red-700;
-}
-
-.yi-ji-content {
-  @apply text-sm text-#666 mt-1;
-}
-
-.anniversary-list {
-  @apply space-y-2;
-}
-
-.anniversary-item {
-  @apply px-3 py-2 bg-#fff9f0 border border-#d4a574/30 rounded text-sm text-#333;
-}
-
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.2s ease;
@@ -769,3 +536,4 @@ watch(showDetailModal, (val) => {
   opacity: 0;
 }
 </style>
+

@@ -1,16 +1,36 @@
 import { pwa } from './app/config/pwa'
 import { appDescription } from './app/constants/index'
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineNuxtConfig({
   modules: [
-    '@vueuse/nuxt',
-    '@unocss/nuxt',
-    '@pinia/nuxt',
-    '@nuxtjs/color-mode',
-    '@vite-pwa/nuxt',
-    '@nuxt/eslint',
+   '@vueuse/nuxt',
+   '@pinia/nuxt',
+   '@nuxtjs/color-mode',
+   '@vite-pwa/nuxt',
+   '@nuxt/eslint',
+   'shadcn-nuxt',
   ],
-
+  shadcn: {
+    /**
+     * Prefix for all the imported component.
+     * @default "Ui"
+     */
+    prefix: '',
+    /**
+     * Directory that the component lives in.
+     * Will respect the Nuxt aliases.
+     * @link https://nuxt.com/docs/api/nuxt-config#alias
+     * @default "@/components/ui"
+     */
+    componentDir: '@/components/ui'
+  },
+ css: ['~/assets/css/tailwind.css'],
+ vite: {
+    plugins: [
+      tailwindcss(),
+    ],
+  },
   devtools: {
     enabled: true,
   },

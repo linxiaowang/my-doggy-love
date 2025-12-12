@@ -32,17 +32,13 @@ html.dark {
 
 /* 全局基础文本颜色，避免白底白字不可见 */
 /* 全局基础文本颜色，避免白底白字不可见 */
+/* 全局基础文本颜色，避免白底白字不可见 */
+/* 全局基础文本颜色，避免白底白字不可见 */
 body { 
-  color: theme('colors.text.main'); 
-  background-color: theme('colors.surface.100');
   font-family: 'DM Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-/* 常见表单元素默认文字颜色 */
-input, textarea, select, button { color: theme('colors.text.main'); }
-/* 占位符颜色在各页面已单独指定；这里兜底一层 */
-::placeholder { color: theme('colors.text.muted'); }
 
 /* 页面过渡动画 */
 .page-enter-active,

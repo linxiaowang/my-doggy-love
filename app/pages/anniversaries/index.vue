@@ -2,13 +2,19 @@
   <div class="min-h-screen bg-#f7f6f3">
     <DogHeader />
     <div class="max-w-3xl mx-auto px-4 py-6 space-y-4">
-      <div class="card">
-        <form class="grid md:grid-cols-4 gap-2 items-center" @submit.prevent="create">
-          <input v-model="title" placeholder="纪念日标题" class="border border-#ece7e1 rounded px-3 py-2 md:col-span-2 bg-white text-#333 placeholder:text-gray-400" />
-          <input v-model="date" type="date" class="border border-#ece7e1 rounded px-3 py-2 bg-white text-#333" />
-          <button class="px-4 py-2 rounded bg-#e9e4de">创建</button>
-        </form>
-      </div>
+      <Card>
+        <CardContent class="px-4">
+          <form class="flex flex-col md:flex-row gap-3" @submit.prevent="create">
+            <div class="flex-1 md:flex-[2]">
+              <Input v-model="title" placeholder="纪念日标题" />
+            </div>
+            <div class="flex-1">
+              <Input v-model="date" type="date" />
+            </div>
+            <Button type="submit" class="md:w-auto">创建</Button>
+          </form>
+        </CardContent>
+      </Card>
       <div v-if="loading">
         <SkeletonList :count="2" />
       </div>
@@ -16,55 +22,56 @@
         <EmptyState text="添加一个特别的日子吧" img="/assets/images/couple/couple-1.png" cta-text="创建纪念日" cta-to="/anniversaries" />
       </div>
       <div v-else class="grid md:grid-cols-2 gap-4">
-        <div
+        <Card
           v-for="a in items"
           :key="a.id"
-          class="rounded-xl p-4 shadow-sm border"
-          :class="meta(a).overdue ? 'border-#f3d1d1' : 'border-#e1e9f5'"
-          :style="{
-            background: meta(a).overdue
-              ? 'linear-gradient(180deg, #fff, #fdf4f4)'
-              : 'linear-gradient(180deg, #fff, #f6f9fd)'
-          }"
+          :class="meta(a).overdue ? 'border-destructive/30' : 'border-primary/30'"
         >
-          <div class="flex items-start justify-between gap-3">
-            <div>
-              <div class="card-heading">{{ a.title }}</div>
-              <div class="text-sm text-#777">{{ new Date(a.date).toLocaleDateString() }}</div>
+          <CardContent>
+            <div class="flex items-start justify-between gap-3 mb-4">
+              <div class="flex-1">
+                <h3 class="font-semibold text-lg mb-1">{{ a.title }}</h3>
+                <p class="text-sm text-muted-foreground">{{ new Date(a.date).toLocaleDateString() }}</p>
+              </div>
+              <Badge
+                :variant="meta(a).overdue ? 'destructive' : (meta(a).days === 0 ? 'default' : 'secondary')"
+                :class="meta(a).canToggle && meta(a).days !== 0 ? 'cursor-pointer hover:opacity-80' : ''"
+                :title="meta(a).canToggle && meta(a).days !== 0 ? '点击切换显示格式' : ''"
+                @click="meta(a).canToggle && meta(a).days !== 0 ? toggleFormat(a.id, meta(a).days) : null"
+              >
+                {{ meta(a).label }}
+              </Badge>
             </div>
-            <span
-              class="px-2 py-0.5 rounded-full text-xs"
-              :class="[
-                meta(a).overdue ? 'bg-#fdecec text-#b42318' : (meta(a).days===0 ? 'bg-#e7f6ec text-#127a3e' : 'bg-#e6eef5 text-#335b8c'),
-                meta(a).canToggle && meta(a).days !== 0 ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''
-              ]"
-              :title="meta(a).canToggle && meta(a).days !== 0 ? '点击切换显示格式' : ''"
-              @click="meta(a).canToggle && meta(a).days !== 0 ? toggleFormat(a.id, meta(a).days) : null"
-            >
-              {{ meta(a).label }}
-            </span>
-          </div>
-          <div class="mt-3 flex items-center gap-3">
-            <button class="text-sm underline" @click="openEdit(a)">编辑</button>
-            <button class="text-sm underline" @click="remove(a.id)">删除</button>
-          </div>
-        </div>
+            <div class="flex items-center gap-2">
+              <Button variant="outline" size="sm" @click="openEdit(a)">编辑</Button>
+              <Button variant="outline" size="sm" @click="remove(a.id)">删除</Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       <!-- 编辑对话框 -->
-      <div v-if="editing" class="fixed inset-0 z-40 bg-black/30 flex items-center justify-center px-4">
-        <div class="card w-full max-w-md">
-          <div class="card-heading mb-3">编辑纪念日</div>
-          <form class="flex flex-col gap-3" @submit.prevent="saveEdit">
-            <input v-model="editTitle" placeholder="纪念日标题" class="input" />
-            <input v-model="editDate" type="date" class="input" />
-            <div class="flex justify-end gap-2 mt-2">
-              <button type="button" class="btn-secondary" @click="closeEdit">取消</button>
-              <button type="submit" class="btn-primary">保存</button>
+      <Dialog :open="editing" @update:open="(val) => editing = val">
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>编辑纪念日</DialogTitle>
+          </DialogHeader>
+          <form class="space-y-4" @submit.prevent="saveEdit">
+            <div class="space-y-2">
+              <Label for="edit-title">标题</Label>
+              <Input id="edit-title" v-model="editTitle" placeholder="纪念日标题" />
             </div>
+            <div class="space-y-2">
+              <Label for="edit-date">日期</Label>
+              <Input id="edit-date" v-model="editDate" type="date" />
+            </div>
+            <DialogFooter>
+              <Button type="button" variant="outline" @click="closeEdit">取消</Button>
+              <Button type="submit">保存</Button>
+            </DialogFooter>
           </form>
-        </div>
-      </div>
+        </DialogContent>
+      </Dialog>
     </div>
   </div>
 </template>
@@ -74,6 +81,12 @@ import DogHeader from '@/components/ui/DogHeader.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'
 import { ref, onMounted } from 'vue'
 import SkeletonList from '@/components/ui/SkeletonList.vue'
+import { Card, CardContent } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Button } from '@/components/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
+import { Badge } from '@/components/ui/badge'
 import { createAnniversary, updateAnniversary, deleteAnniversary } from '@/services/api/anniversaries'
 import { apiFetch } from '@/services/api'
 import dayjs from 'dayjs'
