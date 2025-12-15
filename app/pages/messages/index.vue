@@ -9,8 +9,8 @@
             {{ errorMessage }}
             <NuxtLink v-if="errorMessage.includes('情侣')" to="/user/couple" class="underline ml-1 font-medium hover:opacity-80">去绑定</NuxtLink>
           </div>
-          
-          <form class="flex gap-2" @submit.prevent="submit">
+          <!-- 底部对齐 -->
+          <form class="flex gap-2 items-center" @submit.prevent="submit">
             <Textarea v-model="content" placeholder="留下想说的话…" class="flex-1 min-h-[80px]" />
             <Button type="submit" :disabled="submitting">
               {{ submitting ? '发布中...' : '发布' }}

@@ -78,8 +78,8 @@ function goQuickRecord() {
     <div class="min-h-screen flex flex-col items-center pt-12 pb-8 px-4 relative">
       
       <!-- Decorative background blooms -->
-    <div class="fixed top-20 left-10 w-64 h-64 bg-rose-200/20 rounded-full blur-3xl pointer-events-none z-0"></div>
-    <div class="fixed bottom-20 right-10 w-80 h-80 bg-orange-100/20 rounded-full blur-3xl pointer-events-none z-0"></div>
+    <div class="fixed top-20 left-10 w-64 h-64 bg-primary/8 rounded-full blur-3xl pointer-events-none z-0"></div>
+    <div class="fixed bottom-20 right-10 w-80 h-80 bg-accent/10 rounded-full blur-3xl pointer-events-none z-0"></div>
 
     <div class="w-full max-w-4xl z-10 flex flex-col items-center space-y-8">
         
@@ -100,10 +100,10 @@ function goQuickRecord() {
         
         <!-- Buttons (Primary Action) -->
         <div class="flex gap-6">
-            <button class="px-8 py-2.5 rounded-full bg-stone-800 text-stone-50 font-medium hover:bg-stone-700 hover:scale-105 transition-all shadow-lg active:scale-95 text-sm md:text-base" @click="goQuickRecord">
+            <button class="px-8 py-2.5 rounded-full bg-primary text-primary-foreground font-medium hover:bg-primary/90 hover:scale-105 transition-all shadow-lg active:scale-95 text-sm md:text-base" @click="goQuickRecord">
               开始记录
             </button>
-            <NuxtLink to="/daily" class="px-8 py-2.5 rounded-full bg-white text-stone-600 font-medium border border-stone-200 hover:bg-stone-50 hover:border-stone-300 transition-all shadow-sm text-sm md:text-base">
+            <NuxtLink to="/daily" class="px-8 py-2.5 rounded-full bg-background text-foreground font-medium border border-border hover:bg-accent hover:border-accent-foreground/20 transition-all shadow-sm text-sm md:text-base">
               查看日常
             </NuxtLink>
         </div>

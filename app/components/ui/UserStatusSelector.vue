@@ -3,15 +3,15 @@
     <!-- 状态显示按钮 -->
     <button
       v-if="currentStatus"
-      class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-#f0f0f0 hover:bg-#e0e0e0 transition text-sm"
+      class="flex items-center gap-1 py-1 px-2 rounded-full bg-secondary hover:bg-secondary/80 transition-colors text-sm"
       @click="showPicker = !showPicker"
     >
-      <span class="text-#666">{{ currentStatus }}</span>
-      <span class="text-#999 text-xs">▼</span>
+      <span class="text-secondary-foreground">{{ currentStatus }}</span>
+      <ChevronDown class="w-4 h-4 text-secondary-foreground/70" />
     </button>
     <button
       v-else
-      class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-#f0f0f0 hover:bg-#e0e0e0 transition text-sm text-#999"
+      class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary hover:bg-secondary/80 transition-colors text-sm text-secondary-foreground"
       @click="showPicker = !showPicker"
     >
       <span>设置状态</span>
@@ -21,24 +21,24 @@
     <transition name="fade">
       <div
         v-if="showPicker"
-        class="absolute right-0 top-full mt-2 w-64 rounded-lg border border-#ece7e1 bg-white shadow-lg z-50 overflow-hidden"
+        class="absolute right-0 top-full mt-2 w-64 rounded-lg border bg-popover shadow-lg z-50 overflow-hidden"
       >
         <div v-if="!showCustomInput" class="p-2">
-          <div class="text-xs text-#999 px-2 py-1 mb-1">选择一个状态</div>
+          <div class="text-xs text-muted-foreground px-2 py-1 mb-1">选择一个状态</div>
           <div class="grid grid-cols-2 gap-1">
             <button
               v-for="status in statusOptions"
               :key="status.key"
-              class="flex flex-col items-center gap-1 p-3 rounded-lg hover:bg-#f7f6f3 transition"
-              :class="{ 'bg-#e8f4f8': currentStatus === status.label }"
+              class="flex flex-col items-center gap-1 p-3 rounded-lg hover:bg-accent transition-colors"
+              :class="{ 'bg-accent': currentStatus === status.label }"
               @click="selectStatus(status)"
             >
               <span class="text-2xl">{{ status.emoji }}</span>
-              <span class="text-sm">{{ status.label }}</span>
+              <span class="text-sm text-foreground">{{ status.label }}</span>
             </button>
           </div>
           <button
-            class="w-full mt-2 px-3 py-2 text-sm text-#666 hover:bg-#f7f6f3 rounded-lg transition border border-#ece7e1"
+            class="w-full mt-2 px-3 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded-lg transition-colors border"
             @click="showCustomInput = true"
           >
             <span class="flex items-center justify-center gap-1">
@@ -48,7 +48,7 @@
           </button>
           <button
             v-if="currentStatus"
-            class="w-full mt-2 px-3 py-2 text-sm text-#999 hover:bg-#f7f6f3 rounded-lg transition"
+            class="w-full mt-2 px-3 py-2 text-sm text-muted-foreground hover:bg-destructive/10 hover:text-destructive rounded-lg transition-colors"
             @click="clearStatus"
           >
             清除状态
@@ -56,26 +56,26 @@
         </div>
         <!-- 自定义输入区域 -->
         <div v-else class="p-3">
-          <div class="text-xs text-#999 mb-2">输入自定义状态</div>
+          <div class="text-xs text-muted-foreground mb-2">输入自定义状态</div>
           <input
             ref="customInputRef"
             v-model="customStatusText"
             type="text"
             placeholder="输入你的状态..."
             maxlength="20"
-            class="w-full px-3 py-2 border border-#ece7e1 rounded-lg focus:outline-none focus:ring-2 focus:ring-#d4a574 focus:border-transparent"
+            class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-colors"
             @keyup.enter="confirmCustomStatus"
             @keyup.esc="cancelCustomInput"
           />
           <div class="flex gap-2 mt-3">
             <button
-              class="flex-1 px-3 py-2 text-sm bg-#f7f6f3 hover:bg-#e8e8e8 rounded-lg transition"
+              class="flex-1 px-3 py-2 text-sm bg-muted hover:bg-muted/80 rounded-lg transition-colors"
               @click="cancelCustomInput"
             >
               取消
             </button>
             <button
-              class="flex-1 px-3 py-2 text-sm bg-#d4a574 text-white hover:bg-#c49564 rounded-lg transition"
+              class="flex-1 px-3 py-2 text-sm bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg transition-colors"
               @click="confirmCustomStatus"
             >
               确定
@@ -90,6 +90,7 @@
 <script setup lang="ts">
 import { ref, watch, nextTick, inject } from 'vue'
 import { onClickOutside } from '@vueuse/core'
+import { ChevronDown } from 'lucide-vue-next'
 
 interface StatusOption {
   key: string

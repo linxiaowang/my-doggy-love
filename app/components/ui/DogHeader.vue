@@ -24,22 +24,20 @@
       </Button>
     </nav>
 
-    <div class="flex items-center gap-2 md:gap-3 relative flex-shrink-0">
+    <div class="flex items-center gap-1.5 md:gap-2 relative flex-shrink-0">
       <template v-if="me">
         <div class="md:block hidden">
           <UserStatusSelector :current-status="me?.status" @update="updateStatusHandler" />
         </div>
         
         <!-- 通知图标 -->
-        <Button variant="ghost" size="icon" as-child class="relative w-9 h-9">
+        <Button variant="ghost" size="icon" as-child class="relative w-8 h-8 hover:bg-muted/50 group">
           <NuxtLink to="/notifications">
-            <svg class="w-5 h-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-            </svg>
-            <Badge 
-              v-if="unreadCount > 0" 
-              variant="destructive" 
-              class="absolute -top-1 -right-1 px-1 py-0.5 h-4 min-w-[16px] flex items-center justify-center text-[10px]"
+            <Bell class="w-6 h-6 text-muted-foreground hover:text-foreground transition-colors" />
+            <Badge
+              v-if="unreadCount > 0"
+              variant="destructive"
+              class="absolute -top-1 -right-1 px-1.5 py-0.5 h-5 min-w-[18px] flex items-center justify-center text-[10px] font-semibold shadow-md border-2 border-background animate-in zoom-in-50 duration-200 group-hover:scale-110 transition-transform"
             >
               {{ unreadCount > 99 ? '99+' : unreadCount }}
             </Badge>
@@ -157,6 +155,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue'
+import { Bell } from 'lucide-vue-next'
 import UserStatusSelector from './UserStatusSelector.vue'
 import { updateStatus, logout } from '@/services/api/auth'
 import { useUnreadNotificationCount } from '@/services/api/notifications'

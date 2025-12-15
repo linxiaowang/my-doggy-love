@@ -83,15 +83,18 @@
                 <Badge
                   v-for="tag in selectedTagsForPost"
                   :key="tag"
-                  class="gap-1"
+                  class="gap-1 pr-1"
                 >
                   {{ tag }}
                   <button
                     type="button"
-                    class="ml-1 hover:opacity-70"
+                    class="ml-1 p-0.5 rounded-full bg-white/80 hover:bg-white text-gray-600 hover:text-gray-800 transition-colors"
                     @click="removePostTag(tag)"
+                    title="删除标签"
                   >
-                    ×
+                    <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
                   </button>
                 </Badge>
               </div>
@@ -196,30 +199,58 @@
         </CardContent>
       </Card>
       <Card>
-        <CardContent class="space-y-4">
-          <div class="flex flex-wrap items-center gap-3">
-            <Label class="text-sm font-medium">筛选</Label>
-            <div class="grid grid-cols-2 sm:flex sm:flex-row gap-2 sm:items-center flex-1 min-w-0 w-full sm:w-auto">
-              <Input v-model="start" type="date" class="h-9 text-sm" />
-              <span class="hidden sm:block text-muted-foreground">—</span>
-              <Input v-model="end" type="date" class="h-9 text-sm" />
-            </div>
-            <div class="flex flex-wrap items-center gap-2">
-              <Button variant="outline" size="sm" @click="presetDays(0)">今天</Button>
-              <Button variant="outline" size="sm" @click="presetDays(7)">近7天</Button>
-              <Button variant="outline" size="sm" @click="presetDays(30)">近30天</Button>
-            </div>
-            <Button variant="outline" size="sm" class="md:ml-auto" @click="clearFilters">清空</Button>
+        <CardContent class="px-4 space-y-4">
+          <!-- 日期选择器 -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <DatePicker v-model="start" placeholder="起始时间" class="h-9" />
+            <DatePicker v-model="end" placeholder="结束时间" class="h-9" />
           </div>
-          <div v-if="allTags.length > 0" class="flex flex-wrap gap-2 items-center">
-            <Label class="text-sm">标签</Label>
-            <Badge
-              v-for="t in allTags" :key="t"
-              variant="outline"
-              class="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors"
-              :class="selectedTags.includes(t) ? 'bg-primary text-primary-foreground' : ''"
-              @click="toggleTag(t)"
-            >{{ t }}</Badge>
+
+          <!-- 快速选择按钮 -->
+          <div class="flex flex-wrap gap-2">
+            <Button variant="outline" size="sm" @click="presetDays(0)" class="h-9 px-3">
+              <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+              今天
+            </Button>
+            <Button variant="outline" size="sm" @click="presetDays(7)" class="h-9 px-3">
+              <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              近7天
+            </Button>
+            <Button variant="outline" size="sm" @click="presetDays(30)" class="h-9 px-3">
+              <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+              近30天
+            </Button>
+            <div class="ml-auto">
+              <Button variant="ghost" size="sm" @click="clearFilters" class="h-9 px-3 text-muted-foreground hover:text-foreground">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </Button>
+            </div>
+          </div>
+
+          <!-- 标签筛选区域 -->
+          <div v-if="allTags.length > 0" class="pt-2 border-t border-border/50">
+            <div class="flex flex-wrap gap-2">
+              <Badge
+                v-for="t in allTags" :key="t"
+                variant="outline"
+                class="cursor-pointer transition-all duration-200 hover:shadow-sm"
+                :class="selectedTags.includes(t)
+                  ? 'bg-primary text-primary-foreground shadow-sm border-primary/50'
+                  : 'hover:bg-muted/50 hover:border-muted-foreground/30'"
+                @click="toggleTag(t)"
+              >
+                <span v-if="selectedTags.includes(t)" class="mr-1">✓</span>
+                {{ t }}
+              </Badge>
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -261,6 +292,7 @@ import SkeletonList from '@/components/ui/SkeletonList.vue'
 import PostCard from '@/components/ui/PostCard.vue'
 import Timeline from '@/components/ui/Timeline.vue'
 import TimelineItem from '@/components/ui/TimelineItem.vue'
+import DatePicker from '@/components/ui/DatePicker.vue'
 import { Card, CardContent } from '@/components/ui/card'
 import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
@@ -268,6 +300,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ref, onMounted, computed, nextTick } from 'vue'
+import type { DateValue } from '@internationalized/date'
+import { getLocalTimeZone, today } from '@internationalized/date'
 import { createDailyPost } from '@/services/api/daily'
 import { uploadFiles } from '@/services/api/upload'
 import { apiFetch, handleApiError } from '@/services/api'
@@ -284,8 +318,8 @@ const items = ref<Post[]>([])
 const loading = ref(true)
 const content = ref('')
 const fileRef = ref<HTMLInputElement | null>(null)
-const start = ref('')
-const end = ref('')
+const start = ref<DateValue | undefined>()
+const end = ref<DateValue | undefined>()
 const tag = ref('')
 type FilePreview = {
   file: File
@@ -405,8 +439,8 @@ function asArray(v: any): string[] {
 }
 
 const filtered = computed(() => {
-  const s = start.value ? new Date(start.value) : null
-  const e = end.value ? new Date(end.value) : null
+  const s = start.value ? start.value.toDate(getLocalTimeZone()) : null
+  const e = end.value ? end.value.toDate(getLocalTimeZone()) : null
   const t = tag.value.trim()
   return items.value.filter((it: any) => {
     const d = new Date(it.createdAt)
@@ -676,21 +710,20 @@ function addTagFromInput() {
 }
 
 function presetDays(days: number) {
-  const today = new Date()
-  const ymd = (d: Date) => d.toISOString().slice(0,10)
+  const todayDate = today(getLocalTimeZone())
   if (days === 0) {
-    start.value = ymd(today)
-    end.value = ymd(today)
+    start.value = todayDate
+    end.value = todayDate
   } else {
-    const from = new Date(today.getTime() - (days-1) * 24*60*60*1000)
-    start.value = ymd(from)
-    end.value = ymd(today)
+    const from = todayDate.subtract({ days: days - 1 })
+    start.value = from
+    end.value = todayDate
   }
 }
 
 function clearFilters() {
-  start.value = ''
-  end.value = ''
+  start.value = undefined
+  end.value = undefined
   tag.value = ''
   selectedTags.value = []
 }
