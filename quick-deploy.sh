@@ -3,6 +3,25 @@
 
 set -e
 
+# 解析参数
+INSTALL_DEPS=true
+ENABLE_SWAP=true
+SWAP_SIZE_MB=2048
+
+for arg in "$@"; do
+    case "$arg" in
+        --install)
+            INSTALL_DEPS=true
+            ;;
+        --swap)
+            ENABLE_SWAP=true
+            ;;
+        --swap-size=*)
+            SWAP_SIZE_MB="${arg#*=}"
+            ;;
+    esac
+done
+
 echo "🚀 开始快速部署 My Doggy Love..."
 
 # 检查 Node.js
@@ -26,6 +45,39 @@ fi
 echo "✅ 环境检查通过"
 echo ""
 
+setup_swap() {
+    # macOS 自带动态 swap，不需要额外处理
+    if [ "$(uname)" = "Darwin" ]; then
+        echo "ℹ️  当前为 macOS，跳过 swap 配置"
+        return
+    fi
+
+    if swapon --show | grep -q "/swapfile"; then
+        echo "✅ 已检测到 swap，跳过创建"
+        return
+    fi
+
+    echo "⚙️  创建 ${SWAP_SIZE_MB}MB swap..."
+
+    if command -v fallocate &> /dev/null; then
+        sudo fallocate -l "${SWAP_SIZE_MB}M" /swapfile
+    else
+        sudo dd if=/dev/zero of=/swapfile bs=1M count="${SWAP_SIZE_MB}"
+    fi
+
+    sudo chmod 600 /swapfile
+    sudo mkswap /swapfile
+    sudo swapon /swapfile
+
+    # 开机自动挂载
+    if ! grep -q "/swapfile" /etc/fstab; then
+        echo "/swapfile swap swap defaults 0 0" | sudo tee -a /etc/fstab >/dev/null
+    fi
+
+    echo "✅ swap 配置完成"
+    echo ""
+}
+
 # 拉取最新代码（如果使用 git）
 if [ -d .git ]; then
     echo "📥 拉取最新代码..."
@@ -34,10 +86,15 @@ if [ -d .git ]; then
 fi
 
 # 安装依赖（如果需要）
-if [ -n "$1" ] && [ "$1" = "--install" ]; then
+if [ "$INSTALL_DEPS" = true ]; then
     echo "📦 安装依赖..."
     pnpm install --frozen-lockfile
     echo ""
+fi
+
+# 配置 swap（如果需要）
+if [ "$ENABLE_SWAP" = true ]; then
+    setup_swap
 fi
 
 # 构建项目
