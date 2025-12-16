@@ -92,8 +92,7 @@ export default defineNuxtConfig({
     },
     prerender: {
       crawlLinks: false,
-      routes: ['/'],
-      ignore: ['/hi'],
+      routes: [],
     },
     // 将 sharp 标记为外部依赖，避免在构建时打包原生模块
     // sharp 会在运行时动态加载（使用动态 import）
