@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import DogHeader from '@/components/ui/DogHeader.vue'
+import DogHeader from '@/components/DogHeader.vue'
 import { ref, onMounted, watch, computed } from 'vue'
 import { apiFetch } from '@/services/api'
 

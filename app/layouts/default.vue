@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import BottomNav from '@/components/ui/BottomNav.vue'
-import Toast from '@/components/ui/Toast.vue'
+import BottomNav from '@/components/BottomNav.vue'
+import Toast from '@/components/Toast.vue'
 </script>
 
 <template>

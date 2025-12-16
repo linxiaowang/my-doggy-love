@@ -50,7 +50,7 @@ const compressedFiles = await compressImages(files, {
 
 ### 3. 智能图片加载
 
-**位置**: `app/components/ui/PostCard.vue`
+**位置**: `app/components/PostCard.vue`
 
 **功能**:
 - 列表显示时自动使用缩略图

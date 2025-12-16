@@ -69,7 +69,7 @@
 </template>
 
 <script setup lang="ts">
-import DogHeader from '@/components/ui/DogHeader.vue'
+import DogHeader from '@/components/DogHeader.vue'
 import { ref, onMounted, computed } from 'vue'
 import { useCouple, createCouple, joinCouple, switchCouple } from '@/services/api/couple'
 

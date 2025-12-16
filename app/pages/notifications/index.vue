@@ -63,8 +63,8 @@
 </template>
 
 <script setup lang="ts">
-import DogHeader from '@/components/ui/DogHeader.vue'
-import EmptyState from '@/components/ui/EmptyState.vue'
+import DogHeader from '@/components/DogHeader.vue'
+import EmptyState from '@/components/EmptyState.vue'
 import { ref, computed, onMounted, watch } from 'vue'
 import { useNotifications, useUnreadNotificationCount, markNotificationAsRead, markAllNotificationsAsRead, type Notification } from '@/services/api/notifications'
 

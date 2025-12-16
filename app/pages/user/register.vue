@@ -68,8 +68,8 @@
 </template>
 
 <script setup lang="ts">
-import DogHeader from '@/components/ui/DogHeader.vue'
-import DogLoginAnimation from '@/components/ui/DogLoginAnimation.vue'
+import DogHeader from '@/components/DogHeader.vue'
+import DogLoginAnimation from '@/components/DogLoginAnimation.vue'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'

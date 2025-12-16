@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
 import { apiFetch } from '@/services/api'
-import AnniversaryCountdown from '@/components/ui/AnniversaryCountdown.vue'
+import AnniversaryCountdown from '@/components/AnniversaryCountdown.vue'
 import Calendar from '@/components/ui/Calendar.vue'
 
 definePageMeta({
@@ -126,8 +126,8 @@ function goQuickRecord() {
 </template>
 
 <script lang="ts">
-import DogHeader from '@/components/ui/DogHeader.vue'
-// import DogCarousel from '@/components/ui/DogCarousel.vue' // Deprecated
-import MemoryTree from '@/components/ui/MemoryTree.vue'
+import DogHeader from '@/components/DogHeader.vue'
+// import DogCarousel from '@/components/DogCarousel.vue' // Deprecated
+import MemoryTree from '@/components/MemoryTree.vue'
 export default {}
 </script>

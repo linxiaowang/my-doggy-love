@@ -286,12 +286,12 @@
 </template>
 
 <script setup lang="ts">
-import DogHeader from '@/components/ui/DogHeader.vue'
-import EmptyState from '@/components/ui/EmptyState.vue'
-import SkeletonList from '@/components/ui/SkeletonList.vue'
-import PostCard from '@/components/ui/PostCard.vue'
-import Timeline from '@/components/ui/Timeline.vue'
-import TimelineItem from '@/components/ui/TimelineItem.vue'
+import DogHeader from '@/components/DogHeader.vue'
+import EmptyState from '@/components/EmptyState.vue'
+import SkeletonList from '@/components/SkeletonList.vue'
+import PostCard from '@/components/PostCard.vue'
+import Timeline from '@/components/Timeline.vue'
+import TimelineItem from '@/components/TimelineItem.vue'
 import DatePicker from '@/components/ui/DatePicker.vue'
 import { Card, CardContent } from '@/components/ui/card'
 import { Textarea } from '@/components/ui/textarea'

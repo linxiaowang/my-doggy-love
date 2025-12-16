@@ -168,7 +168,7 @@
 </template>
 
 <script setup lang="ts">
-import DogHeader from '@/components/ui/DogHeader.vue'
+import DogHeader from '@/components/DogHeader.vue'
 import { ref, onMounted, nextTick, watch } from 'vue'
 import { updateNickname, uploadAvatar, logout } from '@/services/api/auth'
 import { useCouple } from '@/services/api/couple'

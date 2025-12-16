@@ -77,10 +77,10 @@
 </template>
 
 <script setup lang="ts">
-import DogHeader from '@/components/ui/DogHeader.vue'
-import EmptyState from '@/components/ui/EmptyState.vue'
+import DogHeader from '@/components/DogHeader.vue'
+import EmptyState from '@/components/EmptyState.vue'
 import { ref, onMounted } from 'vue'
-import SkeletonList from '@/components/ui/SkeletonList.vue'
+import SkeletonList from '@/components/SkeletonList.vue'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
