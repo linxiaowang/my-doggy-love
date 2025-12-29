@@ -3,11 +3,11 @@ const route = useRoute()
 const { isAuthenticated } = useAuth()
 
 const navItems = [
-  { name: '首页', path: '/', icon: 'home' },
-  { name: '日常', path: '/daily', icon: 'image' },
-  { name: '愿望', path: '/wishes', icon: 'star' },
-  { name: '留言', path: '/messages', icon: 'message-circle' },
-  { name: '我的', path: '/user/profile', icon: 'user' },
+  { name: '首页', path: '/', icon: 'home', ariaLabel: '首页' },
+  { name: '日常', path: '/daily', icon: 'image', ariaLabel: '日常动态' },
+  { name: '愿望', path: '/wishes', icon: 'star', ariaLabel: '愿望清单' },
+  { name: '留言', path: '/messages', icon: 'message-circle', ariaLabel: '留言板' },
+  { name: '我的', path: '/user/profile', icon: 'user', ariaLabel: '个人中心' },
 ]
 
 function isActive(path: string) {
@@ -26,30 +26,47 @@ const icons: Record<string, string> = {
 </script>
 
 <template>
-  <nav v-if="isAuthenticated" class="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-md border-t border-border pb-[env(safe-area-inset-bottom)] z-50 md:hidden">
+  <nav
+    v-if="isAuthenticated"
+    class="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-md border-t border-border pb-[env(safe-area-inset-bottom)] z-50 md:hidden"
+    role="navigation"
+    aria-label="主导航"
+  >
     <div class="flex justify-around items-center h-16 px-2">
       <NuxtLink
         v-for="item in navItems"
         :key="item.path"
         :to="item.path"
-        class="relative flex flex-col items-center justify-center w-full h-full space-y-1 transition-all duration-300"
+        class="relative flex flex-col items-center justify-center w-full h-full space-y-1 transition-all duration-300 group"
         :class="isActive(item.path) ? 'text-primary' : 'text-muted-foreground hover:text-foreground'"
+        :aria-label="item.ariaLabel"
+        :aria-current="isActive(item.path) ? 'page' : undefined"
       >
         <!-- Active Background -->
-        <div 
-          v-if="isActive(item.path)"
-          class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-primary/10 rounded-2xl -z-10 animate-fade-in"
-        />
-        
-        <svg 
-          class="w-6 h-6 transition-transform duration-300" 
+        <Transition
+          enter-active-class="transition-all duration-300 ease-out"
+          enter-from-class="scale-0 opacity-0"
+          enter-to-class="scale-100 opacity-100"
+          leave-active-class="transition-all duration-200 ease-in"
+          leave-from-class="scale-100 opacity-100"
+          leave-to-class="scale-0 opacity-0"
+        >
+          <div
+            v-if="isActive(item.path)"
+            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-primary/10 rounded-2xl -z-10"
+          />
+        </Transition>
+
+        <svg
+          class="w-6 h-6 transition-transform duration-300"
           :class="isActive(item.path) ? 'scale-110' : ''"
-          fill="none" 
-          stroke="currentColor" 
-          stroke-width="2" 
-          stroke-linecap="round" 
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
           stroke-linejoin="round"
           viewBox="0 0 24 24"
+          aria-hidden="true"
         >
           <path :d="icons[item.icon]" />
         </svg>
@@ -58,4 +75,3 @@ const icons: Record<string, string> = {
     </div>
   </nav>
 </template>
-

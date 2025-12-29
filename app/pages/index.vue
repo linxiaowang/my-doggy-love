@@ -84,7 +84,7 @@ function goQuickRecord() {
     <div class="w-full max-w-4xl z-10 flex flex-col items-center space-y-8">
         
       <!-- Slogan -->
-      <div class="bg-white/40 backdrop-blur-sm px-6 py-2 rounded-full border border-white/50 shadow-sm animate-fade-in shrink-0">
+      <div class="bg-white/40 dark:bg-slate-800/40 backdrop-blur-sm px-6 py-2 rounded-full border border-white/50 dark:border-slate-700/50 shadow-sm animate-fade-in shrink-0">
         <h1 class="text-xl md:text-2xl font-serif text-text-secondary tracking-widest text-center opacity-90">
           爱的小事，值得被温柔记录
         </h1>

@@ -5,20 +5,24 @@
         <div
           v-for="toast in toasts"
           :key="toast.id"
-          class="px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 pointer-events-auto min-w-[200px] max-w-[400px]"
+          class="px-6 py-3 rounded-xl shadow-xl flex items-center gap-3 pointer-events-auto min-w-[280px] max-w-[420px] backdrop-blur-sm"
           :class="getToastClass(toast.type)"
+          role="alert"
+          :aria-live="toast.type === 'error' ? 'assertive' : 'polite'"
         >
           <!-- 图标 -->
           <ToastIcon :type="toast.type" :class="getIconClass(toast.type)" />
-          
+
           <!-- 消息 -->
           <span class="text-sm font-medium flex-1">{{ toast.message }}</span>
-          
+
           <!-- 关闭按钮 -->
           <button
             v-if="toast.closable"
-            class="flex-shrink-0 hover:opacity-70 transition-opacity text-white"
+            class="flex-shrink-0 hover:opacity-70 transition-opacity rounded-md p-0.5 -mr-1"
+            :class="getCloseButtonClass(toast.type)"
             @click="remove(toast.id)"
+            aria-label="关闭通知"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -38,16 +42,15 @@ const { toasts, remove } = useToast()
 
 function getToastClass(type: ToastType): string {
   const classes = {
-    success: 'bg-#d4a574 text-white',
-    error: 'bg-red-500 text-white',
-    warning: 'bg-yellow-500 text-white',
-    info: 'bg-blue-500 text-white',
+    success: 'bg-amber-600 text-white dark:bg-amber-500',
+    error: 'bg-red-500 text-white dark:bg-red-600',
+    warning: 'bg-amber-500 text-white dark:bg-amber-600',
+    info: 'bg-blue-500 text-white dark:bg-blue-600',
   }
   return classes[type] || classes.info
 }
 
 function getIconClass(type: ToastType): string {
-  // 使用更亮的白色，让图标更明显
   const classes = {
     success: 'text-white',
     error: 'text-white',
@@ -55,6 +58,10 @@ function getIconClass(type: ToastType): string {
     info: 'text-white',
   }
   return classes[type] || classes.info
+}
+
+function getCloseButtonClass(type: ToastType): string {
+  return 'text-white/90 hover:text-white hover:bg-white/10'
 }
 
 // 图标组件

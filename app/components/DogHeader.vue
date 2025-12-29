@@ -1,12 +1,12 @@
 <template>
   <header class="fixed top-0 left-0 right-0 z-30 w-screen flex items-center justify-between px-4 md:px-8 lg:px-12 py-3 bg-background/95 backdrop-blur-md border-b border-border pt-[calc(0.75rem+env(safe-area-inset-top))]">
-    <NuxtLink to="/" class="flex items-center gap-2 md:gap-3 cursor-pointer hover:opacity-80 transition flex-shrink-0 min-w-0">
-      <img src="/assets/images/couple/couple-1.png" alt="logo" class="w-6 h-6 flex-shrink-0" />
+    <NuxtLink to="/" class="flex items-center gap-2 md:gap-3 cursor-pointer hover:opacity-80 transition flex-shrink-0 min-w-0" aria-label="回到首页">
+      <img src="/assets/images/couple/couple-1.png" alt="My Doggy Love Logo" class="w-6 h-6 flex-shrink-0" />
       <span class="font-semibold text-sm md:text-base truncate">My Doggy Love</span>
     </NuxtLink>
     
     <!-- Desktop Navigation -->
-    <nav class="hidden md:flex items-center gap-6 lg:gap-8 text-sm">
+    <nav class="hidden md:flex items-center gap-6 lg:gap-8 text-sm" role="navigation" aria-label="主导航">
       <Button variant="link" as-child class="text-foreground hover:no-underline px-0">
         <NuxtLink to="/">首页</NuxtLink>
       </Button>
@@ -25,18 +25,28 @@
     </nav>
 
     <div class="flex items-center gap-1.5 md:gap-2 relative flex-shrink-0">
+      <!-- 暗黑模式切换按钮 -->
+      <DarkToggle />
+
       <template v-if="me">
         <div class="md:block hidden">
           <UserStatusSelector :current-status="me?.status" @update="updateStatusHandler" />
         </div>
-        
+
         <!-- 通知图标 -->
-        <Button variant="ghost" size="icon" as-child class="relative w-8 h-8 hover:bg-muted/50 group">
+        <Button
+          variant="ghost"
+          size="icon"
+          as-child
+          class="relative w-8 h-8 hover:bg-muted/50 group"
+          :aria-label="unreadCount > 0 ? `有 ${unreadCount} 条未读通知` : '查看通知'"
+        >
           <NuxtLink to="/notifications">
-            <Bell class="w-6 h-6 text-muted-foreground hover:text-foreground transition-colors" />
+            <Bell class="w-6 h-6 text-muted-foreground hover:text-foreground transition-colors" aria-hidden="true" />
             <Badge
               v-if="unreadCount > 0"
               variant="destructive"
+              :aria-label="`${unreadCount} 条未读通知`"
               class="absolute -top-1 -right-1 px-1.5 py-0.5 h-5 min-w-[18px] flex items-center justify-center text-[10px] font-semibold shadow-md border-2 border-background animate-in zoom-in-50 duration-200 group-hover:scale-110 transition-transform"
             >
               {{ unreadCount > 99 ? '99+' : unreadCount }}
@@ -46,7 +56,7 @@
 
         <DropdownMenu>
           <DropdownMenuTrigger as-child>
-            <Button variant="ghost" class="flex items-center gap-2 px-1 hover:bg-transparent">
+            <Button variant="ghost" class="flex items-center gap-2 px-1 hover:bg-transparent" aria-label="用户菜单">
               <Avatar class="w-8 h-8">
                 <AvatarImage :src="me.avatarUrl || '/assets/images/xiaobai/xiaobai-2.png'" />
                 <AvatarFallback>{{ me.nickName?.slice(0, 2) || '用户' }}</AvatarFallback>
@@ -63,10 +73,14 @@
              <DropdownMenuItem as-child>
               <NuxtLink to="/user/couple" class="w-full cursor-pointer">情侣绑定</NuxtLink>
             </DropdownMenuItem>
-            <DropdownMenuItem @click="isPushEnabled ? disableNotification() : enableNotification()" :disabled="pushLoading">
+            <DropdownMenuItem
+              @click="isPushEnabled ? disableNotification() : enableNotification()"
+              :disabled="pushLoading"
+              :aria-label="isPushEnabled ? '关闭推送通知' : '开启推送通知'"
+            >
               <div class="flex items-center justify-between w-full">
                 <span>{{ isPushEnabled ? '关闭通知' : '开启通知' }}</span>
-                <span v-if="pushLoading" class="text-xs text-muted-foreground">...</span>
+                <span v-if="pushLoading" class="text-xs text-muted-foreground" aria-hidden="true">...</span>
               </div>
             </DropdownMenuItem>
             <DropdownMenuItem v-if="isPushEnabled" @click="testNotification">
@@ -92,7 +106,7 @@
       <!-- Mobile Menu (Sheet) -->
       <Sheet v-if="me">
         <SheetTrigger as-child>
-           <Button variant="ghost" size="icon" class="md:hidden">
+           <Button variant="ghost" size="icon" class="md:hidden" aria-label="打开菜单">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
               </svg>
@@ -114,10 +128,16 @@
                  <UserStatusSelector :current-status="me?.status" @update="updateStatusHandler" size="sm" />
               </div>
             </div>
-            
+
+            <!-- 暗黑模式切换 -->
+            <div class="flex items-center justify-between px-2 py-2">
+              <span class="text-sm">外观模式</span>
+              <DarkToggle />
+            </div>
+
             <Separator />
             
-            <nav class="flex flex-col gap-2">
+            <nav class="flex flex-col gap-2" role="navigation" aria-label="移动端导航">
               <SheetClose as-child>
                 <NuxtLink to="/" class="px-2 py-2 hover:bg-muted rounded-md transition-colors">首页</NuxtLink>
               </SheetClose>

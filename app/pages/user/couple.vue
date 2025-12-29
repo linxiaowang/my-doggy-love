@@ -1,10 +1,10 @@
 <template>
-  <div class="min-h-screen bg-#f7f6f3">
+  <div class="min-h-screen bg-slate-50 dark:bg-slate-900">
     <DogHeader />
     <div class="max-w-xl mx-auto px-4 py-8">
       <div class="card space-y-4">
         <div class="text-lg">情侣绑定</div>
-        <div v-if="loading" class="text-sm text-#777">加载中…</div>
+        <div v-if="loading" class="text-sm text-slate-500 dark:text-slate-400">加载中…</div>
         <div v-else-if="couple" class="space-y-4">
           <div class="flex items-center justify-between">
             <div>邀请码：<span class="font-mono">{{ couple.code }}</span></div>
@@ -13,7 +13,7 @@
             </button>
           </div>
           <div class="space-y-3">
-            <div v-for="m in couple.members" :key="m.id" class="flex items-start gap-3 p-3 rounded-lg bg-#f7f6f3 hover:bg-#f0efe9 transition">
+            <div v-for="m in couple.members" :key="m.id" class="flex items-start gap-3 p-3 rounded-lg bg-slate-50 hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-700 transition">
               <img 
                 :src="m.avatarUrl || '/assets/images/xiaojimao/xiaojimao-2.png'" 
                 :alt="m.nickName"
@@ -22,22 +22,22 @@
               />
               <div class="flex-1 min-w-0">
                 <div class="flex items-center gap-2 mb-1">
-                  <span class="font-medium text-#333">{{ m.nickName }}</span>
-                  <span class="text-xs text-#999">（{{ m.role==='A' ? '发起者' : '伴侣' }}）</span>
+                  <span class="font-medium text-slate-900 dark:text-slate-100">{{ m.nickName }}</span>
+                  <span class="text-xs text-slate-400 dark:text-slate-500">（{{ m.role==='A' ? '发起者' : '伴侣' }}）</span>
                 </div>
                 <!-- 状态显示 -->
                 <div v-if="m.status" class="flex items-center gap-2 mb-2">
-                  <span class="px-2 py-0.5 rounded-full bg-#f0e9e2 text-#666 text-sm">{{ m.status }}</span>
-                  <span v-if="m.statusUpdatedAt" class="text-xs text-#999">
+                  <span class="px-2 py-0.5 rounded-full bg-slate-200 text-slate-600 dark:bg-slate-700 dark:text-slate-400 text-sm">{{ m.status }}</span>
+                  <span v-if="m.statusUpdatedAt" class="text-xs text-slate-400 dark:text-slate-500">
                     {{ formatStatusTime(m.statusUpdatedAt) }}
                   </span>
                 </div>
-                <div v-else class="text-xs text-#999 mb-2">暂无状态</div>
+                <div v-else class="text-xs text-slate-400 dark:text-slate-500 mb-2">暂无状态</div>
                 <!-- 操作按钮 -->
                 <div class="flex items-center gap-2">
                   <button
                     @click="viewProfile(m.id, m.id === currentUserId)"
-                    class="text-xs text-#d4a574 hover:text-#c49564 underline"
+                    class="text-xs text-amber-600 hover:text-amber-700 dark:text-amber-500 dark:hover:text-amber-400 underline"
                   >
                     {{ m.id === currentUserId ? '查看我的主页' : '查看主页' }}
                   </button>
@@ -46,7 +46,7 @@
             </div>
           </div>
           <div v-if="couple.members.length === 1" class="space-y-2">
-            <div class="text-xs text-#777">已创建情侣：等待对方加入。你也可以直接加入对方的情侣（将切换绑定）。</div>
+            <div class="text-xs text-slate-500 dark:text-slate-400">已创建情侣：等待对方加入。你也可以直接加入对方的情侣（将切换绑定）。</div>
             <form class="flex gap-2" @submit.prevent="switchToCode">
               <input v-model="switchCode" placeholder="输入对方的邀请码切换绑定" class="input" />
               <button class="btn-secondary">切换加入</button>
@@ -54,7 +54,7 @@
           </div>
         </div>
         <div v-else class="space-y-4">
-          <div class="text-sm text-#777">你还没有绑定情侣。可以创建情侣，或直接输入对方的邀请码加入。</div>
+          <div class="text-sm text-slate-500 dark:text-slate-400">你还没有绑定情侣。可以创建情侣，或直接输入对方的邀请码加入。</div>
           <div class="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
             <button class="btn-primary" @click="createCoupleHandler">创建情侣</button>
             <form class="flex gap-2 w-full sm:w-auto" @submit.prevent="joinCoupleHandler">

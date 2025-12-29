@@ -1,63 +1,63 @@
 <template>
-  <div class="bg-white rounded-lg shadow-lg border-2 border-black overflow-hidden">
+  <div class="bg-white dark:bg-slate-800 rounded-lg shadow-lg border-2 border-slate-900 dark:border-slate-600 overflow-hidden">
     <div class="flex flex-col md:flex-row">
 
-      <!-- 右侧/底部：日历主体 -->
+      <!-- 右侧/底部:日历主体 -->
       <div class="flex-1 p-3 md:p-4">
-        <!-- 日历头部：年月切换 -->
+        <!-- 日历头部:年月切换 -->
         <div class="relative mb-4">
           <div class="flex items-start justify-between mb-3">
             <div class="flex flex-col">
-              <button class="text-2xl md:text-3xl font-bold text-red-600 hover:text-red-700 transition-colors cursor-pointer drop-shadow-sm" @click="showYearPicker = !showYearPicker">
+              <button class="text-2xl md:text-3xl font-bold text-red-600 hover:text-red-700 dark:hover:text-red-500 transition-colors cursor-pointer drop-shadow-sm" @click="showYearPicker = !showYearPicker">
                 {{ currentYear }}
               </button>
-              <div class="text-xs md:text-sm text-[#666] mt-1 font-medium">{{ ganzhiYear }}</div>
+              <div class="text-xs md:text-sm text-slate-600 dark:text-slate-400 mt-1 font-medium">{{ ganzhiYear }}</div>
             </div>
             <div class="flex items-center">
-              <button class="text-2xl md:text-3xl font-bold text-yellow-500 hover:text-yellow-600 transition-colors cursor-pointer drop-shadow-sm" @click="showMonthPicker = !showMonthPicker">
+              <button class="text-2xl md:text-3xl font-bold text-yellow-500 hover:text-yellow-600 dark:hover:text-yellow-400 transition-colors cursor-pointer drop-shadow-sm" @click="showMonthPicker = !showMonthPicker">
                 {{ currentMonth + 1 }}月
               </button>
             </div>
           </div>
           <div class="flex items-center justify-end gap-2">
-            <button class="p-2 rounded hover:bg-[#f7f6f3] transition-colors text-[#666] hover:text-[#333]" @click="prevMonth" title="上一个月">
+            <button class="p-2 rounded hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200" @click="prevMonth" title="上一个月">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
               </svg>
             </button>
-            <button v-if="!isCurrentMonth" class="ml-auto px-3 py-1 text-sm bg-[#d4a574] text-white hover:bg-[#c49564] shadow-sm rounded" @click="goToToday" title="回到今天">
+            <Button v-if="!isCurrentMonth" class="ml-auto px-3 py-1 text-sm bg-amber-600 hover:bg-amber-700 text-white shadow-sm rounded" @click="goToToday" title="回到今天">
               今天
-            </button>
-            <button class="p-2 rounded hover:bg-[#f7f6f3] transition-colors text-[#666] hover:text-[#333]" @click="nextMonth" title="下一个月">
+            </Button>
+            <button class="p-2 rounded hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200" @click="nextMonth" title="下一个月">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
               </svg>
             </button>
           </div>
-          
+
           <!-- 年份选择器 -->
-          <div v-if="showYearPicker" ref="yearPickerRef" class="absolute top-full left-1/2 -translate-x-1/2 w-64 mt-2 bg-white/95 backdrop-blur-md border border-[#ece7e1] rounded-lg shadow-lg z-20 p-4 max-h-64 overflow-y-auto">
+          <div v-if="showYearPicker" ref="yearPickerRef" class="absolute top-full left-1/2 -translate-x-1/2 w-64 mt-2 bg-white/95 dark:bg-slate-800/95 backdrop-blur-md border border-slate-200 dark:border-slate-700 rounded-lg shadow-lg z-20 p-4 max-h-64 overflow-y-auto">
             <div class="grid grid-cols-4 gap-2">
               <button
                 v-for="year in yearRange"
                 :key="year"
-                class="px-3 py-2 text-sm rounded hover:bg-[#f7f6f3] transition-colors text-[#666]"
-                :class="year === currentYear ? 'bg-[#d4a574] text-white hover:bg-[#c49564]' : ''"
+                class="px-3 py-2 text-sm rounded hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors text-slate-600 dark:text-slate-400"
+                :class="year === currentYear ? 'bg-amber-600 text-white hover:bg-amber-700' : ''"
                 @click="selectYear(year)"
               >
                 {{ year }}
               </button>
             </div>
           </div>
-          
+
           <!-- 月份选择器 -->
-          <div v-if="showMonthPicker" ref="monthPickerRef" class="absolute top-full left-1/2 -translate-x-1/2 w-64 mt-2 bg-white/95 backdrop-blur-md border border-[#ece7e1] rounded-lg shadow-lg z-20 p-4 max-h-64 overflow-y-auto">
+          <div v-if="showMonthPicker" ref="monthPickerRef" class="absolute top-full left-1/2 -translate-x-1/2 w-64 mt-2 bg-white/95 dark:bg-slate-800/95 backdrop-blur-md border border-slate-200 dark:border-slate-700 rounded-lg shadow-lg z-20 p-4 max-h-64 overflow-y-auto">
             <div class="grid grid-cols-4 gap-2">
               <button
                 v-for="(month, index) in monthNames"
                 :key="index"
-                class="px-3 py-2 text-sm rounded hover:bg-[#f7f6f3] transition-colors text-[#666]"
-                :class="index === currentMonth ? 'bg-[#d4a574] text-white hover:bg-[#c49564]' : ''"
+                class="px-3 py-2 text-sm rounded hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors text-slate-600 dark:text-slate-400"
+                :class="index === currentMonth ? 'bg-amber-600 text-white hover:bg-amber-700' : ''"
                 @click="selectMonth(index)"
               >
                 {{ month }}
@@ -65,7 +65,7 @@
             </div>
           </div>
         </div>
-        
+
         <!-- 日历网格 -->
         <div class="w-full relative">
           <!-- 星期标题 -->
@@ -73,32 +73,32 @@
             <div
               v-for="(day, index) in weekdays"
               :key="day"
-              class="text-center text-sm md:text-base font-semibold text-[#333] py-2"
+              class="text-center text-sm md:text-base font-semibold text-slate-900 dark:text-slate-100 py-2"
               :class="index >= 5 ? 'bg-red-500 text-white rounded-full w-8 h-8 mx-auto flex items-center justify-center shadow-sm' : ''"
             >
               {{ day }}
             </div>
           </div>
-          
+
           <!-- 日期单元格 -->
           <div class="grid grid-cols-7 gap-1">
             <div
               v-for="(day, index) in calendarDays"
               :key="index"
-              class="relative min-h-[60px] md:min-h-[80px] p-2 rounded border border-transparent hover:border-[#d4a574]/50 hover:bg-[#fff9f0] transition-all cursor-pointer flex flex-col items-center"
+              class="relative min-h-[60px] md:min-h-[80px] p-2 rounded border border-transparent hover:border-amber-600/50 hover:bg-amber-50/50 dark:hover:bg-amber-900/20 transition-all cursor-pointer flex flex-col items-center"
               :class="{
                 'opacity-40': !day.isCurrentMonth,
-                'bg-[#fff5e6] border-2 border-[#d4a574] shadow-sm': day.isToday,
-                'bg-pink-50/50': day.anniversaries && day.anniversaries.length > 0,
-                'bg-red-50/20': day.isWeekend,
+                'bg-amber-50 dark:bg-amber-900/30 border-2 border-amber-600 dark:border-amber-500 shadow-sm': day.isToday,
+                'bg-pink-50/50 dark:bg-pink-900/20': day.anniversaries && day.anniversaries.length > 0,
+                'bg-red-50/20 dark:bg-red-900/20': day.isWeekend,
               }"
               @click="selectDate(day)"
             >
-              <div class="text-sm md:text-base font-semibold text-[#333] mb-0.5" :class="{ 'text-red-600': day.isWeekend, 'text-[#d4a574] font-bold': day.isToday }">{{ day.date }}</div>
-              <div v-if="day.displayText" class="text-xs text-[#666] whitespace-nowrap w-full text-center" :class="{ 'text-red-600 font-medium': day.isFestival }">
+              <div class="text-sm md:text-base font-semibold text-slate-900 dark:text-slate-100 mb-0.5" :class="{ 'text-red-600 dark:text-red-400': day.isWeekend, 'text-amber-600 dark:text-amber-500 font-bold': day.isToday }">{{ day.date }}</div>
+              <div v-if="day.displayText" class="text-xs text-slate-600 dark:text-slate-400 whitespace-nowrap w-full text-center" :class="{ 'text-red-600 dark:text-red-400 font-medium': day.isFestival }">
                 {{ day.displayText }}
               </div>
-              <div v-else-if="day.lunar" class="text-xs text-[#666] whitespace-nowrap w-full text-center">{{ day.lunar }}</div>
+              <div v-else-if="day.lunar" class="text-xs text-slate-600 dark:text-slate-400 whitespace-nowrap w-full text-center">{{ day.lunar }}</div>
               <div v-if="day.anniversaries && day.anniversaries.length > 0" class="absolute top-1 right-1">
                 <AnniversaryIcon :date="day.date" class="text-pink-400 drop-shadow-sm" />
               </div>
@@ -107,7 +107,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- 黄历详情弹窗 -->
     <Teleport to="body">
       <transition name="fade">
@@ -116,61 +116,61 @@
           class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
           @click.self="closeDetailModal"
         >
-          <div class="bg-white/95 backdrop-blur-md rounded-lg shadow-xl max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto border border-white/20">
-            <div class="flex items-center justify-between p-4 border-b border-[#ece7e1]">
-              <h3 class="text-lg font-semibold text-[#333]">黄历详情</h3>
-              <button class="p-1 rounded hover:bg-[#f7f6f3] transition-colors text-[#666]" @click="closeDetailModal">
+          <div class="bg-white/95 dark:bg-slate-800/95 backdrop-blur-md rounded-lg shadow-xl max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto border border-slate-200 dark:border-slate-700">
+            <div class="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
+              <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">黄历详情</h3>
+              <button class="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors text-slate-600 dark:text-slate-400" @click="closeDetailModal">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
-            
+
             <div v-if="selectedDate" class="p-4 space-y-4">
               <!-- 公历日期 -->
               <div class="space-y-2">
-                <div class="text-sm font-medium text-[#666] mb-1">公历</div>
-                <div class="text-base text-[#333]">{{ selectedDate.fullDate }}</div>
+                <div class="text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">公历</div>
+                <div class="text-base text-slate-900 dark:text-slate-100">{{ selectedDate.fullDate }}</div>
               </div>
-              
+
               <!-- 农历日期 -->
               <div v-if="selectedDate.lunarFull" class="space-y-2">
-                <div class="text-sm font-medium text-[#666] mb-1">农历</div>
-                <div class="text-base text-[#333]">{{ selectedDate.lunarFull }}</div>
+                <div class="text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">农历</div>
+                <div class="text-base text-slate-900 dark:text-slate-100">{{ selectedDate.lunarFull }}</div>
               </div>
-              
+
               <!-- 干支纪年 -->
               <div v-if="selectedDate.ganzhi" class="space-y-2">
-                <div class="text-sm font-medium text-[#666] mb-1">干支</div>
-                <div class="text-base text-[#333]">{{ selectedDate.ganzhi }}</div>
+                <div class="text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">干支</div>
+                <div class="text-base text-slate-900 dark:text-slate-100">{{ selectedDate.ganzhi }}</div>
               </div>
-              
+
               <!-- 宜忌 -->
               <div v-if="selectedDate.yi || selectedDate.ji" class="space-y-2">
                 <div v-if="selectedDate.yi" class="mb-2">
-                  <div class="inline-block px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded mr-2">宜</div>
-                  <div class="text-sm text-[#666] mt-1">{{ selectedDate.yi }}</div>
+                  <div class="inline-block px-2 py-1 text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded mr-2">宜</div>
+                  <div class="text-sm text-slate-600 dark:text-slate-400 mt-1">{{ selectedDate.yi }}</div>
                 </div>
                 <div v-if="selectedDate.ji" class="mb-2">
-                  <div class="inline-block px-2 py-1 text-xs font-medium bg-red-100 text-red-700 rounded mr-2">忌</div>
-                  <div class="text-sm text-[#666] mt-1">{{ selectedDate.ji }}</div>
+                  <div class="inline-block px-2 py-1 text-xs font-medium bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded mr-2">忌</div>
+                  <div class="text-sm text-slate-600 dark:text-slate-400 mt-1">{{ selectedDate.ji }}</div>
                 </div>
               </div>
-              
+
               <!-- 节气 -->
               <div v-if="selectedDate.jieqi" class="space-y-2">
-                <div class="text-sm font-medium text-[#666] mb-1">节气</div>
-                <div class="text-base text-[#d4a574] font-semibold">{{ selectedDate.jieqi }}</div>
+                <div class="text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">节气</div>
+                <div class="text-base text-amber-600 dark:text-amber-500 font-semibold">{{ selectedDate.jieqi }}</div>
               </div>
-              
+
               <!-- 纪念日 -->
               <div v-if="selectedDate.anniversaries && selectedDate.anniversaries.length > 0" class="space-y-2">
-                <div class="text-sm font-medium text-[#666] mb-1">纪念日</div>
+                <div class="text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">纪念日</div>
                 <div class="space-y-2">
                   <div
                     v-for="anniversary in selectedDate.anniversaries"
                     :key="anniversary.id"
-                    class="px-3 py-2 bg-[#fff9f0] border border-[#d4a574]/30 rounded text-sm text-[#333]"
+                    class="px-3 py-2 bg-amber-50 dark:bg-amber-900/30 border border-amber-600/30 dark:border-amber-500/30 rounded text-sm text-slate-900 dark:text-slate-100"
                   >
                     {{ anniversary.title }}
                   </div>

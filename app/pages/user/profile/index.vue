@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-#f7f6f3">
+  <div class="min-h-screen bg-slate-50 dark:bg-slate-900">
     <DogHeader :user-override="user" />
     <div class="max-w-2xl mx-auto px-4 py-8">
       <div class="card space-y-4">
@@ -27,19 +27,19 @@
                   ref="nicknameInputRef"
                   type="text"
                   maxlength="20"
-                  class="border border-#ece7e1 rounded px-2 py-1 bg-white text-#333 focus:outline-none focus:ring-2 focus:ring-#d4a574 flex-1"
+                  class="border border-slate-200 dark:border-slate-700 rounded px-2 py-1 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-600 dark:focus:ring-amber-500 flex-1"
                   @keyup.enter="saveNickname"
                   @keyup.esc="cancelEditNickname"
                 />
                 <button
-                  class="px-2 py-1 text-xs rounded bg-#d4a574 text-white hover:bg-#c49564 transition"
+                  class="px-2 py-1 text-xs rounded bg-amber-600 text-white hover:bg-amber-700 dark:bg-amber-500 dark:hover:bg-amber-600 transition"
                   @click="saveNickname"
                   :disabled="savingNickname"
                 >
                   {{ savingNickname ? '保存中...' : '保存' }}
                 </button>
                 <button
-                  class="px-2 py-1 text-xs rounded bg-#f7f6f3 hover:bg-#e8e8e8 transition"
+                  class="px-2 py-1 text-xs rounded bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 transition"
                   @click="cancelEditNickname"
                   :disabled="savingNickname"
                 >
@@ -49,7 +49,7 @@
               <div v-else class="font-medium flex items-center gap-2">
                 <span>{{ user.nickName }}</span>
                 <button
-                  class="text-xs text-#999 hover:text-#666 ml-1 transition p-0.5"
+                  class="text-xs text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 ml-1 transition p-0.5"
                   @click="startEditNickname"
                   title="点击编辑昵称"
                 >
@@ -59,7 +59,7 @@
                 </button>
               </div>
             </div>
-            <div class="text-sm text-#777">{{ user.email }}</div>
+            <div class="text-sm text-slate-500 dark:text-slate-400">{{ user.email }}</div>
           </div>
         </div>
         
@@ -71,12 +71,12 @@
               class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
               @click.self="cancelUploadAvatar"
             >
-              <div ref="avatarModalRef" class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 overflow-hidden">
+              <div ref="avatarModalRef" class="bg-white dark:bg-slate-800 rounded-lg shadow-xl max-w-md w-full mx-4 overflow-hidden">
                 <div class="p-6">
                   <div class="flex items-center justify-between mb-4">
                     <h3 class="text-lg font-semibold">修改头像</h3>
                     <button
-                      class="text-#999 hover:text-#666 transition"
+                      class="text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 transition"
                       @click="cancelUploadAvatar"
                       :disabled="uploadingAvatar"
                     >
@@ -91,7 +91,7 @@
                     <div class="relative">
                       <img
                         :src="avatarPreview || user?.avatarUrl || '/assets/images/xiaobai/xiaobai-2.png'"
-                        class="w-32 h-32 rounded-full object-cover border-2 border-#ece7e1"
+                        class="w-32 h-32 rounded-full object-cover border-2 border-slate-200 dark:border-slate-700"
                         alt="头像预览"
                       />
                     </div>
@@ -100,21 +100,21 @@
                   <!-- 文件选择 -->
                   <form @submit.prevent="onUpload" class="space-y-4">
                     <div>
-                      <label class="block mb-2 text-sm text-#666">选择图片</label>
+                      <label class="block mb-2 text-sm text-slate-600 dark:text-slate-400">选择图片</label>
                       <input
                         ref="fileRef"
                         type="file"
                         accept="image/*"
-                        class="block w-full text-sm text-#666 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-#d4a574 file:text-white hover:file:bg-#c49564 file:cursor-pointer cursor-pointer"
+                        class="block w-full text-sm text-slate-600 dark:text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-amber-600 file:text-white hover:file:bg-amber-700 dark:file:bg-amber-500 dark:hover:file:bg-amber-600 file:cursor-pointer cursor-pointer"
                         @change="handleFileSelect"
                       />
-                      <p class="mt-1 text-xs text-#999">支持 JPG、PNG、GIF 格式，建议尺寸 200x200 像素</p>
+                      <p class="mt-1 text-xs text-slate-400 dark:text-slate-500">支持 JPG、PNG、GIF 格式，建议尺寸 200x200 像素</p>
                     </div>
                     
                     <div class="flex gap-3">
                       <button
                         type="button"
-                        class="flex-1 px-4 py-2 rounded-lg bg-#f7f6f3 hover:bg-#e8e8e8 transition text-sm"
+                        class="flex-1 px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 transition text-sm"
                         @click="cancelUploadAvatar"
                         :disabled="uploadingAvatar"
                       >
@@ -122,7 +122,7 @@
                       </button>
                       <button
                         type="submit"
-                        class="flex-1 px-4 py-2 rounded-lg bg-#d4a574 text-white hover:bg-#c49564 transition text-sm"
+                        class="flex-1 px-4 py-2 rounded-lg bg-amber-600 text-white hover:bg-amber-700 dark:bg-amber-500 dark:hover:bg-amber-600 transition text-sm"
                         :disabled="uploadingAvatar || !selectedFile"
                       >
                         {{ uploadingAvatar ? '上传中...' : '上传' }}
@@ -135,7 +135,7 @@
           </transition>
         </Teleport>
         
-        <div class="border-t border-#ece7e1 pt-4 space-y-3">
+        <div class="border-t border-slate-200 dark:border-slate-700 pt-4 space-y-3">
           <div class="text-base">情侣关系</div>
           <template v-if="couple">
             <div v-if="couple.members?.length >= 2" class="flex items-center justify-between">
@@ -147,13 +147,13 @@
               </div>
               <NuxtLink to="/user/couple" class="text-sm underline">管理情侣</NuxtLink>
             </div>
-            <div v-else class="text-sm text-#777">
+            <div v-else class="text-sm text-slate-500 dark:text-slate-400">
               已创建情侣但尚未完成绑定，邀请码：<span class="font-mono">{{ couple.code }}</span>
               <NuxtLink to="/user/couple" class="underline ml-1">去邀请对方</NuxtLink>
             </div>
           </template>
           <template v-else>
-            <div class="text-sm text-#777">你还没有绑定情侣。
+            <div class="text-sm text-slate-500 dark:text-slate-400">你还没有绑定情侣。
               <NuxtLink to="/user/couple" class="underline ml-1">去绑定</NuxtLink>
             </div>
           </template>

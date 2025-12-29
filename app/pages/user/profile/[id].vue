@@ -1,41 +1,41 @@
 <template>
-  <div class="min-h-screen bg-#f7f6f3">
+  <div class="min-h-screen bg-slate-50 dark:bg-slate-900">
     <DogHeader />
     <div class="max-w-2xl mx-auto px-4 py-8">
-      <div class="rounded-xl bg-white p-6 shadow space-y-4">
+      <div class="rounded-xl bg-white dark:bg-slate-800 p-6 shadow space-y-4">
         <div class="flex items-center gap-2 mb-4">
-          <NuxtLink to="/user/couple" class="text-sm text-#999 hover:text-#666">← 返回</NuxtLink>
+          <NuxtLink to="/user/couple" class="text-sm text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300">← 返回</NuxtLink>
         </div>
         <div class="text-lg">用户资料</div>
-        <div v-if="loading" class="text-sm text-#777">加载中…</div>
+        <div v-if="loading" class="text-sm text-slate-500 dark:text-slate-400">加载中…</div>
         <div v-else-if="user" class="space-y-4">
           <div class="flex items-center gap-4">
             <img 
               :src="user.avatarUrl || '/assets/images/xiaobai/xiaobai-2.png'" 
               :alt="user.nickName"
               loading="lazy" 
-              class="w-16 h-16 rounded-full object-cover border-2 border-#ece7e1"
+              class="w-16 h-16 rounded-full object-cover border-2 border-slate-200 dark:border-slate-700"
               @error="handleImageError"
             />
             <div class="flex-1">
-              <div class="font-medium text-#333">{{ user.nickName }}</div>
-              <div v-if="user.status" class="text-sm text-#666 mt-1">
+              <div class="font-medium text-slate-900 dark:text-slate-100">{{ user.nickName }}</div>
+              <div v-if="user.status" class="text-sm text-slate-600 dark:text-slate-400 mt-1">
                 状态：{{ user.status }}
-                <span v-if="user.statusUpdatedAt" class="text-xs text-#999 ml-1">
+                <span v-if="user.statusUpdatedAt" class="text-xs text-slate-400 dark:text-slate-500 ml-1">
                   ({{ formatStatusTime(user.statusUpdatedAt) }})
                 </span>
               </div>
-              <div v-else class="text-xs text-#999 mt-1">暂无状态</div>
+              <div v-else class="text-xs text-slate-400 dark:text-slate-500 mt-1">暂无状态</div>
             </div>
           </div>
-          <div class="border-t border-#ece7e1 pt-4">
-            <div class="text-sm text-#777">
+          <div class="border-t border-slate-200 dark:border-slate-700 pt-4">
+            <div class="text-sm text-slate-500 dark:text-slate-400">
               <div class="mb-2">这是你的情侣伙伴</div>
               <div>你们共同拥有：日常记录、愿望清单、留言板和纪念日</div>
             </div>
           </div>
         </div>
-        <div v-else class="text-sm text-#777">用户不存在或无权查看</div>
+        <div v-else class="text-sm text-slate-500 dark:text-slate-400">用户不存在或无权查看</div>
       </div>
     </div>
   </div>

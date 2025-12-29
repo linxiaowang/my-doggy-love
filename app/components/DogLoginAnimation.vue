@@ -1,8 +1,8 @@
 <template>
-  <div class="relative w-full h-40 md:h-56 overflow-hidden rounded-xl bg-#f7f6f3 border border-#ece7e1">
+  <div class="relative w-full h-40 md:h-56 overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
     <img :src="leftDog" alt="xiaobai" class="abs-dog left-dog" />
     <img :src="rightDog" alt="xiaojimao" class="abs-dog right-dog" />
-    <div class="absolute inset-x-0 bottom-2 text-center text-#777 text-sm">两只小狗一起登录中…</div>
+    <div class="absolute inset-x-0 bottom-2 text-center text-slate-500 dark:text-slate-400 text-sm">两只小狗一起登录中…</div>
   </div>
 </template>
 

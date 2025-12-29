@@ -1,47 +1,48 @@
 <template>
-  <div class="min-h-screen bg-#f7f6f3">
+  <div class="min-h-screen bg-slate-50 dark:bg-slate-900">
     <DogHeader />
     <div class="max-w-3xl mx-auto px-4 py-6">
-      <div class="rounded-xl bg-white p-4 shadow mb-4">
+      <div class="rounded-xl bg-white dark:bg-slate-800 p-4 shadow mb-4">
         <div class="flex items-center justify-between mb-4">
           <h1 class="text-xl font-semibold">通知</h1>
-          <button
+          <Button
             v-if="unreadCount > 0"
-            class="px-3 py-1.5 text-sm rounded bg-#d4a574 text-white hover:bg-#c49564"
+            size="sm"
+            class="bg-amber-600 hover:bg-amber-700 text-white"
             @click="markAllAsRead"
             :disabled="markingAllAsRead"
           >
             {{ markingAllAsRead ? '处理中...' : '全部标记为已读' }}
-          </button>
+          </Button>
         </div>
-        
+
         <div v-if="loading" class="space-y-3">
           <div v-for="i in 5" :key="i" class="animate-pulse">
-            <div class="h-16 bg-#f0f0f0 rounded"></div>
+            <div class="h-16 bg-slate-200 dark:bg-slate-700 rounded"></div>
           </div>
         </div>
-        
+
         <div v-else-if="items.length === 0" class="text-center py-12">
           <EmptyState text="暂无通知" img="/assets/images/xiaojimao/xiaojimao-4.png" />
         </div>
-        
+
         <div v-else class="space-y-2">
           <div
             v-for="notification in items"
             :key="notification.id"
-            class="flex items-start gap-3 p-3 rounded-lg hover:bg-#f7f6f3 transition"
-            :class="{ 'bg-#f0f5ff border border-#e6eef5': !notification.read }"
+            class="flex items-start gap-3 p-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer"
+            :class="{ 'bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800': !notification.read }"
             @click="handleNotificationClick(notification)"
           >
             <div class="flex-shrink-0 mt-1">
               <div
                 class="w-2 h-2 rounded-full"
-                :class="notification.read ? 'bg-transparent' : 'bg-#b42318'"
+                :class="notification.read ? 'bg-transparent' : 'bg-red-600'"
               ></div>
             </div>
             <div class="flex-1 min-w-0">
-              <div class="text-sm text-#666">{{ notification.content }}</div>
-              <div class="text-xs text-#999 mt-1">
+              <div class="text-sm text-slate-600 dark:text-slate-300">{{ notification.content }}</div>
+              <div class="text-xs text-slate-400 dark:text-slate-500 mt-1">
                 {{ formatTime(notification.createdAt) }}
               </div>
             </div>

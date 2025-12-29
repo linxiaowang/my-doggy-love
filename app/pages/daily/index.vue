@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-#f7f6f3 via-#faf9f7 to-#f7f6f3">
+  <div class="min-h-screen bg-gradient-to-br from-slate-50 via-slate-50/50 to-slate-50 dark:from-slate-900 dark:via-slate-900/50 dark:to-slate-900">
     <DogHeader />
     <div class="max-w-3xl mx-auto px-4 py-6 space-y-4">
       <Card>
@@ -138,7 +138,7 @@
             >
               <template #item="{ element: preview, index }">
                 <div
-                  class="relative group aspect-square rounded-lg overflow-hidden bg-#f7f6f3 border border-#ece7e1 cursor-move"
+                  class="relative group aspect-square rounded-lg overflow-hidden bg-slate-50 border border-slate-200 dark:bg-slate-800 dark:border-slate-700 cursor-move"
                 >
                   <!-- 图片预览 -->
                   <img
@@ -151,7 +151,7 @@
                   <!-- 视频预览 -->
                   <div
                     v-else-if="preview.type.startsWith('video/')"
-                    class="w-full h-full flex flex-col items-center justify-center bg-#f0f0f0 relative"
+                    class="w-full h-full flex flex-col items-center justify-center bg-slate-200 dark:bg-slate-700 relative"
                   >
                     <!-- 如果有缩略图，显示缩略图 -->
                     <img
@@ -162,10 +162,10 @@
                     />
                     <!-- 否则显示占位符 -->
                     <template v-else>
-                      <svg class="w-12 h-12 text-#999 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg class="w-12 h-12 text-slate-400 dark:text-slate-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                       </svg>
-                      <span class="text-xs text-#777 px-2 text-center truncate w-full">{{ preview.name }}</span>
+                      <span class="text-xs text-slate-500 dark:text-slate-400 px-2 text-center truncate w-full">{{ preview.name }}</span>
                     </template>
                     <!-- 视频播放图标覆盖层 -->
                     <div class="absolute inset-0 flex items-center justify-center bg-black/20">

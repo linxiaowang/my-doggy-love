@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-#f7f6f3">
+  <div class="min-h-screen bg-slate-50 dark:bg-slate-900">
     <DogHeader />
     <div class="max-w-3xl mx-auto px-4 py-6 space-y-4">
       <Card>
