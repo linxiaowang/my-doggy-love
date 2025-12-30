@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { appName } from '~/constants'
+import { useThemeDecorations } from '@/composables/useThemeDecorations'
 
 useHead({
   title: appName,
@@ -7,6 +8,9 @@ useHead({
     { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover' }
   ]
 })
+
+// 获取装饰状态
+const { isNewYear } = useThemeDecorations()
 </script>
 
 <template>
@@ -14,6 +18,11 @@ useHead({
   <NuxtLayout>
     <NuxtPage />
     <!-- <UiAnniversaryMode /> -->
+
+    <!-- 新年装饰 -->
+    <ClientOnly>
+      <NewYearDecorations v-if="isNewYear" />
+    </ClientOnly>
   </NuxtLayout>
 </template>
 
