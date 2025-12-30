@@ -1,0 +1,1 @@
+import{b4 as s,E as i,b5 as u,G as n}from"./DW3SVq1p.js";const f=s(async e=>{let r,a;if(e.path==="/user/login"||e.path==="/user/register")return;const t=i();if(t.initialized||([r,a]=u(()=>t.fetchUser()),await r,a()),!t.user)return n({path:"/user/login",query:{redirect:e.fullPath}})});export{f as default};

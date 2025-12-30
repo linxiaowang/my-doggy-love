@@ -1,0 +1,1 @@
+import{M as t,k as o}from"./DW3SVq1p.js";function c(){return t("/api/couple/me")}async function n(){return o("/api/couple/create",{method:"POST"})}async function a(e){return o("/api/couple/join",{method:"POST",body:{code:e}})}async function p(e){return o("/api/couple/switch",{method:"POST",body:{code:e}})}export{n as c,a as j,p as s,c as u};
