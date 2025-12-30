@@ -83,6 +83,15 @@ jobs:
           name: output-package
           path: .
 
+      - name: Test server connection
+        run: |
+          echo "🔍 测试服务器连接..."
+          ssh -o ConnectTimeout=30 -o StrictHostKeyChecking=no \
+            -i <(echo "${{ secrets.SSH_PRIVATE_KEY }}") \
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
+            -p ${{ secrets.SERVER_PORT || 22 }} \
+            "echo '✅ 服务器连接成功'; hostname; whoami"
+
       - name: Copy file to server
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -92,6 +101,9 @@ jobs:
           port: ${{ secrets.SERVER_PORT || 22 }}
           source: "output.tar.gz"
           target: "/tmp/"
+          timeout: 10m
+          command_timeout: 5m
+          strip_components: 0
 
       - name: Deploy on server
         uses: appleboy/ssh-action@v1.0.0
@@ -100,6 +112,8 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SERVER_PORT || 22 }}
+          timeout: 15m
+          command_timeout: 10m
           script_stop: false
           script: |
             # 检查文件是否存在
