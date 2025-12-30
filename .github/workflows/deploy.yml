@@ -199,12 +199,10 @@ jobs:
               # 检查 .env 文件是否存在（Docker Compose 需要）
               if [ ! -f .env ]; then
                 echo "⚠️  未找到 .env 文件，创建默认配置..."
-                cat > .env << 'ENVEOF'
-MYSQL_ROOT_PASSWORD=Lxw@199802
-MYSQL_DATABASE=my_doggy_love
-MYSQL_USER=my_doggy_love_user
-MYSQL_PASSWORD=my_doggy_love_pass
-ENVEOF
+                echo "MYSQL_ROOT_PASSWORD=Lxw@199802" > .env
+                echo "MYSQL_DATABASE=my_doggy_love" >> .env
+                echo "MYSQL_USER=my_doggy_love_user" >> .env
+                echo "MYSQL_PASSWORD=my_doggy_love_pass" >> .env
                 echo "✅ .env 文件已创建"
               fi
 
