@@ -174,8 +174,21 @@ jobs:
             if ! command -v pm2 &> /dev/null; then
               echo "⚠️  PM2 未安装，正在安装..."
               npm install -g pm2
-              echo "✅ PM2 安装完成"
+
+              # 更新 PATH
+              export PATH="$PATH:$(npm prefix -g)/bin"
+
+              # 验证安装
+              if command -v pm2 &> /dev/null; then
+                echo "✅ PM2 安装完成"
+              else
+                echo "❌ PM2 安装失败"
+                exit 1
+              fi
             fi
+
+            # 确保 PM2 在 PATH 中
+            export PATH="$PATH:$(npm prefix -g)/bin"
 
             if command -v pm2 &> /dev/null; then
               echo "🚀 启动应用..."
@@ -213,7 +226,7 @@ jobs:
               echo "查看应用状态:"
               pm2 info "$APP_NAME"
             else
-              echo "❌ PM2 安装失败"
+              echo "❌ PM2 不可用"
               exit 1
             fi
 
