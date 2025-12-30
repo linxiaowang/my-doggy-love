@@ -89,7 +89,6 @@ jobs:
           port: ${{ secrets.SERVER_PORT || 22 }}
           source: "output.tar.gz"
           target: "/tmp/"
-          strip_components: 0
 
       - name: Deploy on server
         uses: appleboy/ssh-action@v1.0.0
@@ -100,11 +99,29 @@ jobs:
           port: ${{ secrets.SERVER_PORT || 22 }}
           script_stop: true
           script: |
+            # 检查文件是否存在
+            echo "🔍 检查上传的文件..."
+            ls -lh /tmp/output.tar.gz || echo "❌ 文件不存在"
+            echo ""
+
             # 配置
             APP_NAME="my-doggy-love"
             APP_DIR="/var/www/$APP_NAME"
             BACKUP_DIR="/var/backups/$APP_NAME"
             TEMP_FILE="/tmp/output.tar.gz"
+
+            # 检查文件
+            if [ ! -f "$TEMP_FILE" ]; then
+              echo "❌ 错误：找不到部署包 $TEMP_FILE"
+              echo "正在检查 /tmp 目录内容..."
+              ls -lh /tmp/
+              exit 1
+            fi
+
+            # 显示文件大小
+            echo "📦 部署包大小:"
+            du -h "$TEMP_FILE"
+            echo ""
 
             # 创建必要目录
             mkdir -p "$APP_DIR"
@@ -128,12 +145,6 @@ jobs:
               # 只保留最近 5 个备份
               ls -t "$BACKUP_DIR"/.output.* 2>/dev/null | tail -n +6 | xargs rm -rf 2>/dev/null || true
             fi
-
-            # 清理旧文件
-            rm -f "$TEMP_FILE"
-
-            # 等待上传完成
-            sleep 2
 
             # 解压部署包
             echo "📦 解压部署包..."
