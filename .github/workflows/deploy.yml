@@ -86,11 +86,14 @@ jobs:
       - name: Test server connection
         run: |
           echo "🔍 测试服务器连接..."
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > /tmp/ssh_key
+          chmod 600 /tmp/ssh_key
           ssh -o ConnectTimeout=30 -o StrictHostKeyChecking=no \
-            -i <(echo "${{ secrets.SSH_PRIVATE_KEY }}") \
+            -i /tmp/ssh_key \
             ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
             -p ${{ secrets.SERVER_PORT || 22 }} \
             "echo '✅ 服务器连接成功'; hostname; whoami"
+          rm /tmp/ssh_key
 
       - name: Copy file to server
         uses: appleboy/scp-action@v0.1.7
