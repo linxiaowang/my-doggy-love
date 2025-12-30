@@ -159,12 +159,12 @@ jobs:
 
             # 设置权限
             echo "🔐 设置权限..."
-            chmod -R 755 "$APP_DIR/.output"
+            chmod -R 755 "$APP_DIR/.output" 2>/dev/null || echo "⚠️  权限设置跳过"
 
             # 清理解压时产生的其他文件（如果存在）
-            rm -f "$APP_DIR/nitro.json"
-            rm -rf "$APP_DIR/public"
-            rm -rf "$APP_DIR/server"
+            rm -f "$APP_DIR/nitro.json" 2>/dev/null || true
+            rm -rf "$APP_DIR/public" 2>/dev/null || true
+            rm -rf "$APP_DIR/server" 2>/dev/null || true
 
             # 创建上传目录
             mkdir -p "$APP_DIR/public/uploads"
