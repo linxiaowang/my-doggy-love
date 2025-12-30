@@ -57,9 +57,8 @@ jobs:
 
       - name: Create deployment package
         run: |
-          cd .output
-          tar -czf ../output.tar.gz .
-          cd ..
+          # 打包时包含 .output 目录本身
+          tar -czf output.tar.gz .output
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -150,11 +149,23 @@ jobs:
             echo "📦 解压部署包..."
             tar -xzf "$TEMP_FILE" -C "$APP_DIR"
 
+            # 检查解压结果
+            echo "🔍 检查解压结果..."
+            ls -la "$APP_DIR/" || echo "目录为空"
+            echo ""
+
             # 清理临时文件
             rm -f "$TEMP_FILE"
 
-            # 设置权限
-            chmod -R 755 "$APP_DIR/.output"
+            # 设置权限（只对存在的文件/目录）
+            if [ -d "$APP_DIR/.output" ]; then
+              echo "🔐 设置 .output 权限..."
+              chmod -R 755 "$APP_DIR/.output"
+            else
+              # 可能解压到了其他位置，检查一下
+              echo "⚠️  .output 目录不存在，检查其他目录..."
+              ls -la "$APP_DIR/"
+            fi
 
             # 创建上传目录
             mkdir -p "$APP_DIR/public/uploads"
