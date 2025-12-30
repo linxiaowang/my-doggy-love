@@ -50,6 +50,10 @@ jobs:
           NUXT_VAPID_SUBJECT=${{ secrets.NUXT_VAPID_SUBJECT }}
           EOF
 
+      - name: Generate Prisma Client
+        run: |
+          pnpm prisma generate
+
       - name: Build application
         run: |
           export NODE_OPTIONS="--max-old-space-size=4096"
