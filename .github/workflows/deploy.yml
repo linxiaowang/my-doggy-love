@@ -174,44 +174,84 @@ jobs:
             echo "🚀 启动应用..."
             cd "$APP_DIR"
 
-              # 检查文件是否存在
-              echo "🔍 检查应用文件..."
-              ls -la .output/server/index.mjs || echo "❌ server/index.mjs 不存在"
-              echo ""
+            # 检查文件是否存在
+            echo "🔍 检查应用文件..."
+            ls -la .output/server/index.mjs || echo "❌ server/index.mjs 不存在"
+            echo ""
 
-              # 使用 npx 或完整路径运行 PM2
-              PM2_CMD="pm2"
-              if ! command -v pm2 &> /dev/null; then
+            # 确保 PM2 已安装
+            echo "🔍 检查 PM2 安装状态..."
+            if ! command -v pm2 &> /dev/null; then
+              echo "PM2 未全局安装，正在安装..."
+              npm install -g pm2
+              if [ $? -ne 0 ]; then
+                echo "⚠️  全局安装失败，尝试使用 npx"
                 PM2_CMD="npx pm2"
-                echo "使用 npx pm2..."
+              else
+                PM2_CMD="pm2"
+                echo "✅ PM2 已全局安装"
               fi
+            else
+              PM2_CMD="pm2"
+              echo "✅ PM2 已全局安装"
+            fi
 
-              # 删除旧进程
-              $PM2_CMD delete "$APP_NAME" 2>/dev/null || true
+            # 显示 PM2 版本
+            echo "PM2 版本:"
+            $PM2_CMD --version || echo "无法获取 PM2 版本"
+            echo ""
 
-              # 启动新进程
-              echo "启动 PM2 进程..."
-              $PM2_CMD start ".output/server/index.mjs" \
-                --name "$APP_NAME" \
-                --env production \
-                --max-memory-restart 1G \
-                || {
-                  echo "❌ PM2 启动失败"
-                  echo "查看 PM2 日志:"
-                  $PM2_CMD logs "$APP_NAME" --lines 20
-                  exit 1
-                }
+            # 检查 package.json 是否存在（PM2 生态系统需要）
+            if [ ! -f "package.json" ]; then
+              echo "⚠️  package.json 不存在，创建占位文件..."
+              cat > package.json << EOF
+{
+  "name": "my-doggy-love",
+  "version": "1.0.0"
+}
+EOF
+            fi
 
-              # 保存 PM2 配置
-              $PM2_CMD save
+            # 删除旧进程
+            echo "删除旧进程..."
+            $PM2_CMD delete "$APP_NAME" 2>/dev/null || echo "无旧进程需要删除"
+            echo ""
 
+            # 启动新进程
+            echo "启动 PM2 进程..."
+            $PM2_CMD start ".output/server/index.mjs" \
+              --name "$APP_NAME" \
+              --env production \
+              --max-memory-restart 1G
+
+            PM2_EXIT_CODE=$?
+
+            if [ $PM2_EXIT_CODE -ne 0 ]; then
               echo ""
-              echo "✅ 应用已启动"
+              echo "❌ PM2 启动失败 (退出码: $PM2_EXIT_CODE)"
               echo ""
-              $PM2_CMD status "$APP_NAME"
+              echo "查看 PM2 日志:"
+              $PM2_CMD logs --lines 50 --nostream || true
               echo ""
-              echo "查看应用状态:"
-              $PM2_CMD info "$APP_NAME"
+              echo "查看 PM2 错误日志:"
+              $PM2_CMD logs --err --lines 50 --nostream || true
+              echo ""
+              echo "尝试直接运行应用查看错误:"
+              cd "$APP_DIR"
+              NODE_ENV=production node .output/server/index.mjs 2>&1 | head -20 || true
+              exit 1
+            fi
+
+            # 保存 PM2 配置
+            $PM2_CMD save
+
+            echo ""
+            echo "✅ 应用已启动"
+            echo ""
+            $PM2_CMD status "$APP_NAME"
+            echo ""
+            echo "查看应用状态:"
+            $PM2_CMD info "$APP_NAME"
 
             echo ""
             echo "🎉 部署完成！"
