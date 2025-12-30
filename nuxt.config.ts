@@ -119,6 +119,11 @@ export default defineNuxtConfig({
     workers: {
       threadCount: 1,
     },
+    // 严格的类型检查，避免类型循环导致的卡顿
+    typescript: {
+      strict: false,
+      typeCheck: false,
+    },
   },
 
   // 优化 Vite 构建

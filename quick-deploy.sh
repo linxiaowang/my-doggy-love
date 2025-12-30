@@ -99,7 +99,20 @@ fi
 
 # 构建项目
 echo "🔨 构建项目..."
-pnpm build
+
+# 🔥 清理可能卡住的构建进程
+echo "🧹 清理可能卡住的构建进程..."
+pkill -9 -f "node.*nuxt" || true
+pkill -9 -f "node.*vite" || true
+pkill -9 -f "node.*nitro" || true
+pkill -9 -f "npx.*prisma" || true
+sleep 2
+
+# 清理构建缓存
+rm -rf .nuxt .output node_modules/.vite .nitro node_modules/.cache ~/.nuxt 2>/dev/null || true
+
+echo "🔧 开始构建..."
+NODE_OPTIONS="--max-old-space-size=4096" pnpm build
 
 if [ ! -d ".output" ] || [ ! -f ".output/server/index.mjs" ]; then
     echo "❌ 构建失败，未找到构建输出"
