@@ -233,7 +233,7 @@ ENVEOF
                   fi
                   echo "   等待中... ($WAIT_COUNT/$MAX_WAIT 秒)"
                   sleep 2
-                  WAIT_COUNT=$((WAIT_COUNT + 2))
+                  WAIT_COUNT=`expr $WAIT_COUNT + 2`
                 done
 
                 if [ $WAIT_COUNT -ge $MAX_WAIT ]; then
