@@ -29,28 +29,57 @@
 
 ### 如何获取 SSH_PRIVATE_KEY
 
-**方式一：使用配置脚本（推荐）**
+**⚠️ 重要提示：SSH 私钥必须完整且格式正确**
+
+**方式一：使用诊断脚本（推荐）**
 
 ```bash
-./setup-ci-cd.sh
+./check-ssh-key.sh
 ```
 
-脚本会自动生成密钥并显示配置内容。
+脚本会：
+- 检查并修复密钥权限
+- 验证密钥格式
+- 显示完整的私钥内容（可直接复制到 GitHub Secrets）
 
 **方式二：手动生成**
 
 ```bash
-# 1. 生成密钥
+# 1. 生成密钥（使用 ED25519 算法）
 ssh-keygen -t ed25519 -C "github-actions" -f ~/.ssh/github_actions
 
-# 2. 查看私钥
+# 2. 设置正确的权限
+chmod 600 ~/.ssh/github_actions
+
+# 3. 查看私钥（完整复制，包括 BEGIN 和 END 行）
 cat ~/.ssh/github_actions
 
-# 3. 复制整个输出（包括 BEGIN 和 END 行）
+# 输出示例：
+# -----BEGIN OPENSSH PRIVATE KEY-----
+# b3BlbnNzaC1rZXktdjEAAAAABG5vbmUA...
+# ...
+# -----END OPENSSH PRIVATE KEY-----
 
 # 4. 添加公钥到服务器
 ssh-copy-id -i ~/.ssh/github_actions.pub user@your-server-ip
 ```
+
+**⚠️ 常见错误和解决方法：**
+
+❌ 错误：`ssh: no key found`
+- **原因**：SSH_PRIVATE_KEY 内容不完整或格式错误
+- **解决**：确保复制了完整的私钥，包括 `-----BEGIN` 和 `-----END` 行
+
+❌ 错误：`ssh: unable to authenticate`
+- **原因**：公钥未添加到服务器或私钥权限错误
+- **解决**：
+  ```bash
+  # 确保私钥权限正确
+  chmod 600 ~/.ssh/github_actions
+
+  # 重新添加公钥到服务器
+  ssh-copy-id -i ~/.ssh/github_actions.pub user@your-server-ip
+  ```
 
 ### 如何获取环境变量
 
