@@ -71,7 +71,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         const res = await apiFetch("/api/messages");
         items.value = res.items;
       } catch (e) {
-        console.error("加载留言失败:", e);
+        console.error("\u52A0\u8F7D\u7559\u8A00\u5931\u8D25:", e);
       } finally {
         loading.value = false;
       }
@@ -88,7 +88,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         await load();
       } catch (e) {
         errorMessage.value = e?.friendlyMessage || handleApiError(e);
-        console.error("发布留言失败:", e);
+        console.error("\u53D1\u5E03\u7559\u8A00\u5931\u8D25:", e);
       } finally {
         submitting.value = false;
       }
@@ -103,7 +103,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         const res = await apiFetch(`/api/messages/${id}/comments`);
         comments.value = res.items;
       } catch (e) {
-        console.error("加载评论失败:", e);
+        console.error("\u52A0\u8F7D\u8BC4\u8BBA\u5931\u8D25:", e);
       } finally {
         loadingComments.value = false;
       }
@@ -120,7 +120,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         inputOpenId.value = null;
         await loadComments(id);
       } catch (e) {
-        console.error("发布评论失败:", e);
+        console.error("\u53D1\u5E03\u8BC4\u8BBA\u5931\u8D25:", e);
       }
     }
     function toggleReply(id) {
@@ -133,7 +133,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         replyContent.value = "";
         if (openId.value) await loadComments(openId.value);
       } catch (e) {
-        console.error("回复评论失败:", e);
+        console.error("\u56DE\u590D\u8BC4\u8BBA\u5931\u8D25:", e);
       }
     }
     return (_ctx, _push, _parent, _attrs) => {
@@ -149,17 +149,17 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                 if (_push3) {
                   if (errorMessage.value) {
                     _push3(`<div class="mb-4 p-3 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-lg"${_scopeId2}>${ssrInterpolate(errorMessage.value)} `);
-                    if (errorMessage.value.includes("情侣")) {
+                    if (errorMessage.value.includes("\u60C5\u4FA3")) {
                       _push3(ssrRenderComponent(_component_NuxtLink, {
                         to: "/user/couple",
                         class: "underline ml-1 font-medium hover:opacity-80"
                       }, {
                         default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                           if (_push4) {
-                            _push4(`去绑定`);
+                            _push4(`\u53BB\u7ED1\u5B9A`);
                           } else {
                             return [
-                              createTextVNode("去绑定")
+                              createTextVNode("\u53BB\u7ED1\u5B9A")
                             ];
                           }
                         }),
@@ -176,7 +176,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                   _push3(ssrRenderComponent(unref(_sfc_main$1), {
                     modelValue: content.value,
                     "onUpdate:modelValue": ($event) => content.value = $event,
-                    placeholder: "留下想说的话…",
+                    placeholder: "\u7559\u4E0B\u60F3\u8BF4\u7684\u8BDD\u2026",
                     class: "flex-1 min-h-[80px]"
                   }, null, _parent3, _scopeId2));
                   _push3(ssrRenderComponent(unref(_sfc_main$v), {
@@ -185,10 +185,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                   }, {
                     default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                       if (_push4) {
-                        _push4(`${ssrInterpolate(submitting.value ? "发布中..." : "发布")}`);
+                        _push4(`${ssrInterpolate(submitting.value ? "\u53D1\u5E03\u4E2D..." : "\u53D1\u5E03")}`);
                       } else {
                         return [
-                          createTextVNode(toDisplayString(submitting.value ? "发布中..." : "发布"), 1)
+                          createTextVNode(toDisplayString(submitting.value ? "\u53D1\u5E03\u4E2D..." : "\u53D1\u5E03"), 1)
                         ];
                       }
                     }),
@@ -202,13 +202,13 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       class: "mb-4 p-3 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-lg"
                     }, [
                       createTextVNode(toDisplayString(errorMessage.value) + " ", 1),
-                      errorMessage.value.includes("情侣") ? (openBlock(), createBlock(_component_NuxtLink, {
+                      errorMessage.value.includes("\u60C5\u4FA3") ? (openBlock(), createBlock(_component_NuxtLink, {
                         key: 0,
                         to: "/user/couple",
                         class: "underline ml-1 font-medium hover:opacity-80"
                       }, {
                         default: withCtx(() => [
-                          createTextVNode("去绑定")
+                          createTextVNode("\u53BB\u7ED1\u5B9A")
                         ]),
                         _: 1
                       })) : createCommentVNode("", true)
@@ -220,7 +220,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       createVNode(unref(_sfc_main$1), {
                         modelValue: content.value,
                         "onUpdate:modelValue": ($event) => content.value = $event,
-                        placeholder: "留下想说的话…",
+                        placeholder: "\u7559\u4E0B\u60F3\u8BF4\u7684\u8BDD\u2026",
                         class: "flex-1 min-h-[80px]"
                       }, null, 8, ["modelValue", "onUpdate:modelValue"]),
                       createVNode(unref(_sfc_main$v), {
@@ -228,7 +228,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         disabled: submitting.value
                       }, {
                         default: withCtx(() => [
-                          createTextVNode(toDisplayString(submitting.value ? "发布中..." : "发布"), 1)
+                          createTextVNode(toDisplayString(submitting.value ? "\u53D1\u5E03\u4E2D..." : "\u53D1\u5E03"), 1)
                         ]),
                         _: 1
                       }, 8, ["disabled"])
@@ -247,13 +247,13 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                     class: "mb-4 p-3 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-lg"
                   }, [
                     createTextVNode(toDisplayString(errorMessage.value) + " ", 1),
-                    errorMessage.value.includes("情侣") ? (openBlock(), createBlock(_component_NuxtLink, {
+                    errorMessage.value.includes("\u60C5\u4FA3") ? (openBlock(), createBlock(_component_NuxtLink, {
                       key: 0,
                       to: "/user/couple",
                       class: "underline ml-1 font-medium hover:opacity-80"
                     }, {
                       default: withCtx(() => [
-                        createTextVNode("去绑定")
+                        createTextVNode("\u53BB\u7ED1\u5B9A")
                       ]),
                       _: 1
                     })) : createCommentVNode("", true)
@@ -265,7 +265,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                     createVNode(unref(_sfc_main$1), {
                       modelValue: content.value,
                       "onUpdate:modelValue": ($event) => content.value = $event,
-                      placeholder: "留下想说的话…",
+                      placeholder: "\u7559\u4E0B\u60F3\u8BF4\u7684\u8BDD\u2026",
                       class: "flex-1 min-h-[80px]"
                     }, null, 8, ["modelValue", "onUpdate:modelValue"]),
                     createVNode(unref(_sfc_main$v), {
@@ -273,7 +273,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       disabled: submitting.value
                     }, {
                       default: withCtx(() => [
-                        createTextVNode(toDisplayString(submitting.value ? "发布中..." : "发布"), 1)
+                        createTextVNode(toDisplayString(submitting.value ? "\u53D1\u5E03\u4E2D..." : "\u53D1\u5E03"), 1)
                       ]),
                       _: 1
                     }, 8, ["disabled"])
@@ -293,9 +293,9 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       } else if (items.value.length === 0) {
         _push(`<div>`);
         _push(ssrRenderComponent(EmptyState, {
-          text: "还没有留言",
+          text: "\u8FD8\u6CA1\u6709\u7559\u8A00",
           img: "/assets/images/xiaobai/xiaobai-3.png",
-          "cta-text": "去发表第一条",
+          "cta-text": "\u53BB\u53D1\u8868\u7B2C\u4E00\u6761",
           "cta-to": "/messages"
         }, null, _parent));
         _push(`</div>`);
@@ -316,15 +316,15 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           if (_push4) {
                             _push4(ssrRenderComponent(unref(_sfc_main$3), {
                               src: m.author?.avatarUrl || "/assets/images/xiaobai/xiaobai-2.png",
-                              alt: m.author?.nickName || "用户头像"
+                              alt: m.author?.nickName || "\u7528\u6237\u5934\u50CF"
                             }, null, _parent4, _scopeId3));
                             _push4(ssrRenderComponent(unref(_sfc_main$4), null, {
                               default: withCtx((_4, _push5, _parent5, _scopeId4) => {
                                 if (_push5) {
-                                  _push5(`${ssrInterpolate((m.author?.nickName || "匿名").charAt(0))}`);
+                                  _push5(`${ssrInterpolate((m.author?.nickName || "\u533F\u540D").charAt(0))}`);
                                 } else {
                                   return [
-                                    createTextVNode(toDisplayString((m.author?.nickName || "匿名").charAt(0)), 1)
+                                    createTextVNode(toDisplayString((m.author?.nickName || "\u533F\u540D").charAt(0)), 1)
                                   ];
                                 }
                               }),
@@ -334,11 +334,11 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                             return [
                               createVNode(unref(_sfc_main$3), {
                                 src: m.author?.avatarUrl || "/assets/images/xiaobai/xiaobai-2.png",
-                                alt: m.author?.nickName || "用户头像"
+                                alt: m.author?.nickName || "\u7528\u6237\u5934\u50CF"
                               }, null, 8, ["src", "alt"]),
                               createVNode(unref(_sfc_main$4), null, {
                                 default: withCtx(() => [
-                                  createTextVNode(toDisplayString((m.author?.nickName || "匿名").charAt(0)), 1)
+                                  createTextVNode(toDisplayString((m.author?.nickName || "\u533F\u540D").charAt(0)), 1)
                                 ]),
                                 _: 2
                               }, 1024)
@@ -347,7 +347,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         }),
                         _: 2
                       }, _parent3, _scopeId2));
-                      _push3(`<div class="flex-1 min-w-0"${_scopeId2}><div class="text-sm text-muted-foreground mb-1.5 font-medium"${_scopeId2}>${ssrInterpolate(m.author?.nickName || "匿名")} · ${ssrInterpolate(new Date(m.createdAt).toLocaleString())}</div><div class="text-foreground whitespace-pre-wrap break-words leading-relaxed"${_scopeId2}>${ssrInterpolate(m.content)}</div><div class="mt-3 flex items-center gap-3 text-sm border-t border-border pt-3"${_scopeId2}>`);
+                      _push3(`<div class="flex-1 min-w-0"${_scopeId2}><div class="text-sm text-muted-foreground mb-1.5 font-medium"${_scopeId2}>${ssrInterpolate(m.author?.nickName || "\u533F\u540D")} \xB7 ${ssrInterpolate(new Date(m.createdAt).toLocaleString())}</div><div class="text-foreground whitespace-pre-wrap break-words leading-relaxed"${_scopeId2}>${ssrInterpolate(m.content)}</div><div class="mt-3 flex items-center gap-3 text-sm border-t border-border pt-3"${_scopeId2}>`);
                       _push3(ssrRenderComponent(unref(_sfc_main$v), {
                         variant: "ghost",
                         size: "sm",
@@ -355,10 +355,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       }, {
                         default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                           if (_push4) {
-                            _push4(`${ssrInterpolate(openId.value === m.id ? "收起评论" : `查看评论${formatCount(m.commentCount)}`)}`);
+                            _push4(`${ssrInterpolate(openId.value === m.id ? "\u6536\u8D77\u8BC4\u8BBA" : `\u67E5\u770B\u8BC4\u8BBA${formatCount(m.commentCount)}`)}`);
                           } else {
                             return [
-                              createTextVNode(toDisplayString(openId.value === m.id ? "收起评论" : `查看评论${formatCount(m.commentCount)}`), 1)
+                              createTextVNode(toDisplayString(openId.value === m.id ? "\u6536\u8D77\u8BC4\u8BBA" : `\u67E5\u770B\u8BC4\u8BBA${formatCount(m.commentCount)}`), 1)
                             ];
                           }
                         }),
@@ -372,10 +372,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       }, {
                         default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                           if (_push4) {
-                            _push4(`${ssrInterpolate(inputOpenId.value === m.id ? "收起输入" : "写评论")}`);
+                            _push4(`${ssrInterpolate(inputOpenId.value === m.id ? "\u6536\u8D77\u8F93\u5165" : "\u5199\u8BC4\u8BBA")}`);
                           } else {
                             return [
-                              createTextVNode(toDisplayString(inputOpenId.value === m.id ? "收起输入" : "写评论"), 1)
+                              createTextVNode(toDisplayString(inputOpenId.value === m.id ? "\u6536\u8D77\u8F93\u5165" : "\u5199\u8BC4\u8BBA"), 1)
                             ];
                           }
                         }),
@@ -387,7 +387,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         _push3(ssrRenderComponent(unref(_sfc_main$2), {
                           modelValue: comment.value,
                           "onUpdate:modelValue": ($event) => comment.value = $event,
-                          placeholder: "写点评论…",
+                          placeholder: "\u5199\u70B9\u8BC4\u8BBA\u2026",
                           class: "flex-1",
                           onKeydown: ($event) => submitComment(m.id)
                         }, null, _parent3, _scopeId2));
@@ -397,10 +397,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         }, {
                           default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                             if (_push4) {
-                              _push4(`发布`);
+                              _push4(`\u53D1\u5E03`);
                             } else {
                               return [
-                                createTextVNode("发布")
+                                createTextVNode("\u53D1\u5E03")
                               ];
                             }
                           }),
@@ -413,9 +413,9 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       if (openId.value === m.id) {
                         _push3(`<div class="mt-2"${_scopeId2}>`);
                         if (loadingComments.value) {
-                          _push3(`<div class="text-sm text-muted-foreground"${_scopeId2}>加载中…</div>`);
+                          _push3(`<div class="text-sm text-muted-foreground"${_scopeId2}>\u52A0\u8F7D\u4E2D\u2026</div>`);
                         } else if (comments.value.length === 0) {
-                          _push3(`<div class="text-sm text-muted-foreground"${_scopeId2}>暂无评论</div>`);
+                          _push3(`<div class="text-sm text-muted-foreground"${_scopeId2}>\u6682\u65E0\u8BC4\u8BBA</div>`);
                         } else {
                           _push3(`<div class="space-y-2"${_scopeId2}><!--[-->`);
                           ssrRenderList(comments.value, (c) => {
@@ -425,15 +425,15 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                 if (_push4) {
                                   _push4(ssrRenderComponent(unref(_sfc_main$3), {
                                     src: c.author?.avatarUrl || "/assets/images/xiaobai/xiaobai-2.png",
-                                    alt: c.author?.nickName || "用户头像"
+                                    alt: c.author?.nickName || "\u7528\u6237\u5934\u50CF"
                                   }, null, _parent4, _scopeId3));
                                   _push4(ssrRenderComponent(unref(_sfc_main$4), { class: "text-xs" }, {
                                     default: withCtx((_4, _push5, _parent5, _scopeId4) => {
                                       if (_push5) {
-                                        _push5(`${ssrInterpolate((c.author?.nickName || "匿名").charAt(0))}`);
+                                        _push5(`${ssrInterpolate((c.author?.nickName || "\u533F\u540D").charAt(0))}`);
                                       } else {
                                         return [
-                                          createTextVNode(toDisplayString((c.author?.nickName || "匿名").charAt(0)), 1)
+                                          createTextVNode(toDisplayString((c.author?.nickName || "\u533F\u540D").charAt(0)), 1)
                                         ];
                                       }
                                     }),
@@ -443,11 +443,11 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                   return [
                                     createVNode(unref(_sfc_main$3), {
                                       src: c.author?.avatarUrl || "/assets/images/xiaobai/xiaobai-2.png",
-                                      alt: c.author?.nickName || "用户头像"
+                                      alt: c.author?.nickName || "\u7528\u6237\u5934\u50CF"
                                     }, null, 8, ["src", "alt"]),
                                     createVNode(unref(_sfc_main$4), { class: "text-xs" }, {
                                       default: withCtx(() => [
-                                        createTextVNode(toDisplayString((c.author?.nickName || "匿名").charAt(0)), 1)
+                                        createTextVNode(toDisplayString((c.author?.nickName || "\u533F\u540D").charAt(0)), 1)
                                       ]),
                                       _: 2
                                     }, 1024)
@@ -456,7 +456,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               }),
                               _: 2
                             }, _parent3, _scopeId2));
-                            _push3(`<div class="flex-1 min-w-0"${_scopeId2}><div class="text-xs text-muted-foreground"${_scopeId2}>${ssrInterpolate(c.author?.nickName || "匿名")} · ${ssrInterpolate(new Date(c.createdAt).toLocaleString())}</div><div class="text-sm text-foreground whitespace-pre-wrap break-words"${_scopeId2}>${ssrInterpolate(c.content)}</div>`);
+                            _push3(`<div class="flex-1 min-w-0"${_scopeId2}><div class="text-xs text-muted-foreground"${_scopeId2}>${ssrInterpolate(c.author?.nickName || "\u533F\u540D")} \xB7 ${ssrInterpolate(new Date(c.createdAt).toLocaleString())}</div><div class="text-sm text-foreground whitespace-pre-wrap break-words"${_scopeId2}>${ssrInterpolate(c.content)}</div>`);
                             _push3(ssrRenderComponent(unref(_sfc_main$v), {
                               variant: "link",
                               size: "sm",
@@ -465,10 +465,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                             }, {
                               default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                                 if (_push4) {
-                                  _push4(`${ssrInterpolate(replyOpenId.value === c.id ? "收起回复" : "回复")}`);
+                                  _push4(`${ssrInterpolate(replyOpenId.value === c.id ? "\u6536\u8D77\u56DE\u590D" : "\u56DE\u590D")}`);
                                 } else {
                                   return [
-                                    createTextVNode(toDisplayString(replyOpenId.value === c.id ? "收起回复" : "回复"), 1)
+                                    createTextVNode(toDisplayString(replyOpenId.value === c.id ? "\u6536\u8D77\u56DE\u590D" : "\u56DE\u590D"), 1)
                                   ];
                                 }
                               }),
@@ -479,7 +479,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               _push3(ssrRenderComponent(unref(_sfc_main$2), {
                                 modelValue: replyContent.value,
                                 "onUpdate:modelValue": ($event) => replyContent.value = $event,
-                                placeholder: "回复…",
+                                placeholder: "\u56DE\u590D\u2026",
                                 class: "flex-1 h-8 text-sm",
                                 onKeydown: ($event) => submitReply(c.id)
                               }, null, _parent3, _scopeId2));
@@ -490,10 +490,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               }, {
                                 default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                                   if (_push4) {
-                                    _push4(`发送`);
+                                    _push4(`\u53D1\u9001`);
                                   } else {
                                     return [
-                                      createTextVNode("发送")
+                                      createTextVNode("\u53D1\u9001")
                                     ];
                                   }
                                 }),
@@ -513,15 +513,15 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                     if (_push4) {
                                       _push4(ssrRenderComponent(unref(_sfc_main$3), {
                                         src: r.author?.avatarUrl,
-                                        alt: r.author?.nickName || "用户头像"
+                                        alt: r.author?.nickName || "\u7528\u6237\u5934\u50CF"
                                       }, null, _parent4, _scopeId3));
                                       _push4(ssrRenderComponent(unref(_sfc_main$4), { class: "text-[10px]" }, {
                                         default: withCtx((_4, _push5, _parent5, _scopeId4) => {
                                           if (_push5) {
-                                            _push5(`${ssrInterpolate((r.author?.nickName || "匿名").charAt(0))}`);
+                                            _push5(`${ssrInterpolate((r.author?.nickName || "\u533F\u540D").charAt(0))}`);
                                           } else {
                                             return [
-                                              createTextVNode(toDisplayString((r.author?.nickName || "匿名").charAt(0)), 1)
+                                              createTextVNode(toDisplayString((r.author?.nickName || "\u533F\u540D").charAt(0)), 1)
                                             ];
                                           }
                                         }),
@@ -531,11 +531,11 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                       return [
                                         createVNode(unref(_sfc_main$3), {
                                           src: r.author?.avatarUrl,
-                                          alt: r.author?.nickName || "用户头像"
+                                          alt: r.author?.nickName || "\u7528\u6237\u5934\u50CF"
                                         }, null, 8, ["src", "alt"]),
                                         createVNode(unref(_sfc_main$4), { class: "text-[10px]" }, {
                                           default: withCtx(() => [
-                                            createTextVNode(toDisplayString((r.author?.nickName || "匿名").charAt(0)), 1)
+                                            createTextVNode(toDisplayString((r.author?.nickName || "\u533F\u540D").charAt(0)), 1)
                                           ]),
                                           _: 2
                                         }, 1024)
@@ -544,7 +544,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                   }),
                                   _: 2
                                 }, _parent3, _scopeId2));
-                                _push3(`<div class="flex-1 min-w-0"${_scopeId2}><div class="text-xs text-muted-foreground"${_scopeId2}>${ssrInterpolate(r.author?.nickName || "匿名")} · ${ssrInterpolate(new Date(r.createdAt).toLocaleString())}</div><div class="text-sm text-foreground whitespace-pre-wrap break-words"${_scopeId2}>${ssrInterpolate(r.content)}</div></div></div>`);
+                                _push3(`<div class="flex-1 min-w-0"${_scopeId2}><div class="text-xs text-muted-foreground"${_scopeId2}>${ssrInterpolate(r.author?.nickName || "\u533F\u540D")} \xB7 ${ssrInterpolate(new Date(r.createdAt).toLocaleString())}</div><div class="text-sm text-foreground whitespace-pre-wrap break-words"${_scopeId2}>${ssrInterpolate(r.content)}</div></div></div>`);
                               });
                               _push3(`<!--]--></div>`);
                             } else {
@@ -566,11 +566,11 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                             default: withCtx(() => [
                               createVNode(unref(_sfc_main$3), {
                                 src: m.author?.avatarUrl || "/assets/images/xiaobai/xiaobai-2.png",
-                                alt: m.author?.nickName || "用户头像"
+                                alt: m.author?.nickName || "\u7528\u6237\u5934\u50CF"
                               }, null, 8, ["src", "alt"]),
                               createVNode(unref(_sfc_main$4), null, {
                                 default: withCtx(() => [
-                                  createTextVNode(toDisplayString((m.author?.nickName || "匿名").charAt(0)), 1)
+                                  createTextVNode(toDisplayString((m.author?.nickName || "\u533F\u540D").charAt(0)), 1)
                                 ]),
                                 _: 2
                               }, 1024)
@@ -578,7 +578,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                             _: 2
                           }, 1024),
                           createVNode("div", { class: "flex-1 min-w-0" }, [
-                            createVNode("div", { class: "text-sm text-muted-foreground mb-1.5 font-medium" }, toDisplayString(m.author?.nickName || "匿名") + " · " + toDisplayString(new Date(m.createdAt).toLocaleString()), 1),
+                            createVNode("div", { class: "text-sm text-muted-foreground mb-1.5 font-medium" }, toDisplayString(m.author?.nickName || "\u533F\u540D") + " \xB7 " + toDisplayString(new Date(m.createdAt).toLocaleString()), 1),
                             createVNode("div", { class: "text-foreground whitespace-pre-wrap break-words leading-relaxed" }, toDisplayString(m.content), 1),
                             createVNode("div", { class: "mt-3 flex items-center gap-3 text-sm border-t border-border pt-3" }, [
                               createVNode(unref(_sfc_main$v), {
@@ -587,7 +587,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                 onClick: ($event) => toggleComments(m.id)
                               }, {
                                 default: withCtx(() => [
-                                  createTextVNode(toDisplayString(openId.value === m.id ? "收起评论" : `查看评论${formatCount(m.commentCount)}`), 1)
+                                  createTextVNode(toDisplayString(openId.value === m.id ? "\u6536\u8D77\u8BC4\u8BBA" : `\u67E5\u770B\u8BC4\u8BBA${formatCount(m.commentCount)}`), 1)
                                 ]),
                                 _: 2
                               }, 1032, ["onClick"]),
@@ -598,7 +598,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                 onClick: ($event) => toggleInput(m.id)
                               }, {
                                 default: withCtx(() => [
-                                  createTextVNode(toDisplayString(inputOpenId.value === m.id ? "收起输入" : "写评论"), 1)
+                                  createTextVNode(toDisplayString(inputOpenId.value === m.id ? "\u6536\u8D77\u8F93\u5165" : "\u5199\u8BC4\u8BBA"), 1)
                                 ]),
                                 _: 2
                               }, 1032, ["onClick"])
@@ -610,7 +610,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               createVNode(unref(_sfc_main$2), {
                                 modelValue: comment.value,
                                 "onUpdate:modelValue": ($event) => comment.value = $event,
-                                placeholder: "写点评论…",
+                                placeholder: "\u5199\u70B9\u8BC4\u8BBA\u2026",
                                 class: "flex-1",
                                 onKeydown: withKeys(withModifiers(($event) => submitComment(m.id), ["prevent"]), ["enter"])
                               }, null, 8, ["modelValue", "onUpdate:modelValue", "onKeydown"]),
@@ -619,7 +619,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                 onClick: ($event) => submitComment(m.id)
                               }, {
                                 default: withCtx(() => [
-                                  createTextVNode("发布")
+                                  createTextVNode("\u53D1\u5E03")
                                 ]),
                                 _: 1
                               }, 8, ["onClick"])
@@ -631,10 +631,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               loadingComments.value ? (openBlock(), createBlock("div", {
                                 key: 0,
                                 class: "text-sm text-muted-foreground"
-                              }, "加载中…")) : comments.value.length === 0 ? (openBlock(), createBlock("div", {
+                              }, "\u52A0\u8F7D\u4E2D\u2026")) : comments.value.length === 0 ? (openBlock(), createBlock("div", {
                                 key: 1,
                                 class: "text-sm text-muted-foreground"
-                              }, "暂无评论")) : (openBlock(), createBlock("div", {
+                              }, "\u6682\u65E0\u8BC4\u8BBA")) : (openBlock(), createBlock("div", {
                                 key: 2,
                                 class: "space-y-2"
                               }, [
@@ -648,11 +648,11 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                         default: withCtx(() => [
                                           createVNode(unref(_sfc_main$3), {
                                             src: c.author?.avatarUrl || "/assets/images/xiaobai/xiaobai-2.png",
-                                            alt: c.author?.nickName || "用户头像"
+                                            alt: c.author?.nickName || "\u7528\u6237\u5934\u50CF"
                                           }, null, 8, ["src", "alt"]),
                                           createVNode(unref(_sfc_main$4), { class: "text-xs" }, {
                                             default: withCtx(() => [
-                                              createTextVNode(toDisplayString((c.author?.nickName || "匿名").charAt(0)), 1)
+                                              createTextVNode(toDisplayString((c.author?.nickName || "\u533F\u540D").charAt(0)), 1)
                                             ]),
                                             _: 2
                                           }, 1024)
@@ -660,7 +660,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                         _: 2
                                       }, 1024),
                                       createVNode("div", { class: "flex-1 min-w-0" }, [
-                                        createVNode("div", { class: "text-xs text-muted-foreground" }, toDisplayString(c.author?.nickName || "匿名") + " · " + toDisplayString(new Date(c.createdAt).toLocaleString()), 1),
+                                        createVNode("div", { class: "text-xs text-muted-foreground" }, toDisplayString(c.author?.nickName || "\u533F\u540D") + " \xB7 " + toDisplayString(new Date(c.createdAt).toLocaleString()), 1),
                                         createVNode("div", { class: "text-sm text-foreground whitespace-pre-wrap break-words" }, toDisplayString(c.content), 1),
                                         createVNode(unref(_sfc_main$v), {
                                           variant: "link",
@@ -669,7 +669,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                           onClick: ($event) => toggleReply(c.id)
                                         }, {
                                           default: withCtx(() => [
-                                            createTextVNode(toDisplayString(replyOpenId.value === c.id ? "收起回复" : "回复"), 1)
+                                            createTextVNode(toDisplayString(replyOpenId.value === c.id ? "\u6536\u8D77\u56DE\u590D" : "\u56DE\u590D"), 1)
                                           ]),
                                           _: 2
                                         }, 1032, ["onClick"]),
@@ -680,7 +680,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                           createVNode(unref(_sfc_main$2), {
                                             modelValue: replyContent.value,
                                             "onUpdate:modelValue": ($event) => replyContent.value = $event,
-                                            placeholder: "回复…",
+                                            placeholder: "\u56DE\u590D\u2026",
                                             class: "flex-1 h-8 text-sm",
                                             onKeydown: withKeys(withModifiers(($event) => submitReply(c.id), ["prevent"]), ["enter"])
                                           }, null, 8, ["modelValue", "onUpdate:modelValue", "onKeydown"]),
@@ -690,7 +690,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                             onClick: ($event) => submitReply(c.id)
                                           }, {
                                             default: withCtx(() => [
-                                              createTextVNode("发送")
+                                              createTextVNode("\u53D1\u9001")
                                             ]),
                                             _: 1
                                           }, 8, ["onClick"])
@@ -710,11 +710,11 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                             default: withCtx(() => [
                                               createVNode(unref(_sfc_main$3), {
                                                 src: r.author?.avatarUrl,
-                                                alt: r.author?.nickName || "用户头像"
+                                                alt: r.author?.nickName || "\u7528\u6237\u5934\u50CF"
                                               }, null, 8, ["src", "alt"]),
                                               createVNode(unref(_sfc_main$4), { class: "text-[10px]" }, {
                                                 default: withCtx(() => [
-                                                  createTextVNode(toDisplayString((r.author?.nickName || "匿名").charAt(0)), 1)
+                                                  createTextVNode(toDisplayString((r.author?.nickName || "\u533F\u540D").charAt(0)), 1)
                                                 ]),
                                                 _: 2
                                               }, 1024)
@@ -722,7 +722,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                             _: 2
                                           }, 1024),
                                           createVNode("div", { class: "flex-1 min-w-0" }, [
-                                            createVNode("div", { class: "text-xs text-muted-foreground" }, toDisplayString(r.author?.nickName || "匿名") + " · " + toDisplayString(new Date(r.createdAt).toLocaleString()), 1),
+                                            createVNode("div", { class: "text-xs text-muted-foreground" }, toDisplayString(r.author?.nickName || "\u533F\u540D") + " \xB7 " + toDisplayString(new Date(r.createdAt).toLocaleString()), 1),
                                             createVNode("div", { class: "text-sm text-foreground whitespace-pre-wrap break-words" }, toDisplayString(r.content), 1)
                                           ])
                                         ]);
@@ -748,11 +748,11 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           default: withCtx(() => [
                             createVNode(unref(_sfc_main$3), {
                               src: m.author?.avatarUrl || "/assets/images/xiaobai/xiaobai-2.png",
-                              alt: m.author?.nickName || "用户头像"
+                              alt: m.author?.nickName || "\u7528\u6237\u5934\u50CF"
                             }, null, 8, ["src", "alt"]),
                             createVNode(unref(_sfc_main$4), null, {
                               default: withCtx(() => [
-                                createTextVNode(toDisplayString((m.author?.nickName || "匿名").charAt(0)), 1)
+                                createTextVNode(toDisplayString((m.author?.nickName || "\u533F\u540D").charAt(0)), 1)
                               ]),
                               _: 2
                             }, 1024)
@@ -760,7 +760,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           _: 2
                         }, 1024),
                         createVNode("div", { class: "flex-1 min-w-0" }, [
-                          createVNode("div", { class: "text-sm text-muted-foreground mb-1.5 font-medium" }, toDisplayString(m.author?.nickName || "匿名") + " · " + toDisplayString(new Date(m.createdAt).toLocaleString()), 1),
+                          createVNode("div", { class: "text-sm text-muted-foreground mb-1.5 font-medium" }, toDisplayString(m.author?.nickName || "\u533F\u540D") + " \xB7 " + toDisplayString(new Date(m.createdAt).toLocaleString()), 1),
                           createVNode("div", { class: "text-foreground whitespace-pre-wrap break-words leading-relaxed" }, toDisplayString(m.content), 1),
                           createVNode("div", { class: "mt-3 flex items-center gap-3 text-sm border-t border-border pt-3" }, [
                             createVNode(unref(_sfc_main$v), {
@@ -769,7 +769,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               onClick: ($event) => toggleComments(m.id)
                             }, {
                               default: withCtx(() => [
-                                createTextVNode(toDisplayString(openId.value === m.id ? "收起评论" : `查看评论${formatCount(m.commentCount)}`), 1)
+                                createTextVNode(toDisplayString(openId.value === m.id ? "\u6536\u8D77\u8BC4\u8BBA" : `\u67E5\u770B\u8BC4\u8BBA${formatCount(m.commentCount)}`), 1)
                               ]),
                               _: 2
                             }, 1032, ["onClick"]),
@@ -780,7 +780,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               onClick: ($event) => toggleInput(m.id)
                             }, {
                               default: withCtx(() => [
-                                createTextVNode(toDisplayString(inputOpenId.value === m.id ? "收起输入" : "写评论"), 1)
+                                createTextVNode(toDisplayString(inputOpenId.value === m.id ? "\u6536\u8D77\u8F93\u5165" : "\u5199\u8BC4\u8BBA"), 1)
                               ]),
                               _: 2
                             }, 1032, ["onClick"])
@@ -792,7 +792,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                             createVNode(unref(_sfc_main$2), {
                               modelValue: comment.value,
                               "onUpdate:modelValue": ($event) => comment.value = $event,
-                              placeholder: "写点评论…",
+                              placeholder: "\u5199\u70B9\u8BC4\u8BBA\u2026",
                               class: "flex-1",
                               onKeydown: withKeys(withModifiers(($event) => submitComment(m.id), ["prevent"]), ["enter"])
                             }, null, 8, ["modelValue", "onUpdate:modelValue", "onKeydown"]),
@@ -801,7 +801,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               onClick: ($event) => submitComment(m.id)
                             }, {
                               default: withCtx(() => [
-                                createTextVNode("发布")
+                                createTextVNode("\u53D1\u5E03")
                               ]),
                               _: 1
                             }, 8, ["onClick"])
@@ -813,10 +813,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                             loadingComments.value ? (openBlock(), createBlock("div", {
                               key: 0,
                               class: "text-sm text-muted-foreground"
-                            }, "加载中…")) : comments.value.length === 0 ? (openBlock(), createBlock("div", {
+                            }, "\u52A0\u8F7D\u4E2D\u2026")) : comments.value.length === 0 ? (openBlock(), createBlock("div", {
                               key: 1,
                               class: "text-sm text-muted-foreground"
-                            }, "暂无评论")) : (openBlock(), createBlock("div", {
+                            }, "\u6682\u65E0\u8BC4\u8BBA")) : (openBlock(), createBlock("div", {
                               key: 2,
                               class: "space-y-2"
                             }, [
@@ -830,11 +830,11 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                       default: withCtx(() => [
                                         createVNode(unref(_sfc_main$3), {
                                           src: c.author?.avatarUrl || "/assets/images/xiaobai/xiaobai-2.png",
-                                          alt: c.author?.nickName || "用户头像"
+                                          alt: c.author?.nickName || "\u7528\u6237\u5934\u50CF"
                                         }, null, 8, ["src", "alt"]),
                                         createVNode(unref(_sfc_main$4), { class: "text-xs" }, {
                                           default: withCtx(() => [
-                                            createTextVNode(toDisplayString((c.author?.nickName || "匿名").charAt(0)), 1)
+                                            createTextVNode(toDisplayString((c.author?.nickName || "\u533F\u540D").charAt(0)), 1)
                                           ]),
                                           _: 2
                                         }, 1024)
@@ -842,7 +842,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                       _: 2
                                     }, 1024),
                                     createVNode("div", { class: "flex-1 min-w-0" }, [
-                                      createVNode("div", { class: "text-xs text-muted-foreground" }, toDisplayString(c.author?.nickName || "匿名") + " · " + toDisplayString(new Date(c.createdAt).toLocaleString()), 1),
+                                      createVNode("div", { class: "text-xs text-muted-foreground" }, toDisplayString(c.author?.nickName || "\u533F\u540D") + " \xB7 " + toDisplayString(new Date(c.createdAt).toLocaleString()), 1),
                                       createVNode("div", { class: "text-sm text-foreground whitespace-pre-wrap break-words" }, toDisplayString(c.content), 1),
                                       createVNode(unref(_sfc_main$v), {
                                         variant: "link",
@@ -851,7 +851,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                         onClick: ($event) => toggleReply(c.id)
                                       }, {
                                         default: withCtx(() => [
-                                          createTextVNode(toDisplayString(replyOpenId.value === c.id ? "收起回复" : "回复"), 1)
+                                          createTextVNode(toDisplayString(replyOpenId.value === c.id ? "\u6536\u8D77\u56DE\u590D" : "\u56DE\u590D"), 1)
                                         ]),
                                         _: 2
                                       }, 1032, ["onClick"]),
@@ -862,7 +862,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                         createVNode(unref(_sfc_main$2), {
                                           modelValue: replyContent.value,
                                           "onUpdate:modelValue": ($event) => replyContent.value = $event,
-                                          placeholder: "回复…",
+                                          placeholder: "\u56DE\u590D\u2026",
                                           class: "flex-1 h-8 text-sm",
                                           onKeydown: withKeys(withModifiers(($event) => submitReply(c.id), ["prevent"]), ["enter"])
                                         }, null, 8, ["modelValue", "onUpdate:modelValue", "onKeydown"]),
@@ -872,7 +872,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                           onClick: ($event) => submitReply(c.id)
                                         }, {
                                           default: withCtx(() => [
-                                            createTextVNode("发送")
+                                            createTextVNode("\u53D1\u9001")
                                           ]),
                                           _: 1
                                         }, 8, ["onClick"])
@@ -892,11 +892,11 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                           default: withCtx(() => [
                                             createVNode(unref(_sfc_main$3), {
                                               src: r.author?.avatarUrl,
-                                              alt: r.author?.nickName || "用户头像"
+                                              alt: r.author?.nickName || "\u7528\u6237\u5934\u50CF"
                                             }, null, 8, ["src", "alt"]),
                                             createVNode(unref(_sfc_main$4), { class: "text-[10px]" }, {
                                               default: withCtx(() => [
-                                                createTextVNode(toDisplayString((r.author?.nickName || "匿名").charAt(0)), 1)
+                                                createTextVNode(toDisplayString((r.author?.nickName || "\u533F\u540D").charAt(0)), 1)
                                               ]),
                                               _: 2
                                             }, 1024)
@@ -904,7 +904,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                           _: 2
                                         }, 1024),
                                         createVNode("div", { class: "flex-1 min-w-0" }, [
-                                          createVNode("div", { class: "text-xs text-muted-foreground" }, toDisplayString(r.author?.nickName || "匿名") + " · " + toDisplayString(new Date(r.createdAt).toLocaleString()), 1),
+                                          createVNode("div", { class: "text-xs text-muted-foreground" }, toDisplayString(r.author?.nickName || "\u533F\u540D") + " \xB7 " + toDisplayString(new Date(r.createdAt).toLocaleString()), 1),
                                           createVNode("div", { class: "text-sm text-foreground whitespace-pre-wrap break-words" }, toDisplayString(r.content), 1)
                                         ])
                                       ]);

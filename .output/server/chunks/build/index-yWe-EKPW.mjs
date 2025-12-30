@@ -159,7 +159,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
         await refreshComments();
         emit("commented");
       } catch (e) {
-        console.error("发布评论失败:", e);
+        console.error("\u53D1\u5E03\u8BC4\u8BBA\u5931\u8D25:", e);
       }
     }
     async function toggleComments() {
@@ -185,7 +185,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
           await refreshComments();
         }
       } catch (e) {
-        console.error("回复评论失败:", e);
+        console.error("\u56DE\u590D\u8BC4\u8BBA\u5931\u8D25:", e);
       }
     }
     function toggleReply(id) {
@@ -197,15 +197,15 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
       return props.authorId && currentUserId && props.authorId === currentUserId;
     });
     async function handleDelete() {
-      if (!confirm("确定要删除这条日常记录吗？")) {
+      if (!confirm("\u786E\u5B9A\u8981\u5220\u9664\u8FD9\u6761\u65E5\u5E38\u8BB0\u5F55\u5417\uFF1F")) {
         return;
       }
       try {
         await deleteDailyPost(props.id);
         emit("deleted");
       } catch (e) {
-        console.error("删除失败:", e);
-        alert(e?.friendlyMessage || "删除失败，请稍后再试");
+        console.error("\u5220\u9664\u5931\u8D25:", e);
+        alert(e?.friendlyMessage || "\u5220\u9664\u5931\u8D25\uFF0C\u8BF7\u7A0D\u540E\u518D\u8BD5");
       }
     }
     return (_ctx, _push, _parent, _attrs) => {
@@ -250,7 +250,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                       } else if (isVideo(u)) {
                         _push3(`<div class="w-full h-full bg-muted flex items-center justify-center relative group-hover:bg-muted/80 transition-colors duration-300"${_scopeId2}><video${ssrRenderAttr("src", u)} class="w-full h-full object-cover" preload="metadata" muted${_scopeId2}></video><div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors duration-300"${_scopeId2}><svg class="w-10 h-10 text-white drop-shadow-lg" fill="currentColor" viewBox="0 0 24 24"${_scopeId2}><path d="M8 5v14l11-7z"${_scopeId2}></path></svg></div></div>`);
                       } else {
-                        _push3(`<div class="w-full h-full bg-muted flex items-center justify-center"${_scopeId2}><span class="text-xs text-muted-foreground"${_scopeId2}>未知类型</span></div>`);
+                        _push3(`<div class="w-full h-full bg-muted flex items-center justify-center"${_scopeId2}><span class="text-xs text-muted-foreground"${_scopeId2}>\u672A\u77E5\u7C7B\u578B</span></div>`);
                       }
                       _push3(`</div>`);
                     });
@@ -273,7 +273,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                       }
                       _push4(`<div class="max-w-[90vw] max-h-[90vh] flex items-center justify-center w-full h-full p-4"${_scopeId2}>`);
                       if (currentMedia.value && isImage(currentMedia.value)) {
-                        _push4(`<img${ssrRenderAttr("src", currentMedia.value)} class="max-w-full max-h-[85vh] object-contain shadow-2xl rounded-sm select-none" alt="预览"${_scopeId2}>`);
+                        _push4(`<img${ssrRenderAttr("src", currentMedia.value)} class="max-w-full max-h-[85vh] object-contain shadow-2xl rounded-sm select-none" alt="\u9884\u89C8"${_scopeId2}>`);
                       } else if (currentMedia.value && isVideo(currentMedia.value)) {
                         _push4(`<video${ssrRenderAttr("src", currentMedia.value)} class="max-w-full max-h-[85vh] shadow-2xl rounded-sm" controls autoplay${_scopeId2}></video>`);
                       } else {
@@ -299,10 +299,10 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                   }, {
                     default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                       if (_push4) {
-                        _push4(`${ssrInterpolate(showComments.value ? "收起评论" : `查看评论${displayCount.value}`)}`);
+                        _push4(`${ssrInterpolate(showComments.value ? "\u6536\u8D77\u8BC4\u8BBA" : `\u67E5\u770B\u8BC4\u8BBA${displayCount.value}`)}`);
                       } else {
                         return [
-                          createTextVNode(toDisplayString(showComments.value ? "收起评论" : `查看评论${displayCount.value}`), 1)
+                          createTextVNode(toDisplayString(showComments.value ? "\u6536\u8D77\u8BC4\u8BBA" : `\u67E5\u770B\u8BC4\u8BBA${displayCount.value}`), 1)
                         ];
                       }
                     }),
@@ -317,10 +317,10 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                   }, {
                     default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                       if (_push4) {
-                        _push4(`${ssrInterpolate(showInput.value ? "收起输入" : "写评论")}`);
+                        _push4(`${ssrInterpolate(showInput.value ? "\u6536\u8D77\u8F93\u5165" : "\u5199\u8BC4\u8BBA")}`);
                       } else {
                         return [
-                          createTextVNode(toDisplayString(showInput.value ? "收起输入" : "写评论"), 1)
+                          createTextVNode(toDisplayString(showInput.value ? "\u6536\u8D77\u8F93\u5165" : "\u5199\u8BC4\u8BBA"), 1)
                         ];
                       }
                     }),
@@ -336,10 +336,10 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                     }, {
                       default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                         if (_push4) {
-                          _push4(` 删除 `);
+                          _push4(` \u5220\u9664 `);
                         } else {
                           return [
-                            createTextVNode(" 删除 ")
+                            createTextVNode(" \u5220\u9664 ")
                           ];
                         }
                       }),
@@ -355,7 +355,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                     _push3(ssrRenderComponent(unref(_sfc_main$q), {
                       modelValue: comment.value,
                       "onUpdate:modelValue": ($event) => comment.value = $event,
-                      placeholder: "写点评论…",
+                      placeholder: "\u5199\u70B9\u8BC4\u8BBA\u2026",
                       class: "flex-1",
                       onKeydown: submit
                     }, null, _parent3, _scopeId2));
@@ -365,10 +365,10 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                     }, {
                       default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                         if (_push4) {
-                          _push4(`发布`);
+                          _push4(`\u53D1\u5E03`);
                         } else {
                           return [
-                            createTextVNode("发布")
+                            createTextVNode("\u53D1\u5E03")
                           ];
                         }
                       }),
@@ -382,9 +382,9 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                   if (showComments.value) {
                     _push3(`<div class="mt-4 space-y-4"${_scopeId2}>`);
                     if (loading.value) {
-                      _push3(`<div class="text-sm text-muted-foreground py-2 text-center"${_scopeId2}>加载中…</div>`);
+                      _push3(`<div class="text-sm text-muted-foreground py-2 text-center"${_scopeId2}>\u52A0\u8F7D\u4E2D\u2026</div>`);
                     } else if (comments.value.length === 0) {
-                      _push3(`<div class="text-sm text-muted-foreground py-2 text-center"${_scopeId2}>暂无评论</div>`);
+                      _push3(`<div class="text-sm text-muted-foreground py-2 text-center"${_scopeId2}>\u6682\u65E0\u8BC4\u8BBA</div>`);
                     } else {
                       _push3(`<div class="space-y-4 pl-1"${_scopeId2}><!--[-->`);
                       ssrRenderList(comments.value, (c) => {
@@ -398,10 +398,10 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                               _push4(ssrRenderComponent(unref(_sfc_main$4$1), null, {
                                 default: withCtx((_4, _push5, _parent5, _scopeId4) => {
                                   if (_push5) {
-                                    _push5(`${ssrInterpolate(c.author.nickName?.slice(0, 2) || "用户")}`);
+                                    _push5(`${ssrInterpolate(c.author.nickName?.slice(0, 2) || "\u7528\u6237")}`);
                                   } else {
                                     return [
-                                      createTextVNode(toDisplayString(c.author.nickName?.slice(0, 2) || "用户"), 1)
+                                      createTextVNode(toDisplayString(c.author.nickName?.slice(0, 2) || "\u7528\u6237"), 1)
                                     ];
                                   }
                                 }),
@@ -414,7 +414,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                                 }, null, 8, ["src"]),
                                 createVNode(unref(_sfc_main$4$1), null, {
                                   default: withCtx(() => [
-                                    createTextVNode(toDisplayString(c.author.nickName?.slice(0, 2) || "用户"), 1)
+                                    createTextVNode(toDisplayString(c.author.nickName?.slice(0, 2) || "\u7528\u6237"), 1)
                                   ]),
                                   _: 2
                                 }, 1024)
@@ -432,10 +432,10 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                         }, {
                           default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                             if (_push4) {
-                              _push4(`${ssrInterpolate(replyOpenId.value === c.id ? "收起回复" : "回复")}`);
+                              _push4(`${ssrInterpolate(replyOpenId.value === c.id ? "\u6536\u8D77\u56DE\u590D" : "\u56DE\u590D")}`);
                             } else {
                               return [
-                                createTextVNode(toDisplayString(replyOpenId.value === c.id ? "收起回复" : "回复"), 1)
+                                createTextVNode(toDisplayString(replyOpenId.value === c.id ? "\u6536\u8D77\u56DE\u590D" : "\u56DE\u590D"), 1)
                               ];
                             }
                           }),
@@ -447,7 +447,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                           _push3(ssrRenderComponent(unref(_sfc_main$q), {
                             modelValue: replyContent.value,
                             "onUpdate:modelValue": ($event) => replyContent.value = $event,
-                            placeholder: "回复…",
+                            placeholder: "\u56DE\u590D\u2026",
                             class: "h-8 text-sm",
                             onKeydown: ($event) => submitReply(c.id)
                           }, null, _parent3, _scopeId2));
@@ -459,10 +459,10 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                           }, {
                             default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                               if (_push4) {
-                                _push4(`发送`);
+                                _push4(`\u53D1\u9001`);
                               } else {
                                 return [
-                                  createTextVNode("发送")
+                                  createTextVNode("\u53D1\u9001")
                                 ];
                               }
                             }),
@@ -520,10 +520,10 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                             }, {
                               default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                                 if (_push4) {
-                                  _push4(`${ssrInterpolate(replyOpenId.value === r.id ? "收起回复" : "回复")}`);
+                                  _push4(`${ssrInterpolate(replyOpenId.value === r.id ? "\u6536\u8D77\u56DE\u590D" : "\u56DE\u590D")}`);
                                 } else {
                                   return [
-                                    createTextVNode(toDisplayString(replyOpenId.value === r.id ? "收起回复" : "回复"), 1)
+                                    createTextVNode(toDisplayString(replyOpenId.value === r.id ? "\u6536\u8D77\u56DE\u590D" : "\u56DE\u590D"), 1)
                                   ];
                                 }
                               }),
@@ -535,7 +535,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                               _push3(ssrRenderComponent(unref(_sfc_main$q), {
                                 modelValue: replyContent.value,
                                 "onUpdate:modelValue": ($event) => replyContent.value = $event,
-                                placeholder: "回复…",
+                                placeholder: "\u56DE\u590D\u2026",
                                 class: "h-8 text-sm",
                                 onKeydown: ($event) => submitReply(r.id)
                               }, null, _parent3, _scopeId2));
@@ -547,10 +547,10 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                               }, {
                                 default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                                   if (_push4) {
-                                    _push4(`发送`);
+                                    _push4(`\u53D1\u9001`);
                                   } else {
                                     return [
-                                      createTextVNode("发送")
+                                      createTextVNode("\u53D1\u9001")
                                     ];
                                   }
                                 }),
@@ -690,7 +690,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                             key: 2,
                             class: "w-full h-full bg-muted flex items-center justify-center"
                           }, [
-                            createVNode("span", { class: "text-xs text-muted-foreground" }, "未知类型")
+                            createVNode("span", { class: "text-xs text-muted-foreground" }, "\u672A\u77E5\u7C7B\u578B")
                           ]))
                         ], 8, ["onClick"]);
                       }), 128))
@@ -769,7 +769,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                             key: 0,
                             src: currentMedia.value,
                             class: "max-w-full max-h-[85vh] object-contain shadow-2xl rounded-sm select-none",
-                            alt: "预览"
+                            alt: "\u9884\u89C8"
                           }, null, 8, ["src"])) : currentMedia.value && isVideo(currentMedia.value) ? (openBlock(), createBlock("video", {
                             key: 1,
                             src: currentMedia.value,
@@ -792,7 +792,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                         onClick: toggleComments
                       }, {
                         default: withCtx(() => [
-                          createTextVNode(toDisplayString(showComments.value ? "收起评论" : `查看评论${displayCount.value}`), 1)
+                          createTextVNode(toDisplayString(showComments.value ? "\u6536\u8D77\u8BC4\u8BBA" : `\u67E5\u770B\u8BC4\u8BBA${displayCount.value}`), 1)
                         ]),
                         _: 1
                       }),
@@ -804,7 +804,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                         onClick: toggleInput
                       }, {
                         default: withCtx(() => [
-                          createTextVNode(toDisplayString(showInput.value ? "收起输入" : "写评论"), 1)
+                          createTextVNode(toDisplayString(showInput.value ? "\u6536\u8D77\u8F93\u5165" : "\u5199\u8BC4\u8BBA"), 1)
                         ]),
                         _: 1
                       }),
@@ -817,7 +817,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                           onClick: handleDelete
                         }, {
                           default: withCtx(() => [
-                            createTextVNode(" 删除 ")
+                            createTextVNode(" \u5220\u9664 ")
                           ]),
                           _: 1
                         })
@@ -830,7 +830,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                       createVNode(unref(_sfc_main$q), {
                         modelValue: comment.value,
                         "onUpdate:modelValue": ($event) => comment.value = $event,
-                        placeholder: "写点评论…",
+                        placeholder: "\u5199\u70B9\u8BC4\u8BBA\u2026",
                         class: "flex-1",
                         onKeydown: withKeys(withModifiers(submit, ["prevent"]), ["enter"])
                       }, null, 8, ["modelValue", "onUpdate:modelValue", "onKeydown"]),
@@ -839,7 +839,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                         disabled: !comment.value.trim()
                       }, {
                         default: withCtx(() => [
-                          createTextVNode("发布")
+                          createTextVNode("\u53D1\u5E03")
                         ]),
                         _: 1
                       }, 8, ["disabled"])
@@ -852,10 +852,10 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                         loading.value ? (openBlock(), createBlock("div", {
                           key: 0,
                           class: "text-sm text-muted-foreground py-2 text-center"
-                        }, "加载中…")) : comments.value.length === 0 ? (openBlock(), createBlock("div", {
+                        }, "\u52A0\u8F7D\u4E2D\u2026")) : comments.value.length === 0 ? (openBlock(), createBlock("div", {
                           key: 1,
                           class: "text-sm text-muted-foreground py-2 text-center"
-                        }, "暂无评论")) : (openBlock(), createBlock("div", {
+                        }, "\u6682\u65E0\u8BC4\u8BBA")) : (openBlock(), createBlock("div", {
                           key: 2,
                           class: "space-y-4 pl-1"
                         }, [
@@ -872,7 +872,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                                     }, null, 8, ["src"]),
                                     createVNode(unref(_sfc_main$4$1), null, {
                                       default: withCtx(() => [
-                                        createTextVNode(toDisplayString(c.author.nickName?.slice(0, 2) || "用户"), 1)
+                                        createTextVNode(toDisplayString(c.author.nickName?.slice(0, 2) || "\u7528\u6237"), 1)
                                       ]),
                                       _: 2
                                     }, 1024)
@@ -893,7 +893,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                                       onClick: ($event) => toggleReply(c.id)
                                     }, {
                                       default: withCtx(() => [
-                                        createTextVNode(toDisplayString(replyOpenId.value === c.id ? "收起回复" : "回复"), 1)
+                                        createTextVNode(toDisplayString(replyOpenId.value === c.id ? "\u6536\u8D77\u56DE\u590D" : "\u56DE\u590D"), 1)
                                       ]),
                                       _: 2
                                     }, 1032, ["onClick"])
@@ -905,7 +905,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                                     createVNode(unref(_sfc_main$q), {
                                       modelValue: replyContent.value,
                                       "onUpdate:modelValue": ($event) => replyContent.value = $event,
-                                      placeholder: "回复…",
+                                      placeholder: "\u56DE\u590D\u2026",
                                       class: "h-8 text-sm",
                                       onKeydown: withKeys(withModifiers(($event) => submitReply(c.id), ["prevent"]), ["enter"])
                                     }, null, 8, ["modelValue", "onUpdate:modelValue", "onKeydown"]),
@@ -916,7 +916,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                                       disabled: !replyContent.value.trim()
                                     }, {
                                       default: withCtx(() => [
-                                        createTextVNode("发送")
+                                        createTextVNode("\u53D1\u9001")
                                       ]),
                                       _: 1
                                     }, 8, ["onClick", "disabled"])
@@ -961,7 +961,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                                             onClick: ($event) => toggleReply(r.id)
                                           }, {
                                             default: withCtx(() => [
-                                              createTextVNode(toDisplayString(replyOpenId.value === r.id ? "收起回复" : "回复"), 1)
+                                              createTextVNode(toDisplayString(replyOpenId.value === r.id ? "\u6536\u8D77\u56DE\u590D" : "\u56DE\u590D"), 1)
                                             ]),
                                             _: 2
                                           }, 1032, ["onClick"])
@@ -973,7 +973,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                                           createVNode(unref(_sfc_main$q), {
                                             modelValue: replyContent.value,
                                             "onUpdate:modelValue": ($event) => replyContent.value = $event,
-                                            placeholder: "回复…",
+                                            placeholder: "\u56DE\u590D\u2026",
                                             class: "h-8 text-sm",
                                             onKeydown: withKeys(withModifiers(($event) => submitReply(r.id), ["prevent"]), ["enter"])
                                           }, null, 8, ["modelValue", "onUpdate:modelValue", "onKeydown"]),
@@ -984,7 +984,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                                             disabled: !replyContent.value.trim()
                                           }, {
                                             default: withCtx(() => [
-                                              createTextVNode("发送")
+                                              createTextVNode("\u53D1\u9001")
                                             ]),
                                             _: 1
                                           }, 8, ["onClick", "disabled"])
@@ -1109,7 +1109,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                           key: 2,
                           class: "w-full h-full bg-muted flex items-center justify-center"
                         }, [
-                          createVNode("span", { class: "text-xs text-muted-foreground" }, "未知类型")
+                          createVNode("span", { class: "text-xs text-muted-foreground" }, "\u672A\u77E5\u7C7B\u578B")
                         ]))
                       ], 8, ["onClick"]);
                     }), 128))
@@ -1188,7 +1188,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                           key: 0,
                           src: currentMedia.value,
                           class: "max-w-full max-h-[85vh] object-contain shadow-2xl rounded-sm select-none",
-                          alt: "预览"
+                          alt: "\u9884\u89C8"
                         }, null, 8, ["src"])) : currentMedia.value && isVideo(currentMedia.value) ? (openBlock(), createBlock("video", {
                           key: 1,
                           src: currentMedia.value,
@@ -1211,7 +1211,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                       onClick: toggleComments
                     }, {
                       default: withCtx(() => [
-                        createTextVNode(toDisplayString(showComments.value ? "收起评论" : `查看评论${displayCount.value}`), 1)
+                        createTextVNode(toDisplayString(showComments.value ? "\u6536\u8D77\u8BC4\u8BBA" : `\u67E5\u770B\u8BC4\u8BBA${displayCount.value}`), 1)
                       ]),
                       _: 1
                     }),
@@ -1223,7 +1223,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                       onClick: toggleInput
                     }, {
                       default: withCtx(() => [
-                        createTextVNode(toDisplayString(showInput.value ? "收起输入" : "写评论"), 1)
+                        createTextVNode(toDisplayString(showInput.value ? "\u6536\u8D77\u8F93\u5165" : "\u5199\u8BC4\u8BBA"), 1)
                       ]),
                       _: 1
                     }),
@@ -1236,7 +1236,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                         onClick: handleDelete
                       }, {
                         default: withCtx(() => [
-                          createTextVNode(" 删除 ")
+                          createTextVNode(" \u5220\u9664 ")
                         ]),
                         _: 1
                       })
@@ -1249,7 +1249,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                     createVNode(unref(_sfc_main$q), {
                       modelValue: comment.value,
                       "onUpdate:modelValue": ($event) => comment.value = $event,
-                      placeholder: "写点评论…",
+                      placeholder: "\u5199\u70B9\u8BC4\u8BBA\u2026",
                       class: "flex-1",
                       onKeydown: withKeys(withModifiers(submit, ["prevent"]), ["enter"])
                     }, null, 8, ["modelValue", "onUpdate:modelValue", "onKeydown"]),
@@ -1258,7 +1258,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                       disabled: !comment.value.trim()
                     }, {
                       default: withCtx(() => [
-                        createTextVNode("发布")
+                        createTextVNode("\u53D1\u5E03")
                       ]),
                       _: 1
                     }, 8, ["disabled"])
@@ -1271,10 +1271,10 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                       loading.value ? (openBlock(), createBlock("div", {
                         key: 0,
                         class: "text-sm text-muted-foreground py-2 text-center"
-                      }, "加载中…")) : comments.value.length === 0 ? (openBlock(), createBlock("div", {
+                      }, "\u52A0\u8F7D\u4E2D\u2026")) : comments.value.length === 0 ? (openBlock(), createBlock("div", {
                         key: 1,
                         class: "text-sm text-muted-foreground py-2 text-center"
-                      }, "暂无评论")) : (openBlock(), createBlock("div", {
+                      }, "\u6682\u65E0\u8BC4\u8BBA")) : (openBlock(), createBlock("div", {
                         key: 2,
                         class: "space-y-4 pl-1"
                       }, [
@@ -1291,7 +1291,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                                   }, null, 8, ["src"]),
                                   createVNode(unref(_sfc_main$4$1), null, {
                                     default: withCtx(() => [
-                                      createTextVNode(toDisplayString(c.author.nickName?.slice(0, 2) || "用户"), 1)
+                                      createTextVNode(toDisplayString(c.author.nickName?.slice(0, 2) || "\u7528\u6237"), 1)
                                     ]),
                                     _: 2
                                   }, 1024)
@@ -1312,7 +1312,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                                     onClick: ($event) => toggleReply(c.id)
                                   }, {
                                     default: withCtx(() => [
-                                      createTextVNode(toDisplayString(replyOpenId.value === c.id ? "收起回复" : "回复"), 1)
+                                      createTextVNode(toDisplayString(replyOpenId.value === c.id ? "\u6536\u8D77\u56DE\u590D" : "\u56DE\u590D"), 1)
                                     ]),
                                     _: 2
                                   }, 1032, ["onClick"])
@@ -1324,7 +1324,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                                   createVNode(unref(_sfc_main$q), {
                                     modelValue: replyContent.value,
                                     "onUpdate:modelValue": ($event) => replyContent.value = $event,
-                                    placeholder: "回复…",
+                                    placeholder: "\u56DE\u590D\u2026",
                                     class: "h-8 text-sm",
                                     onKeydown: withKeys(withModifiers(($event) => submitReply(c.id), ["prevent"]), ["enter"])
                                   }, null, 8, ["modelValue", "onUpdate:modelValue", "onKeydown"]),
@@ -1335,7 +1335,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                                     disabled: !replyContent.value.trim()
                                   }, {
                                     default: withCtx(() => [
-                                      createTextVNode("发送")
+                                      createTextVNode("\u53D1\u9001")
                                     ]),
                                     _: 1
                                   }, 8, ["onClick", "disabled"])
@@ -1380,7 +1380,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                                           onClick: ($event) => toggleReply(r.id)
                                         }, {
                                           default: withCtx(() => [
-                                            createTextVNode(toDisplayString(replyOpenId.value === r.id ? "收起回复" : "回复"), 1)
+                                            createTextVNode(toDisplayString(replyOpenId.value === r.id ? "\u6536\u8D77\u56DE\u590D" : "\u56DE\u590D"), 1)
                                           ]),
                                           _: 2
                                         }, 1032, ["onClick"])
@@ -1392,7 +1392,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                                         createVNode(unref(_sfc_main$q), {
                                           modelValue: replyContent.value,
                                           "onUpdate:modelValue": ($event) => replyContent.value = $event,
-                                          placeholder: "回复…",
+                                          placeholder: "\u56DE\u590D\u2026",
                                           class: "h-8 text-sm",
                                           onKeydown: withKeys(withModifiers(($event) => submitReply(r.id), ["prevent"]), ["enter"])
                                         }, null, 8, ["modelValue", "onUpdate:modelValue", "onKeydown"]),
@@ -1403,7 +1403,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
                                           disabled: !replyContent.value.trim()
                                         }, {
                                           default: withCtx(() => [
-                                            createTextVNode("发送")
+                                            createTextVNode("\u53D1\u9001")
                                           ]),
                                           _: 1
                                         }, 8, ["onClick", "disabled"])
@@ -2877,7 +2877,7 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
   __ssrInlineRender: true,
   props: {
     modelValue: {},
-    placeholder: { default: "选择日期" },
+    placeholder: { default: "\u9009\u62E9\u65E5\u671F" },
     defaultPlaceholder: { default: () => today(getLocalTimeZone()) }
   },
   emits: ["update:modelValue"],
@@ -3122,7 +3122,7 @@ async function compressImage(file, options = {}) {
         resolve(compressedFile);
       },
       error(err) {
-        console.error("图片压缩失败:", err);
+        console.error("\u56FE\u7247\u538B\u7F29\u5931\u8D25:", err);
         reject(err);
       }
     });
@@ -3150,7 +3150,7 @@ async function compressImages(files, options = {}) {
         );
         results.push(compressedFile);
       } catch (error) {
-        console.warn(`压缩图片 ${file.name} 失败:`, error);
+        console.warn(`\u538B\u7F29\u56FE\u7247 ${file.name} \u5931\u8D25:`, error);
         results.push(file);
       }
     } else {
@@ -3176,20 +3176,20 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
     const selectedTags = ref([]);
     const selectedTagsForPost = ref([]);
     const presetTags = ref([
-      "旅游",
-      "美食",
-      "约会",
-      "购物",
-      "电影",
-      "运动",
-      "学习",
-      "工作",
-      "休息",
-      "惊喜",
-      "纪念日",
-      "日常",
-      "开心",
-      "感动"
+      "\u65C5\u6E38",
+      "\u7F8E\u98DF",
+      "\u7EA6\u4F1A",
+      "\u8D2D\u7269",
+      "\u7535\u5F71",
+      "\u8FD0\u52A8",
+      "\u5B66\u4E60",
+      "\u5DE5\u4F5C",
+      "\u4F11\u606F",
+      "\u60CA\u559C",
+      "\u7EAA\u5FF5\u65E5",
+      "\u65E5\u5E38",
+      "\u5F00\u5FC3",
+      "\u611F\u52A8"
     ]);
     const showCustomTagInput = ref(false);
     const customTagInput = ref("");
@@ -3202,7 +3202,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         const res = await apiFetch(`/api/daily?take=${pageSize}`);
         items.value = res.items;
       } catch (e) {
-        console.error("加载日常记录失败:", e);
+        console.error("\u52A0\u8F7D\u65E5\u5E38\u8BB0\u5F55\u5931\u8D25:", e);
       } finally {
         loading.value = false;
       }
@@ -3258,8 +3258,8 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         await load();
       } catch (e) {
         errorMessage.value = e?.friendlyMessage || handleApiError(e);
-        if (errorMessage.value.includes("情侣")) ;
-        console.error("发布日常记录失败:", e);
+        if (errorMessage.value.includes("\u60C5\u4FA3")) ;
+        console.error("\u53D1\u5E03\u65E5\u5E38\u8BB0\u5F55\u5931\u8D25:", e);
       } finally {
         creating.value = false;
       }
@@ -3302,9 +3302,9 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         else earlier.push(it);
       }
       const groups = [];
-      if (today2.length) groups.push({ label: "今天", items: today2 });
-      if (thisWeek.length) groups.push({ label: "本周", items: thisWeek });
-      if (earlier.length) groups.push({ label: "更早", items: earlier });
+      if (today2.length) groups.push({ label: "\u4ECA\u5929", items: today2 });
+      if (thisWeek.length) groups.push({ label: "\u672C\u5468", items: thisWeek });
+      if (earlier.length) groups.push({ label: "\u66F4\u65E9", items: earlier });
       return groups;
     });
     const hasMore = computed(() => items.value.length > 0 && items.value.length % pageSize === 0);
@@ -3317,7 +3317,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         const toAppend = res.items.filter((p) => !items.value.find((i) => i.id === p.id));
         items.value = items.value.concat(toAppend);
       } catch (e) {
-        console.error("加载更多失败:", e);
+        console.error("\u52A0\u8F7D\u66F4\u591A\u5931\u8D25:", e);
       } finally {
         loadingMore.value = false;
       }
@@ -3338,7 +3338,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       const imageFiles = filesToAdd.filter((f) => f.type.startsWith("image/"));
       const needsCompression = imageFiles.filter((f) => shouldCompress(f));
       if (needsCompression.length > 0) {
-        console.log(`将压缩 ${needsCompression.length} 张图片以优化上传速度`);
+        console.log(`\u5C06\u538B\u7F29 ${needsCompression.length} \u5F20\u56FE\u7247\u4EE5\u4F18\u5316\u4E0A\u4F20\u901F\u5EA6`);
       }
       filesToAdd.forEach((file) => {
         const preview = {
@@ -3503,17 +3503,17 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                 if (_push3) {
                   if (errorMessage.value) {
                     _push3(`<div class="mb-4 p-3 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-lg animate-fade-in"${_scopeId2}>${ssrInterpolate(errorMessage.value)} `);
-                    if (errorMessage.value.includes("情侣")) {
+                    if (errorMessage.value.includes("\u60C5\u4FA3")) {
                       _push3(ssrRenderComponent(_component_NuxtLink, {
                         to: "/user/couple",
                         class: "underline ml-1 font-medium hover:opacity-80"
                       }, {
                         default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                           if (_push4) {
-                            _push4(`去绑定`);
+                            _push4(`\u53BB\u7ED1\u5B9A`);
                           } else {
                             return [
-                              createTextVNode("去绑定")
+                              createTextVNode("\u53BB\u7ED1\u5B9A")
                             ];
                           }
                         }),
@@ -3530,10 +3530,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                   _push3(ssrRenderComponent(unref(_sfc_main$o), { for: "content" }, {
                     default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                       if (_push4) {
-                        _push4(`记录内容`);
+                        _push4(`\u8BB0\u5F55\u5185\u5BB9`);
                       } else {
                         return [
-                          createTextVNode("记录内容")
+                          createTextVNode("\u8BB0\u5F55\u5185\u5BB9")
                         ];
                       }
                     }),
@@ -3543,17 +3543,17 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                     id: "content",
                     modelValue: content.value,
                     "onUpdate:modelValue": ($event) => content.value = $event,
-                    placeholder: "今天想记录点什么…",
+                    placeholder: "\u4ECA\u5929\u60F3\u8BB0\u5F55\u70B9\u4EC0\u4E48\u2026",
                     class: "min-h-[100px]"
                   }, null, _parent3, _scopeId2));
                   _push3(`</div><div class="space-y-2"${_scopeId2}>`);
                   _push3(ssrRenderComponent(unref(_sfc_main$o), null, {
                     default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                       if (_push4) {
-                        _push4(`选择标签`);
+                        _push4(`\u9009\u62E9\u6807\u7B7E`);
                       } else {
                         return [
-                          createTextVNode("选择标签")
+                          createTextVNode("\u9009\u62E9\u6807\u7B7E")
                         ];
                       }
                     }),
@@ -3588,11 +3588,11 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                     }, {
                       default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                         if (_push4) {
-                          _push4(`<span class="mr-1"${_scopeId3}>+</span><span${_scopeId3}>自定义</span>`);
+                          _push4(`<span class="mr-1"${_scopeId3}>+</span><span${_scopeId3}>\u81EA\u5B9A\u4E49</span>`);
                         } else {
                           return [
                             createVNode("span", { class: "mr-1" }, "+"),
-                            createVNode("span", null, "自定义")
+                            createVNode("span", null, "\u81EA\u5B9A\u4E49")
                           ];
                         }
                       }),
@@ -3606,7 +3606,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       modelValue: customTagInput.value,
                       "onUpdate:modelValue": ($event) => customTagInput.value = $event,
                       type: "text",
-                      placeholder: "输入标签名称",
+                      placeholder: "\u8F93\u5165\u6807\u7B7E\u540D\u79F0",
                       maxlength: "10",
                       class: "h-8 w-32",
                       onKeyup: [addCustomTag, cancelCustomTag],
@@ -3621,10 +3621,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                     }, {
                       default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                         if (_push4) {
-                          _push4(` 添加 `);
+                          _push4(` \u6DFB\u52A0 `);
                         } else {
                           return [
-                            createTextVNode(" 添加 ")
+                            createTextVNode(" \u6DFB\u52A0 ")
                           ];
                         }
                       }),
@@ -3639,10 +3639,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                     }, {
                       default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                         if (_push4) {
-                          _push4(` 取消 `);
+                          _push4(` \u53D6\u6D88 `);
                         } else {
                           return [
-                            createTextVNode(" 取消 ")
+                            createTextVNode(" \u53D6\u6D88 ")
                           ];
                         }
                       }),
@@ -3652,7 +3652,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                   }
                   _push3(`</div>`);
                   if (selectedTagsForPost.value.length > 0) {
-                    _push3(`<div class="flex flex-wrap gap-2 items-center"${_scopeId2}><span class="text-xs text-muted-foreground"${_scopeId2}>已选：</span><!--[-->`);
+                    _push3(`<div class="flex flex-wrap gap-2 items-center"${_scopeId2}><span class="text-xs text-muted-foreground"${_scopeId2}>\u5DF2\u9009\uFF1A</span><!--[-->`);
                     ssrRenderList(selectedTagsForPost.value, (tag2) => {
                       _push3(ssrRenderComponent(unref(_sfc_main$2$1), {
                         key: tag2,
@@ -3660,7 +3660,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       }, {
                         default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                           if (_push4) {
-                            _push4(`${ssrInterpolate(tag2)} <button type="button" class="ml-1 p-0.5 rounded-full bg-white/80 hover:bg-white text-gray-600 hover:text-gray-800 transition-colors" title="删除标签"${_scopeId3}><svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"${_scopeId3}><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"${_scopeId3}></path></svg></button>`);
+                            _push4(`${ssrInterpolate(tag2)} <button type="button" class="ml-1 p-0.5 rounded-full bg-white/80 hover:bg-white text-gray-600 hover:text-gray-800 transition-colors" title="\u5220\u9664\u6807\u7B7E"${_scopeId3}><svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"${_scopeId3}><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"${_scopeId3}></path></svg></button>`);
                           } else {
                             return [
                               createTextVNode(toDisplayString(tag2) + " ", 1),
@@ -3668,7 +3668,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                 type: "button",
                                 class: "ml-1 p-0.5 rounded-full bg-white/80 hover:bg-white text-gray-600 hover:text-gray-800 transition-colors",
                                 onClick: ($event) => removePostTag(tag2),
-                                title: "删除标签"
+                                title: "\u5220\u9664\u6807\u7B7E"
                               }, [
                                 (openBlock(), createBlock("svg", {
                                   class: "w-2.5 h-2.5",
@@ -3702,7 +3702,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                   }, {
                     default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                       if (_push4) {
-                        _push4(`<label class="cursor-pointer"${_scopeId3}><input type="file" accept="image/*,video/*" multiple class="hidden"${_scopeId3}><div class="flex items-center gap-2"${_scopeId3}><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"${_scopeId3}><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"${_scopeId3}></path></svg><span${_scopeId3}>添加图片/视频</span>`);
+                        _push4(`<label class="cursor-pointer"${_scopeId3}><input type="file" accept="image/*,video/*" multiple class="hidden"${_scopeId3}><div class="flex items-center gap-2"${_scopeId3}><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"${_scopeId3}><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"${_scopeId3}></path></svg><span${_scopeId3}>\u6DFB\u52A0\u56FE\u7247/\u89C6\u9891</span>`);
                         if (filePreviews.value.length > 0) {
                           _push4(ssrRenderComponent(unref(_sfc_main$2$1), {
                             variant: "secondary",
@@ -3749,7 +3749,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                   d: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
                                 })
                               ])),
-                              createVNode("span", null, "添加图片/视频"),
+                              createVNode("span", null, "\u6DFB\u52A0\u56FE\u7247/\u89C6\u9891"),
                               filePreviews.value.length > 0 ? (openBlock(), createBlock(unref(_sfc_main$2$1), {
                                 key: 0,
                                 variant: "secondary",
@@ -3774,10 +3774,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                   }, {
                     default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                       if (_push4) {
-                        _push4(`${ssrInterpolate(creating.value ? "发布中..." : "发布")}`);
+                        _push4(`${ssrInterpolate(creating.value ? "\u53D1\u5E03\u4E2D..." : "\u53D1\u5E03")}`);
                       } else {
                         return [
-                          createTextVNode(toDisplayString(creating.value ? "发布中..." : "发布"), 1)
+                          createTextVNode(toDisplayString(creating.value ? "\u53D1\u5E03\u4E2D..." : "\u53D1\u5E03"), 1)
                         ];
                       }
                     }),
@@ -3801,7 +3801,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           } else if (preview.type.startsWith("video/")) {
                             _push4(`<div class="w-full h-full flex flex-col items-center justify-center bg-slate-200 dark:bg-slate-700 relative"${_scopeId3}>`);
                             if (preview.url && preview.url.startsWith("data:image")) {
-                              _push4(`<img${ssrRenderAttr("src", preview.url)} class="w-full h-full object-cover" alt="视频预览"${_scopeId3}>`);
+                              _push4(`<img${ssrRenderAttr("src", preview.url)} class="w-full h-full object-cover" alt="\u89C6\u9891\u9884\u89C8"${_scopeId3}>`);
                             } else {
                               _push4(`<!--[--><svg class="w-12 h-12 text-slate-400 dark:text-slate-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"${_scopeId3}><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"${_scopeId3}></path></svg><span class="text-xs text-slate-500 dark:text-slate-400 px-2 text-center truncate w-full"${_scopeId3}>${ssrInterpolate(preview.name)}</span><!--]-->`);
                             }
@@ -3809,7 +3809,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           } else {
                             _push4(`<!---->`);
                           }
-                          _push4(`<button type="button" class="absolute top-1 right-1 w-6 h-6 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition z-10" title="删除"${_scopeId3}><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"${_scopeId3}><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"${_scopeId3}></path></svg></button><div class="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-black/60 text-white text-xs"${_scopeId3}>${ssrInterpolate(preview.type.startsWith("image/") ? "图片" : "视频")}</div></div>`);
+                          _push4(`<button type="button" class="absolute top-1 right-1 w-6 h-6 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition z-10" title="\u5220\u9664"${_scopeId3}><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"${_scopeId3}><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"${_scopeId3}></path></svg></button><div class="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-black/60 text-white text-xs"${_scopeId3}>${ssrInterpolate(preview.type.startsWith("image/") ? "\u56FE\u7247" : "\u89C6\u9891")}</div></div>`);
                         } else {
                           return [
                             createVNode("div", { class: "relative group aspect-square rounded-lg overflow-hidden bg-slate-50 border border-slate-200 dark:bg-slate-800 dark:border-slate-700 cursor-move" }, [
@@ -3826,7 +3826,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                   key: 0,
                                   src: preview.url,
                                   class: "w-full h-full object-cover",
-                                  alt: "视频预览"
+                                  alt: "\u89C6\u9891\u9884\u89C8"
                                 }, null, 8, ["src"])) : (openBlock(), createBlock(Fragment, { key: 1 }, [
                                   (openBlock(), createBlock("svg", {
                                     class: "w-12 h-12 text-slate-400 dark:text-slate-500 mb-2",
@@ -3857,7 +3857,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                 type: "button",
                                 class: "absolute top-1 right-1 w-6 h-6 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition z-10",
                                 onClick: withModifiers(($event) => removeFile(index), ["stop"]),
-                                title: "删除"
+                                title: "\u5220\u9664"
                               }, [
                                 (openBlock(), createBlock("svg", {
                                   class: "w-4 h-4",
@@ -3873,7 +3873,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                   })
                                 ]))
                               ], 8, ["onClick"]),
-                              createVNode("div", { class: "absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-black/60 text-white text-xs" }, toDisplayString(preview.type.startsWith("image/") ? "图片" : "视频"), 1)
+                              createVNode("div", { class: "absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-black/60 text-white text-xs" }, toDisplayString(preview.type.startsWith("image/") ? "\u56FE\u7247" : "\u89C6\u9891"), 1)
                             ])
                           ];
                         }
@@ -3891,13 +3891,13 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       class: "mb-4 p-3 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-lg animate-fade-in"
                     }, [
                       createTextVNode(toDisplayString(errorMessage.value) + " ", 1),
-                      errorMessage.value.includes("情侣") ? (openBlock(), createBlock(_component_NuxtLink, {
+                      errorMessage.value.includes("\u60C5\u4FA3") ? (openBlock(), createBlock(_component_NuxtLink, {
                         key: 0,
                         to: "/user/couple",
                         class: "underline ml-1 font-medium hover:opacity-80"
                       }, {
                         default: withCtx(() => [
-                          createTextVNode("去绑定")
+                          createTextVNode("\u53BB\u7ED1\u5B9A")
                         ]),
                         _: 1
                       })) : createCommentVNode("", true)
@@ -3909,7 +3909,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       createVNode("div", { class: "space-y-2" }, [
                         createVNode(unref(_sfc_main$o), { for: "content" }, {
                           default: withCtx(() => [
-                            createTextVNode("记录内容")
+                            createTextVNode("\u8BB0\u5F55\u5185\u5BB9")
                           ]),
                           _: 1
                         }),
@@ -3917,14 +3917,14 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           id: "content",
                           modelValue: content.value,
                           "onUpdate:modelValue": ($event) => content.value = $event,
-                          placeholder: "今天想记录点什么…",
+                          placeholder: "\u4ECA\u5929\u60F3\u8BB0\u5F55\u70B9\u4EC0\u4E48\u2026",
                           class: "min-h-[100px]"
                         }, null, 8, ["modelValue", "onUpdate:modelValue"])
                       ]),
                       createVNode("div", { class: "space-y-2" }, [
                         createVNode(unref(_sfc_main$o), null, {
                           default: withCtx(() => [
-                            createTextVNode("选择标签")
+                            createTextVNode("\u9009\u62E9\u6807\u7B7E")
                           ]),
                           _: 1
                         }),
@@ -3950,7 +3950,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           }, {
                             default: withCtx(() => [
                               createVNode("span", { class: "mr-1" }, "+"),
-                              createVNode("span", null, "自定义")
+                              createVNode("span", null, "\u81EA\u5B9A\u4E49")
                             ]),
                             _: 1
                           })) : (openBlock(), createBlock("div", {
@@ -3963,7 +3963,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               modelValue: customTagInput.value,
                               "onUpdate:modelValue": ($event) => customTagInput.value = $event,
                               type: "text",
-                              placeholder: "输入标签名称",
+                              placeholder: "\u8F93\u5165\u6807\u7B7E\u540D\u79F0",
                               maxlength: "10",
                               class: "h-8 w-32",
                               onKeyup: [
@@ -3980,7 +3980,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               onClick: addCustomTag
                             }, {
                               default: withCtx(() => [
-                                createTextVNode(" 添加 ")
+                                createTextVNode(" \u6DFB\u52A0 ")
                               ]),
                               _: 1
                             }),
@@ -3992,7 +3992,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               onClick: cancelCustomTag
                             }, {
                               default: withCtx(() => [
-                                createTextVNode(" 取消 ")
+                                createTextVNode(" \u53D6\u6D88 ")
                               ]),
                               _: 1
                             })
@@ -4002,7 +4002,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           key: 0,
                           class: "flex flex-wrap gap-2 items-center"
                         }, [
-                          createVNode("span", { class: "text-xs text-muted-foreground" }, "已选："),
+                          createVNode("span", { class: "text-xs text-muted-foreground" }, "\u5DF2\u9009\uFF1A"),
                           (openBlock(true), createBlock(Fragment, null, renderList(selectedTagsForPost.value, (tag2) => {
                             return openBlock(), createBlock(unref(_sfc_main$2$1), {
                               key: tag2,
@@ -4014,7 +4014,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                   type: "button",
                                   class: "ml-1 p-0.5 rounded-full bg-white/80 hover:bg-white text-gray-600 hover:text-gray-800 transition-colors",
                                   onClick: ($event) => removePostTag(tag2),
-                                  title: "删除标签"
+                                  title: "\u5220\u9664\u6807\u7B7E"
                                 }, [
                                   (openBlock(), createBlock("svg", {
                                     class: "w-2.5 h-2.5",
@@ -4068,7 +4068,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                       d: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
                                     })
                                   ])),
-                                  createVNode("span", null, "添加图片/视频"),
+                                  createVNode("span", null, "\u6DFB\u52A0\u56FE\u7247/\u89C6\u9891"),
                                   filePreviews.value.length > 0 ? (openBlock(), createBlock(unref(_sfc_main$2$1), {
                                     key: 0,
                                     variant: "secondary",
@@ -4090,7 +4090,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                             disabled: creating.value
                           }, {
                             default: withCtx(() => [
-                              createTextVNode(toDisplayString(creating.value ? "发布中..." : "发布"), 1)
+                              createTextVNode(toDisplayString(creating.value ? "\u53D1\u5E03\u4E2D..." : "\u53D1\u5E03"), 1)
                             ]),
                             _: 1
                           }, 8, ["disabled"])
@@ -4119,7 +4119,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                   key: 0,
                                   src: preview.url,
                                   class: "w-full h-full object-cover",
-                                  alt: "视频预览"
+                                  alt: "\u89C6\u9891\u9884\u89C8"
                                 }, null, 8, ["src"])) : (openBlock(), createBlock(Fragment, { key: 1 }, [
                                   (openBlock(), createBlock("svg", {
                                     class: "w-12 h-12 text-slate-400 dark:text-slate-500 mb-2",
@@ -4150,7 +4150,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                 type: "button",
                                 class: "absolute top-1 right-1 w-6 h-6 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition z-10",
                                 onClick: withModifiers(($event) => removeFile(index), ["stop"]),
-                                title: "删除"
+                                title: "\u5220\u9664"
                               }, [
                                 (openBlock(), createBlock("svg", {
                                   class: "w-4 h-4",
@@ -4166,7 +4166,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                   })
                                 ]))
                               ], 8, ["onClick"]),
-                              createVNode("div", { class: "absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-black/60 text-white text-xs" }, toDisplayString(preview.type.startsWith("image/") ? "图片" : "视频"), 1)
+                              createVNode("div", { class: "absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-black/60 text-white text-xs" }, toDisplayString(preview.type.startsWith("image/") ? "\u56FE\u7247" : "\u89C6\u9891"), 1)
                             ])
                           ]),
                           _: 1
@@ -4187,13 +4187,13 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                     class: "mb-4 p-3 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-lg animate-fade-in"
                   }, [
                     createTextVNode(toDisplayString(errorMessage.value) + " ", 1),
-                    errorMessage.value.includes("情侣") ? (openBlock(), createBlock(_component_NuxtLink, {
+                    errorMessage.value.includes("\u60C5\u4FA3") ? (openBlock(), createBlock(_component_NuxtLink, {
                       key: 0,
                       to: "/user/couple",
                       class: "underline ml-1 font-medium hover:opacity-80"
                     }, {
                       default: withCtx(() => [
-                        createTextVNode("去绑定")
+                        createTextVNode("\u53BB\u7ED1\u5B9A")
                       ]),
                       _: 1
                     })) : createCommentVNode("", true)
@@ -4205,7 +4205,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                     createVNode("div", { class: "space-y-2" }, [
                       createVNode(unref(_sfc_main$o), { for: "content" }, {
                         default: withCtx(() => [
-                          createTextVNode("记录内容")
+                          createTextVNode("\u8BB0\u5F55\u5185\u5BB9")
                         ]),
                         _: 1
                       }),
@@ -4213,14 +4213,14 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         id: "content",
                         modelValue: content.value,
                         "onUpdate:modelValue": ($event) => content.value = $event,
-                        placeholder: "今天想记录点什么…",
+                        placeholder: "\u4ECA\u5929\u60F3\u8BB0\u5F55\u70B9\u4EC0\u4E48\u2026",
                         class: "min-h-[100px]"
                       }, null, 8, ["modelValue", "onUpdate:modelValue"])
                     ]),
                     createVNode("div", { class: "space-y-2" }, [
                       createVNode(unref(_sfc_main$o), null, {
                         default: withCtx(() => [
-                          createTextVNode("选择标签")
+                          createTextVNode("\u9009\u62E9\u6807\u7B7E")
                         ]),
                         _: 1
                       }),
@@ -4246,7 +4246,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         }, {
                           default: withCtx(() => [
                             createVNode("span", { class: "mr-1" }, "+"),
-                            createVNode("span", null, "自定义")
+                            createVNode("span", null, "\u81EA\u5B9A\u4E49")
                           ]),
                           _: 1
                         })) : (openBlock(), createBlock("div", {
@@ -4259,7 +4259,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                             modelValue: customTagInput.value,
                             "onUpdate:modelValue": ($event) => customTagInput.value = $event,
                             type: "text",
-                            placeholder: "输入标签名称",
+                            placeholder: "\u8F93\u5165\u6807\u7B7E\u540D\u79F0",
                             maxlength: "10",
                             class: "h-8 w-32",
                             onKeyup: [
@@ -4276,7 +4276,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                             onClick: addCustomTag
                           }, {
                             default: withCtx(() => [
-                              createTextVNode(" 添加 ")
+                              createTextVNode(" \u6DFB\u52A0 ")
                             ]),
                             _: 1
                           }),
@@ -4288,7 +4288,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                             onClick: cancelCustomTag
                           }, {
                             default: withCtx(() => [
-                              createTextVNode(" 取消 ")
+                              createTextVNode(" \u53D6\u6D88 ")
                             ]),
                             _: 1
                           })
@@ -4298,7 +4298,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         key: 0,
                         class: "flex flex-wrap gap-2 items-center"
                       }, [
-                        createVNode("span", { class: "text-xs text-muted-foreground" }, "已选："),
+                        createVNode("span", { class: "text-xs text-muted-foreground" }, "\u5DF2\u9009\uFF1A"),
                         (openBlock(true), createBlock(Fragment, null, renderList(selectedTagsForPost.value, (tag2) => {
                           return openBlock(), createBlock(unref(_sfc_main$2$1), {
                             key: tag2,
@@ -4310,7 +4310,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                 type: "button",
                                 class: "ml-1 p-0.5 rounded-full bg-white/80 hover:bg-white text-gray-600 hover:text-gray-800 transition-colors",
                                 onClick: ($event) => removePostTag(tag2),
-                                title: "删除标签"
+                                title: "\u5220\u9664\u6807\u7B7E"
                               }, [
                                 (openBlock(), createBlock("svg", {
                                   class: "w-2.5 h-2.5",
@@ -4364,7 +4364,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                     d: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
                                   })
                                 ])),
-                                createVNode("span", null, "添加图片/视频"),
+                                createVNode("span", null, "\u6DFB\u52A0\u56FE\u7247/\u89C6\u9891"),
                                 filePreviews.value.length > 0 ? (openBlock(), createBlock(unref(_sfc_main$2$1), {
                                   key: 0,
                                   variant: "secondary",
@@ -4386,7 +4386,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           disabled: creating.value
                         }, {
                           default: withCtx(() => [
-                            createTextVNode(toDisplayString(creating.value ? "发布中..." : "发布"), 1)
+                            createTextVNode(toDisplayString(creating.value ? "\u53D1\u5E03\u4E2D..." : "\u53D1\u5E03"), 1)
                           ]),
                           _: 1
                         }, 8, ["disabled"])
@@ -4415,7 +4415,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                 key: 0,
                                 src: preview.url,
                                 class: "w-full h-full object-cover",
-                                alt: "视频预览"
+                                alt: "\u89C6\u9891\u9884\u89C8"
                               }, null, 8, ["src"])) : (openBlock(), createBlock(Fragment, { key: 1 }, [
                                 (openBlock(), createBlock("svg", {
                                   class: "w-12 h-12 text-slate-400 dark:text-slate-500 mb-2",
@@ -4446,7 +4446,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               type: "button",
                               class: "absolute top-1 right-1 w-6 h-6 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition z-10",
                               onClick: withModifiers(($event) => removeFile(index), ["stop"]),
-                              title: "删除"
+                              title: "\u5220\u9664"
                             }, [
                               (openBlock(), createBlock("svg", {
                                 class: "w-4 h-4",
@@ -4462,7 +4462,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                 })
                               ]))
                             ], 8, ["onClick"]),
-                            createVNode("div", { class: "absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-black/60 text-white text-xs" }, toDisplayString(preview.type.startsWith("image/") ? "图片" : "视频"), 1)
+                            createVNode("div", { class: "absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-black/60 text-white text-xs" }, toDisplayString(preview.type.startsWith("image/") ? "\u56FE\u7247" : "\u89C6\u9891"), 1)
                           ])
                         ]),
                         _: 1
@@ -4487,13 +4487,13 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                   _push3(ssrRenderComponent(_sfc_main$1, {
                     modelValue: start.value,
                     "onUpdate:modelValue": ($event) => start.value = $event,
-                    placeholder: "起始时间",
+                    placeholder: "\u8D77\u59CB\u65F6\u95F4",
                     class: "h-9"
                   }, null, _parent3, _scopeId2));
                   _push3(ssrRenderComponent(_sfc_main$1, {
                     modelValue: end.value,
                     "onUpdate:modelValue": ($event) => end.value = $event,
-                    placeholder: "结束时间",
+                    placeholder: "\u7ED3\u675F\u65F6\u95F4",
                     class: "h-9"
                   }, null, _parent3, _scopeId2));
                   _push3(`</div><div class="flex flex-wrap gap-2"${_scopeId2}>`);
@@ -4505,7 +4505,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                   }, {
                     default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                       if (_push4) {
-                        _push4(`<svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"${_scopeId3}><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"${_scopeId3}></path></svg> 今天 `);
+                        _push4(`<svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"${_scopeId3}><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"${_scopeId3}></path></svg> \u4ECA\u5929 `);
                       } else {
                         return [
                           (openBlock(), createBlock("svg", {
@@ -4521,7 +4521,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               d: "M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
                             })
                           ])),
-                          createTextVNode(" 今天 ")
+                          createTextVNode(" \u4ECA\u5929 ")
                         ];
                       }
                     }),
@@ -4535,7 +4535,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                   }, {
                     default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                       if (_push4) {
-                        _push4(`<svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"${_scopeId3}><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"${_scopeId3}></path></svg> 近7天 `);
+                        _push4(`<svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"${_scopeId3}><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"${_scopeId3}></path></svg> \u8FD17\u5929 `);
                       } else {
                         return [
                           (openBlock(), createBlock("svg", {
@@ -4551,7 +4551,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               d: "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                             })
                           ])),
-                          createTextVNode(" 近7天 ")
+                          createTextVNode(" \u8FD17\u5929 ")
                         ];
                       }
                     }),
@@ -4565,7 +4565,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                   }, {
                     default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                       if (_push4) {
-                        _push4(`<svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"${_scopeId3}><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"${_scopeId3}></path></svg> 近30天 `);
+                        _push4(`<svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"${_scopeId3}><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"${_scopeId3}></path></svg> \u8FD130\u5929 `);
                       } else {
                         return [
                           (openBlock(), createBlock("svg", {
@@ -4581,7 +4581,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               d: "M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
                             })
                           ])),
-                          createTextVNode(" 近30天 ")
+                          createTextVNode(" \u8FD130\u5929 ")
                         ];
                       }
                     }),
@@ -4630,7 +4630,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                           if (_push4) {
                             if (selectedTags.value.includes(t)) {
-                              _push4(`<span class="mr-1"${_scopeId3}>✓</span>`);
+                              _push4(`<span class="mr-1"${_scopeId3}>\u2713</span>`);
                             } else {
                               _push4(`<!---->`);
                             }
@@ -4640,7 +4640,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               selectedTags.value.includes(t) ? (openBlock(), createBlock("span", {
                                 key: 0,
                                 class: "mr-1"
-                              }, "✓")) : createCommentVNode("", true),
+                              }, "\u2713")) : createCommentVNode("", true),
                               createTextVNode(" " + toDisplayString(t), 1)
                             ];
                           }
@@ -4658,13 +4658,13 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       createVNode(_sfc_main$1, {
                         modelValue: start.value,
                         "onUpdate:modelValue": ($event) => start.value = $event,
-                        placeholder: "起始时间",
+                        placeholder: "\u8D77\u59CB\u65F6\u95F4",
                         class: "h-9"
                       }, null, 8, ["modelValue", "onUpdate:modelValue"]),
                       createVNode(_sfc_main$1, {
                         modelValue: end.value,
                         "onUpdate:modelValue": ($event) => end.value = $event,
-                        placeholder: "结束时间",
+                        placeholder: "\u7ED3\u675F\u65F6\u95F4",
                         class: "h-9"
                       }, null, 8, ["modelValue", "onUpdate:modelValue"])
                     ]),
@@ -4689,7 +4689,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               d: "M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
                             })
                           ])),
-                          createTextVNode(" 今天 ")
+                          createTextVNode(" \u4ECA\u5929 ")
                         ]),
                         _: 1
                       }, 8, ["onClick"]),
@@ -4713,7 +4713,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               d: "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                             })
                           ])),
-                          createTextVNode(" 近7天 ")
+                          createTextVNode(" \u8FD17\u5929 ")
                         ]),
                         _: 1
                       }, 8, ["onClick"]),
@@ -4737,7 +4737,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               d: "M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
                             })
                           ])),
-                          createTextVNode(" 近30天 ")
+                          createTextVNode(" \u8FD130\u5929 ")
                         ]),
                         _: 1
                       }, 8, ["onClick"]),
@@ -4783,7 +4783,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               selectedTags.value.includes(t) ? (openBlock(), createBlock("span", {
                                 key: 0,
                                 class: "mr-1"
-                              }, "✓")) : createCommentVNode("", true),
+                              }, "\u2713")) : createCommentVNode("", true),
                               createTextVNode(" " + toDisplayString(t), 1)
                             ]),
                             _: 2
@@ -4804,13 +4804,13 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                     createVNode(_sfc_main$1, {
                       modelValue: start.value,
                       "onUpdate:modelValue": ($event) => start.value = $event,
-                      placeholder: "起始时间",
+                      placeholder: "\u8D77\u59CB\u65F6\u95F4",
                       class: "h-9"
                     }, null, 8, ["modelValue", "onUpdate:modelValue"]),
                     createVNode(_sfc_main$1, {
                       modelValue: end.value,
                       "onUpdate:modelValue": ($event) => end.value = $event,
-                      placeholder: "结束时间",
+                      placeholder: "\u7ED3\u675F\u65F6\u95F4",
                       class: "h-9"
                     }, null, 8, ["modelValue", "onUpdate:modelValue"])
                   ]),
@@ -4835,7 +4835,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                             d: "M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
                           })
                         ])),
-                        createTextVNode(" 今天 ")
+                        createTextVNode(" \u4ECA\u5929 ")
                       ]),
                       _: 1
                     }, 8, ["onClick"]),
@@ -4859,7 +4859,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                             d: "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                           })
                         ])),
-                        createTextVNode(" 近7天 ")
+                        createTextVNode(" \u8FD17\u5929 ")
                       ]),
                       _: 1
                     }, 8, ["onClick"]),
@@ -4883,7 +4883,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                             d: "M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
                           })
                         ])),
-                        createTextVNode(" 近30天 ")
+                        createTextVNode(" \u8FD130\u5929 ")
                       ]),
                       _: 1
                     }, 8, ["onClick"]),
@@ -4929,7 +4929,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                             selectedTags.value.includes(t) ? (openBlock(), createBlock("span", {
                               key: 0,
                               class: "mr-1"
-                            }, "✓")) : createCommentVNode("", true),
+                            }, "\u2713")) : createCommentVNode("", true),
                             createTextVNode(" " + toDisplayString(t), 1)
                           ]),
                           _: 2
@@ -4952,9 +4952,9 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       } else if (items.value.length === 0) {
         _push(`<div>`);
         _push(ssrRenderComponent(EmptyState, {
-          text: "暂无日常记录",
+          text: "\u6682\u65E0\u65E5\u5E38\u8BB0\u5F55",
           img: "/assets/images/xiaojimao/xiaojimao-4.png",
-          "cta-text": "去发布一条",
+          "cta-text": "\u53BB\u53D1\u5E03\u4E00\u6761",
           "cta-to": "/daily"
         }, null, _parent));
         _push(`</div>`);
@@ -5048,10 +5048,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         }, {
           default: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
-              _push2(`${ssrInterpolate(loadingMore.value ? "加载中…" : "加载更多")}`);
+              _push2(`${ssrInterpolate(loadingMore.value ? "\u52A0\u8F7D\u4E2D\u2026" : "\u52A0\u8F7D\u66F4\u591A")}`);
             } else {
               return [
-                createTextVNode(toDisplayString(loadingMore.value ? "加载中…" : "加载更多"), 1)
+                createTextVNode(toDisplayString(loadingMore.value ? "\u52A0\u8F7D\u4E2D\u2026" : "\u52A0\u8F7D\u66F4\u591A"), 1)
               ];
             }
           }),

@@ -6,7 +6,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
   __name: "EmptyState",
   __ssrInlineRender: true,
   props: {
-    text: { default: "暂无记录" },
+    text: { default: "\u6682\u65E0\u8BB0\u5F55" },
     img: { default: "/assets/images/xiaobai/xiaobai-4.png" },
     ctaText: {},
     ctaTo: {}

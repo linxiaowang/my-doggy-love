@@ -432,24 +432,24 @@ function generateOptionSegments(opts) {
 function handleApiError(error) {
   const apiError = error;
   const statusMessage = apiError?.statusMessage || apiError?.data?.statusMessage;
-  const message = apiError?.message || apiError?.data?.message || "请求失败，请稍后再试";
+  const message = apiError?.message || apiError?.data?.message || "\u8BF7\u6C42\u5931\u8D25\uFF0C\u8BF7\u7A0D\u540E\u518D\u8BD5";
   if (statusMessage === "not in couple" || message.includes("not in couple")) {
-    return "您还没有绑定情侣，无法执行此操作。";
+    return "\u60A8\u8FD8\u6CA1\u6709\u7ED1\u5B9A\u60C5\u4FA3\uFF0C\u65E0\u6CD5\u6267\u884C\u6B64\u64CD\u4F5C\u3002";
   }
   if (apiError?.statusCode === 400) {
-    return message || "请求参数错误";
+    return message || "\u8BF7\u6C42\u53C2\u6570\u9519\u8BEF";
   }
   if (apiError?.statusCode === 401) {
-    return "登录已过期，请重新登录";
+    return "\u767B\u5F55\u5DF2\u8FC7\u671F\uFF0C\u8BF7\u91CD\u65B0\u767B\u5F55";
   }
   if (apiError?.statusCode === 403) {
-    return "没有权限执行此操作";
+    return "\u6CA1\u6709\u6743\u9650\u6267\u884C\u6B64\u64CD\u4F5C";
   }
   if (apiError?.statusCode === 404) {
-    return "请求的资源不存在";
+    return "\u8BF7\u6C42\u7684\u8D44\u6E90\u4E0D\u5B58\u5728";
   }
   if (apiError?.statusCode === 500) {
-    return "服务器错误，请稍后再试";
+    return "\u670D\u52A1\u5668\u9519\u8BEF\uFF0C\u8BF7\u7A0D\u540E\u518D\u8BD5";
   }
   return message;
 }
@@ -470,7 +470,7 @@ function useApiFetch(url, options = {}) {
       }
     },
     onRequestError({ error }) {
-      errorMessage.value = "网络错误，请检查网络连接";
+      errorMessage.value = "\u7F51\u7EDC\u9519\u8BEF\uFF0C\u8BF7\u68C0\u67E5\u7F51\u7EDC\u8FDE\u63A5";
       if (options.onRequestError) {
         options.onRequestError({ error });
       }
@@ -635,7 +635,7 @@ const _sfc_main$u = /* @__PURE__ */ defineComponent({
         size: "icon",
         class: "relative w-8 h-8 hover:bg-muted/50",
         onClick: toggleDark,
-        "aria-label": unref(isDark) ? "切换到亮色模式" : "切换到暗黑模式"
+        "aria-label": unref(isDark) ? "\u5207\u6362\u5230\u4EAE\u8272\u6A21\u5F0F" : "\u5207\u6362\u5230\u6697\u9ED1\u6A21\u5F0F"
       }, _attrs), {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
@@ -735,18 +735,18 @@ const _sfc_main$t = /* @__PURE__ */ defineComponent({
       }
     });
     const statusOptions = [
-      { key: "happy", label: "开心", emoji: "😊" },
-      { key: "busy", label: "忙碌", emoji: "💼" },
-      { key: "thinking", label: "在思考", emoji: "🤔" },
-      { key: "working", label: "工作中", emoji: "💻" },
-      { key: "relaxing", label: "休息中", emoji: "😌" },
-      { key: "eating", label: "吃饭中", emoji: "🍽️" },
-      { key: "sporting", label: "在运动", emoji: "🏃" },
-      { key: "traveling", label: "旅行中", emoji: "✈️" },
-      { key: "sleeping", label: "睡觉中", emoji: "😴" },
-      { key: "studying", label: "学习中", emoji: "📚" },
-      { key: "shopping", label: "购物中", emoji: "🛍️" },
-      { key: "loving", label: "恋爱中", emoji: "💕" }
+      { key: "happy", label: "\u5F00\u5FC3", emoji: "\u{1F60A}" },
+      { key: "busy", label: "\u5FD9\u788C", emoji: "\u{1F4BC}" },
+      { key: "thinking", label: "\u5728\u601D\u8003", emoji: "\u{1F914}" },
+      { key: "working", label: "\u5DE5\u4F5C\u4E2D", emoji: "\u{1F4BB}" },
+      { key: "relaxing", label: "\u4F11\u606F\u4E2D", emoji: "\u{1F60C}" },
+      { key: "eating", label: "\u5403\u996D\u4E2D", emoji: "\u{1F37D}\uFE0F" },
+      { key: "sporting", label: "\u5728\u8FD0\u52A8", emoji: "\u{1F3C3}" },
+      { key: "traveling", label: "\u65C5\u884C\u4E2D", emoji: "\u2708\uFE0F" },
+      { key: "sleeping", label: "\u7761\u89C9\u4E2D", emoji: "\u{1F634}" },
+      { key: "studying", label: "\u5B66\u4E60\u4E2D", emoji: "\u{1F4DA}" },
+      { key: "shopping", label: "\u8D2D\u7269\u4E2D", emoji: "\u{1F6CD}\uFE0F" },
+      { key: "loving", label: "\u604B\u7231\u4E2D", emoji: "\u{1F495}" }
     ];
     return (_ctx, _push, _parent, _attrs) => {
       _push(`<div${ssrRenderAttrs(mergeProps({
@@ -759,24 +759,24 @@ const _sfc_main$t = /* @__PURE__ */ defineComponent({
         _push(ssrRenderComponent(unref(ChevronDown), { class: "w-4 h-4 text-secondary-foreground/70" }, null, _parent));
         _push(`</button>`);
       } else {
-        _push(`<button class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary hover:bg-secondary/80 transition-colors text-sm text-secondary-foreground" data-v-31530a85><span data-v-31530a85>设置状态</span></button>`);
+        _push(`<button class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary hover:bg-secondary/80 transition-colors text-sm text-secondary-foreground" data-v-31530a85><span data-v-31530a85>\u8BBE\u7F6E\u72B6\u6001</span></button>`);
       }
       if (showPicker.value) {
         _push(`<div class="absolute right-0 top-full mt-2 w-64 rounded-lg border bg-popover shadow-lg z-50 overflow-hidden" data-v-31530a85>`);
         if (!showCustomInput.value) {
-          _push(`<div class="p-2" data-v-31530a85><div class="text-xs text-muted-foreground px-2 py-1 mb-1" data-v-31530a85>选择一个状态</div><div class="grid grid-cols-2 gap-1" data-v-31530a85><!--[-->`);
+          _push(`<div class="p-2" data-v-31530a85><div class="text-xs text-muted-foreground px-2 py-1 mb-1" data-v-31530a85>\u9009\u62E9\u4E00\u4E2A\u72B6\u6001</div><div class="grid grid-cols-2 gap-1" data-v-31530a85><!--[-->`);
           ssrRenderList(statusOptions, (status) => {
             _push(`<button class="${ssrRenderClass([{ "bg-accent": __props.currentStatus === status.label }, "flex flex-col items-center gap-1 p-3 rounded-lg hover:bg-accent transition-colors"])}" data-v-31530a85><span class="text-2xl" data-v-31530a85>${ssrInterpolate(status.emoji)}</span><span class="text-sm text-foreground" data-v-31530a85>${ssrInterpolate(status.label)}</span></button>`);
           });
-          _push(`<!--]--></div><button class="w-full mt-2 px-3 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded-lg transition-colors border" data-v-31530a85><span class="flex items-center justify-center gap-1" data-v-31530a85><span data-v-31530a85>✏️</span><span data-v-31530a85>自定义状态</span></span></button>`);
+          _push(`<!--]--></div><button class="w-full mt-2 px-3 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded-lg transition-colors border" data-v-31530a85><span class="flex items-center justify-center gap-1" data-v-31530a85><span data-v-31530a85>\u270F\uFE0F</span><span data-v-31530a85>\u81EA\u5B9A\u4E49\u72B6\u6001</span></span></button>`);
           if (__props.currentStatus) {
-            _push(`<button class="w-full mt-2 px-3 py-2 text-sm text-muted-foreground hover:bg-destructive/10 hover:text-destructive rounded-lg transition-colors" data-v-31530a85> 清除状态 </button>`);
+            _push(`<button class="w-full mt-2 px-3 py-2 text-sm text-muted-foreground hover:bg-destructive/10 hover:text-destructive rounded-lg transition-colors" data-v-31530a85> \u6E05\u9664\u72B6\u6001 </button>`);
           } else {
             _push(`<!---->`);
           }
           _push(`</div>`);
         } else {
-          _push(`<div class="p-3" data-v-31530a85><div class="text-xs text-muted-foreground mb-2" data-v-31530a85>输入自定义状态</div><input${ssrRenderAttr("value", customStatusText.value)} type="text" placeholder="输入你的状态..." maxlength="20" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-colors" data-v-31530a85><div class="flex gap-2 mt-3" data-v-31530a85><button class="flex-1 px-3 py-2 text-sm bg-muted hover:bg-muted/80 rounded-lg transition-colors" data-v-31530a85> 取消 </button><button class="flex-1 px-3 py-2 text-sm bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg transition-colors" data-v-31530a85> 确定 </button></div></div>`);
+          _push(`<div class="p-3" data-v-31530a85><div class="text-xs text-muted-foreground mb-2" data-v-31530a85>\u8F93\u5165\u81EA\u5B9A\u4E49\u72B6\u6001</div><input${ssrRenderAttr("value", customStatusText.value)} type="text" placeholder="\u8F93\u5165\u4F60\u7684\u72B6\u6001..." maxlength="20" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-colors" data-v-31530a85><div class="flex gap-2 mt-3" data-v-31530a85><button class="flex-1 px-3 py-2 text-sm bg-muted hover:bg-muted/80 rounded-lg transition-colors" data-v-31530a85> \u53D6\u6D88 </button><button class="flex-1 px-3 py-2 text-sm bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg transition-colors" data-v-31530a85> \u786E\u5B9A </button></div></div>`);
         }
         _push(`</div>`);
       } else {
@@ -2026,12 +2026,12 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       toggleDecoration
     } = useThemeDecorations();
     const decorationIcon = computed(() => {
-      if (isNewYear.value) return "🐴";
-      return "✨";
+      if (isNewYear.value) return "\u{1F434}";
+      return "\u2728";
     });
     const decorationLabel = computed(() => {
-      if (isNewYear.value) return "马年装饰已开启,点击切换";
-      return "开启节日装饰";
+      if (isNewYear.value) return "\u9A6C\u5E74\u88C5\u9970\u5DF2\u5F00\u542F,\u70B9\u51FB\u5207\u6362";
+      return "\u5F00\u542F\u8282\u65E5\u88C5\u9970";
     });
     watch(unreadCount, (count) => {
     }, { immediate: true });
@@ -2043,14 +2043,14 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         await logout();
         navigateTo("/user/login");
       } catch (error) {
-        console.error("退出登录失败:", error);
+        console.error("\u9000\u51FA\u767B\u5F55\u5931\u8D25:", error);
       }
     }
     async function updateStatusHandler(status) {
       try {
         await updateStatus(status);
       } catch (error) {
-        console.error("更新状态失败:", error);
+        console.error("\u66F4\u65B0\u72B6\u6001\u5931\u8D25:", error);
       }
     }
     function urlBase64ToUint8Array(base64String) {
@@ -2065,7 +2065,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
     }
     async function enableNotification() {
       if (!("Notification" in void 0)) {
-        alert("您的浏览器不支持通知功能");
+        alert("\u60A8\u7684\u6D4F\u89C8\u5668\u4E0D\u652F\u6301\u901A\u77E5\u529F\u80FD");
         return;
       }
       pushLoading.value = true;
@@ -2074,7 +2074,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         if (permission === "granted") {
           const { key } = await apiFetch("/api/notifications/vapid-public-key");
           if (!key) {
-            throw new Error("无法获取 VAPID 公钥");
+            throw new Error("\u65E0\u6CD5\u83B7\u53D6 VAPID \u516C\u94A5");
           }
           const registration = await (void 0).serviceWorker.ready;
           const subscription = await registration.pushManager.subscribe({
@@ -2086,13 +2086,13 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
             body: { subscription }
           });
           isPushEnabled.value = true;
-          alert("通知已开启！");
+          alert("\u901A\u77E5\u5DF2\u5F00\u542F\uFF01");
         } else {
-          alert("您拒绝了通知权限，无法接收消息提醒");
+          alert("\u60A8\u62D2\u7EDD\u4E86\u901A\u77E5\u6743\u9650\uFF0C\u65E0\u6CD5\u63A5\u6536\u6D88\u606F\u63D0\u9192");
         }
       } catch (e) {
-        console.error("请求通知权限失败:", e);
-        alert("开启通知失败，请重试");
+        console.error("\u8BF7\u6C42\u901A\u77E5\u6743\u9650\u5931\u8D25:", e);
+        alert("\u5F00\u542F\u901A\u77E5\u5931\u8D25\uFF0C\u8BF7\u91CD\u8BD5");
       } finally {
         pushLoading.value = false;
       }
@@ -2109,15 +2109,15 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
               body: { endpoint: subscription.endpoint }
             });
           } catch (e) {
-            console.warn("后端删除订阅失败，继续取消浏览器订阅", e);
+            console.warn("\u540E\u7AEF\u5220\u9664\u8BA2\u9605\u5931\u8D25\uFF0C\u7EE7\u7EED\u53D6\u6D88\u6D4F\u89C8\u5668\u8BA2\u9605", e);
           }
           await subscription.unsubscribe();
         }
         isPushEnabled.value = false;
-        alert("通知已关闭");
+        alert("\u901A\u77E5\u5DF2\u5173\u95ED");
       } catch (e) {
-        console.error("关闭通知失败:", e);
-        alert("关闭通知失败，请重试");
+        console.error("\u5173\u95ED\u901A\u77E5\u5931\u8D25:", e);
+        alert("\u5173\u95ED\u901A\u77E5\u5931\u8D25\uFF0C\u8BF7\u91CD\u8BD5");
       } finally {
         pushLoading.value = false;
       }
@@ -2127,13 +2127,13 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       if (Notification.permission === "granted") {
         try {
           await apiFetch("/api/test-push", { method: "POST" });
-          alert("测试通知已发送，请检查通知栏");
+          alert("\u6D4B\u8BD5\u901A\u77E5\u5DF2\u53D1\u9001\uFF0C\u8BF7\u68C0\u67E5\u901A\u77E5\u680F");
         } catch (e) {
-          console.error("发送测试通知失败:", e);
-          alert("发送失败");
+          console.error("\u53D1\u9001\u6D4B\u8BD5\u901A\u77E5\u5931\u8D25:", e);
+          alert("\u53D1\u9001\u5931\u8D25");
         }
       } else {
-        alert('请先点击"开启通知"');
+        alert('\u8BF7\u5148\u70B9\u51FB"\u5F00\u542F\u901A\u77E5"');
       }
     }
     return (_ctx, _push, _parent, _attrs) => {
@@ -2143,7 +2143,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       _push(ssrRenderComponent(_component_NuxtLink, {
         to: "/",
         class: "flex items-center gap-2 md:gap-3 cursor-pointer hover:opacity-80 transition flex-shrink-0 min-w-0",
-        "aria-label": "回到首页"
+        "aria-label": "\u56DE\u5230\u9996\u9875"
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
@@ -2161,7 +2161,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<nav class="hidden md:flex items-center gap-6 lg:gap-8 text-sm" role="navigation" aria-label="主导航">`);
+      _push(`<nav class="hidden md:flex items-center gap-6 lg:gap-8 text-sm" role="navigation" aria-label="\u4E3B\u5BFC\u822A">`);
       _push(ssrRenderComponent(unref(_sfc_main$v), {
         variant: "link",
         "as-child": "",
@@ -2172,10 +2172,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
             _push2(ssrRenderComponent(_component_NuxtLink, { to: "/" }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`首页`);
+                  _push3(`\u9996\u9875`);
                 } else {
                   return [
-                    createTextVNode("首页")
+                    createTextVNode("\u9996\u9875")
                   ];
                 }
               }),
@@ -2185,7 +2185,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
             return [
               createVNode(_component_NuxtLink, { to: "/" }, {
                 default: withCtx(() => [
-                  createTextVNode("首页")
+                  createTextVNode("\u9996\u9875")
                 ]),
                 _: 1
               })
@@ -2204,10 +2204,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
             _push2(ssrRenderComponent(_component_NuxtLink, { to: "/daily" }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`日常`);
+                  _push3(`\u65E5\u5E38`);
                 } else {
                   return [
-                    createTextVNode("日常")
+                    createTextVNode("\u65E5\u5E38")
                   ];
                 }
               }),
@@ -2217,7 +2217,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
             return [
               createVNode(_component_NuxtLink, { to: "/daily" }, {
                 default: withCtx(() => [
-                  createTextVNode("日常")
+                  createTextVNode("\u65E5\u5E38")
                 ]),
                 _: 1
               })
@@ -2236,10 +2236,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
             _push2(ssrRenderComponent(_component_NuxtLink, { to: "/anniversaries" }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`纪念日`);
+                  _push3(`\u7EAA\u5FF5\u65E5`);
                 } else {
                   return [
-                    createTextVNode("纪念日")
+                    createTextVNode("\u7EAA\u5FF5\u65E5")
                   ];
                 }
               }),
@@ -2249,7 +2249,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
             return [
               createVNode(_component_NuxtLink, { to: "/anniversaries" }, {
                 default: withCtx(() => [
-                  createTextVNode("纪念日")
+                  createTextVNode("\u7EAA\u5FF5\u65E5")
                 ]),
                 _: 1
               })
@@ -2268,10 +2268,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
             _push2(ssrRenderComponent(_component_NuxtLink, { to: "/wishes" }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`愿望清单`);
+                  _push3(`\u613F\u671B\u6E05\u5355`);
                 } else {
                   return [
-                    createTextVNode("愿望清单")
+                    createTextVNode("\u613F\u671B\u6E05\u5355")
                   ];
                 }
               }),
@@ -2281,7 +2281,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
             return [
               createVNode(_component_NuxtLink, { to: "/wishes" }, {
                 default: withCtx(() => [
-                  createTextVNode("愿望清单")
+                  createTextVNode("\u613F\u671B\u6E05\u5355")
                 ]),
                 _: 1
               })
@@ -2300,10 +2300,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
             _push2(ssrRenderComponent(_component_NuxtLink, { to: "/messages" }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`留言板`);
+                  _push3(`\u7559\u8A00\u677F`);
                 } else {
                   return [
-                    createTextVNode("留言板")
+                    createTextVNode("\u7559\u8A00\u677F")
                   ];
                 }
               }),
@@ -2313,7 +2313,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
             return [
               createVNode(_component_NuxtLink, { to: "/messages" }, {
                 default: withCtx(() => [
-                  createTextVNode("留言板")
+                  createTextVNode("\u7559\u8A00\u677F")
                 ]),
                 _: 1
               })
@@ -2330,7 +2330,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         class: "relative w-8 h-8 hover:bg-muted/50",
         onClick: unref(toggleDecoration),
         "aria-label": decorationLabel.value,
-        title: "切换节日装饰"
+        title: "\u5207\u6362\u8282\u65E5\u88C5\u9970"
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
@@ -2355,7 +2355,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
           size: "icon",
           "as-child": "",
           class: "relative w-8 h-8 hover:bg-muted/50 group",
-          "aria-label": unreadCount.value > 0 ? `有 ${unreadCount.value} 条未读通知` : "查看通知"
+          "aria-label": unreadCount.value > 0 ? `\u6709 ${unreadCount.value} \u6761\u672A\u8BFB\u901A\u77E5` : "\u67E5\u770B\u901A\u77E5"
         }, {
           default: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
@@ -2369,7 +2369,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                     if (unreadCount.value > 0) {
                       _push3(ssrRenderComponent(unref(_sfc_main$2), {
                         variant: "destructive",
-                        "aria-label": `${unreadCount.value} 条未读通知`,
+                        "aria-label": `${unreadCount.value} \u6761\u672A\u8BFB\u901A\u77E5`,
                         class: "absolute -top-1 -right-1 px-1.5 py-0.5 h-5 min-w-[18px] flex items-center justify-center text-[10px] font-semibold shadow-md border-2 border-white dark:border-slate-900 bg-red-600 dark:bg-red-600 text-white animate-in zoom-in-50 duration-200 group-hover:scale-110 transition-transform"
                       }, {
                         default: withCtx((_3, _push4, _parent4, _scopeId3) => {
@@ -2395,7 +2395,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       unreadCount.value > 0 ? (openBlock(), createBlock(unref(_sfc_main$2), {
                         key: 0,
                         variant: "destructive",
-                        "aria-label": `${unreadCount.value} 条未读通知`,
+                        "aria-label": `${unreadCount.value} \u6761\u672A\u8BFB\u901A\u77E5`,
                         class: "absolute -top-1 -right-1 px-1.5 py-0.5 h-5 min-w-[18px] flex items-center justify-center text-[10px] font-semibold shadow-md border-2 border-white dark:border-slate-900 bg-red-600 dark:bg-red-600 text-white animate-in zoom-in-50 duration-200 group-hover:scale-110 transition-transform"
                       }, {
                         default: withCtx(() => [
@@ -2419,7 +2419,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                     unreadCount.value > 0 ? (openBlock(), createBlock(unref(_sfc_main$2), {
                       key: 0,
                       variant: "destructive",
-                      "aria-label": `${unreadCount.value} 条未读通知`,
+                      "aria-label": `${unreadCount.value} \u6761\u672A\u8BFB\u901A\u77E5`,
                       class: "absolute -top-1 -right-1 px-1.5 py-0.5 h-5 min-w-[18px] flex items-center justify-center text-[10px] font-semibold shadow-md border-2 border-white dark:border-slate-900 bg-red-600 dark:bg-red-600 text-white animate-in zoom-in-50 duration-200 group-hover:scale-110 transition-transform"
                     }, {
                       default: withCtx(() => [
@@ -2444,7 +2444,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                     _push3(ssrRenderComponent(unref(_sfc_main$v), {
                       variant: "ghost",
                       class: "flex items-center gap-2 px-1 hover:bg-transparent",
-                      "aria-label": "用户菜单"
+                      "aria-label": "\u7528\u6237\u83DC\u5355"
                     }, {
                       default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                         if (_push4) {
@@ -2457,10 +2457,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                 _push5(ssrRenderComponent(unref(_sfc_main$4), null, {
                                   default: withCtx((_5, _push6, _parent6, _scopeId5) => {
                                     if (_push6) {
-                                      _push6(`${ssrInterpolate(me.value.nickName?.slice(0, 2) || "用户")}`);
+                                      _push6(`${ssrInterpolate(me.value.nickName?.slice(0, 2) || "\u7528\u6237")}`);
                                     } else {
                                       return [
-                                        createTextVNode(toDisplayString(me.value.nickName?.slice(0, 2) || "用户"), 1)
+                                        createTextVNode(toDisplayString(me.value.nickName?.slice(0, 2) || "\u7528\u6237"), 1)
                                       ];
                                     }
                                   }),
@@ -2473,7 +2473,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                   }, null, 8, ["src"]),
                                   createVNode(unref(_sfc_main$4), null, {
                                     default: withCtx(() => [
-                                      createTextVNode(toDisplayString(me.value.nickName?.slice(0, 2) || "用户"), 1)
+                                      createTextVNode(toDisplayString(me.value.nickName?.slice(0, 2) || "\u7528\u6237"), 1)
                                     ]),
                                     _: 1
                                   })
@@ -2492,7 +2492,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                 }, null, 8, ["src"]),
                                 createVNode(unref(_sfc_main$4), null, {
                                   default: withCtx(() => [
-                                    createTextVNode(toDisplayString(me.value.nickName?.slice(0, 2) || "用户"), 1)
+                                    createTextVNode(toDisplayString(me.value.nickName?.slice(0, 2) || "\u7528\u6237"), 1)
                                   ]),
                                   _: 1
                                 })
@@ -2510,7 +2510,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       createVNode(unref(_sfc_main$v), {
                         variant: "ghost",
                         class: "flex items-center gap-2 px-1 hover:bg-transparent",
-                        "aria-label": "用户菜单"
+                        "aria-label": "\u7528\u6237\u83DC\u5355"
                       }, {
                         default: withCtx(() => [
                           createVNode(unref(_sfc_main$5), { class: "w-8 h-8" }, {
@@ -2520,7 +2520,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               }, null, 8, ["src"]),
                               createVNode(unref(_sfc_main$4), null, {
                                 default: withCtx(() => [
-                                  createTextVNode(toDisplayString(me.value.nickName?.slice(0, 2) || "用户"), 1)
+                                  createTextVNode(toDisplayString(me.value.nickName?.slice(0, 2) || "\u7528\u6237"), 1)
                                 ]),
                                 _: 1
                               })
@@ -2545,10 +2545,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                     _push3(ssrRenderComponent(unref(_sfc_main$n), null, {
                       default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                         if (_push4) {
-                          _push4(`我的账户`);
+                          _push4(`\u6211\u7684\u8D26\u6237`);
                         } else {
                           return [
-                            createTextVNode("我的账户")
+                            createTextVNode("\u6211\u7684\u8D26\u6237")
                           ];
                         }
                       }),
@@ -2564,10 +2564,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           }, {
                             default: withCtx((_4, _push5, _parent5, _scopeId4) => {
                               if (_push5) {
-                                _push5(`用户资料`);
+                                _push5(`\u7528\u6237\u8D44\u6599`);
                               } else {
                                 return [
-                                  createTextVNode("用户资料")
+                                  createTextVNode("\u7528\u6237\u8D44\u6599")
                                 ];
                               }
                             }),
@@ -2580,7 +2580,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               class: "w-full cursor-pointer"
                             }, {
                               default: withCtx(() => [
-                                createTextVNode("用户资料")
+                                createTextVNode("\u7528\u6237\u8D44\u6599")
                               ]),
                               _: 1
                             })
@@ -2598,10 +2598,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           }, {
                             default: withCtx((_4, _push5, _parent5, _scopeId4) => {
                               if (_push5) {
-                                _push5(`情侣绑定`);
+                                _push5(`\u60C5\u4FA3\u7ED1\u5B9A`);
                               } else {
                                 return [
-                                  createTextVNode("情侣绑定")
+                                  createTextVNode("\u60C5\u4FA3\u7ED1\u5B9A")
                                 ];
                               }
                             }),
@@ -2614,7 +2614,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               class: "w-full cursor-pointer"
                             }, {
                               default: withCtx(() => [
-                                createTextVNode("情侣绑定")
+                                createTextVNode("\u60C5\u4FA3\u7ED1\u5B9A")
                               ]),
                               _: 1
                             })
@@ -2626,11 +2626,11 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                     _push3(ssrRenderComponent(unref(_sfc_main$o), {
                       onClick: ($event) => isPushEnabled.value ? disableNotification() : enableNotification(),
                       disabled: pushLoading.value,
-                      "aria-label": isPushEnabled.value ? "关闭推送通知" : "开启推送通知"
+                      "aria-label": isPushEnabled.value ? "\u5173\u95ED\u63A8\u9001\u901A\u77E5" : "\u5F00\u542F\u63A8\u9001\u901A\u77E5"
                     }, {
                       default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                         if (_push4) {
-                          _push4(`<div class="flex items-center justify-between w-full"${_scopeId3}><span${_scopeId3}>${ssrInterpolate(isPushEnabled.value ? "关闭通知" : "开启通知")}</span>`);
+                          _push4(`<div class="flex items-center justify-between w-full"${_scopeId3}><span${_scopeId3}>${ssrInterpolate(isPushEnabled.value ? "\u5173\u95ED\u901A\u77E5" : "\u5F00\u542F\u901A\u77E5")}</span>`);
                           if (pushLoading.value) {
                             _push4(`<span class="text-xs text-muted-foreground" aria-hidden="true"${_scopeId3}>...</span>`);
                           } else {
@@ -2640,7 +2640,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         } else {
                           return [
                             createVNode("div", { class: "flex items-center justify-between w-full" }, [
-                              createVNode("span", null, toDisplayString(isPushEnabled.value ? "关闭通知" : "开启通知"), 1),
+                              createVNode("span", null, toDisplayString(isPushEnabled.value ? "\u5173\u95ED\u901A\u77E5" : "\u5F00\u542F\u901A\u77E5"), 1),
                               pushLoading.value ? (openBlock(), createBlock("span", {
                                 key: 0,
                                 class: "text-xs text-muted-foreground",
@@ -2656,10 +2656,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       _push3(ssrRenderComponent(unref(_sfc_main$o), { onClick: testNotification }, {
                         default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                           if (_push4) {
-                            _push4(` 测试通知 `);
+                            _push4(` \u6D4B\u8BD5\u901A\u77E5 `);
                           } else {
                             return [
-                              createTextVNode(" 测试通知 ")
+                              createTextVNode(" \u6D4B\u8BD5\u901A\u77E5 ")
                             ];
                           }
                         }),
@@ -2675,10 +2675,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                     }, {
                       default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                         if (_push4) {
-                          _push4(` 退出登录 `);
+                          _push4(` \u9000\u51FA\u767B\u5F55 `);
                         } else {
                           return [
-                            createTextVNode(" 退出登录 ")
+                            createTextVNode(" \u9000\u51FA\u767B\u5F55 ")
                           ];
                         }
                       }),
@@ -2688,7 +2688,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                     return [
                       createVNode(unref(_sfc_main$n), null, {
                         default: withCtx(() => [
-                          createTextVNode("我的账户")
+                          createTextVNode("\u6211\u7684\u8D26\u6237")
                         ]),
                         _: 1
                       }),
@@ -2700,7 +2700,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                             class: "w-full cursor-pointer"
                           }, {
                             default: withCtx(() => [
-                              createTextVNode("用户资料")
+                              createTextVNode("\u7528\u6237\u8D44\u6599")
                             ]),
                             _: 1
                           })
@@ -2714,7 +2714,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                             class: "w-full cursor-pointer"
                           }, {
                             default: withCtx(() => [
-                              createTextVNode("情侣绑定")
+                              createTextVNode("\u60C5\u4FA3\u7ED1\u5B9A")
                             ]),
                             _: 1
                           })
@@ -2724,11 +2724,11 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       createVNode(unref(_sfc_main$o), {
                         onClick: ($event) => isPushEnabled.value ? disableNotification() : enableNotification(),
                         disabled: pushLoading.value,
-                        "aria-label": isPushEnabled.value ? "关闭推送通知" : "开启推送通知"
+                        "aria-label": isPushEnabled.value ? "\u5173\u95ED\u63A8\u9001\u901A\u77E5" : "\u5F00\u542F\u63A8\u9001\u901A\u77E5"
                       }, {
                         default: withCtx(() => [
                           createVNode("div", { class: "flex items-center justify-between w-full" }, [
-                            createVNode("span", null, toDisplayString(isPushEnabled.value ? "关闭通知" : "开启通知"), 1),
+                            createVNode("span", null, toDisplayString(isPushEnabled.value ? "\u5173\u95ED\u901A\u77E5" : "\u5F00\u542F\u901A\u77E5"), 1),
                             pushLoading.value ? (openBlock(), createBlock("span", {
                               key: 0,
                               class: "text-xs text-muted-foreground",
@@ -2743,7 +2743,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         onClick: testNotification
                       }, {
                         default: withCtx(() => [
-                          createTextVNode(" 测试通知 ")
+                          createTextVNode(" \u6D4B\u8BD5\u901A\u77E5 ")
                         ]),
                         _: 1
                       })) : createCommentVNode("", true),
@@ -2753,7 +2753,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         class: "text-destructive focus:text-destructive"
                       }, {
                         default: withCtx(() => [
-                          createTextVNode(" 退出登录 ")
+                          createTextVNode(" \u9000\u51FA\u767B\u5F55 ")
                         ]),
                         _: 1
                       })
@@ -2769,7 +2769,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                     createVNode(unref(_sfc_main$v), {
                       variant: "ghost",
                       class: "flex items-center gap-2 px-1 hover:bg-transparent",
-                      "aria-label": "用户菜单"
+                      "aria-label": "\u7528\u6237\u83DC\u5355"
                     }, {
                       default: withCtx(() => [
                         createVNode(unref(_sfc_main$5), { class: "w-8 h-8" }, {
@@ -2779,7 +2779,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                             }, null, 8, ["src"]),
                             createVNode(unref(_sfc_main$4), null, {
                               default: withCtx(() => [
-                                createTextVNode(toDisplayString(me.value.nickName?.slice(0, 2) || "用户"), 1)
+                                createTextVNode(toDisplayString(me.value.nickName?.slice(0, 2) || "\u7528\u6237"), 1)
                               ]),
                               _: 1
                             })
@@ -2800,7 +2800,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                   default: withCtx(() => [
                     createVNode(unref(_sfc_main$n), null, {
                       default: withCtx(() => [
-                        createTextVNode("我的账户")
+                        createTextVNode("\u6211\u7684\u8D26\u6237")
                       ]),
                       _: 1
                     }),
@@ -2812,7 +2812,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           class: "w-full cursor-pointer"
                         }, {
                           default: withCtx(() => [
-                            createTextVNode("用户资料")
+                            createTextVNode("\u7528\u6237\u8D44\u6599")
                           ]),
                           _: 1
                         })
@@ -2826,7 +2826,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           class: "w-full cursor-pointer"
                         }, {
                           default: withCtx(() => [
-                            createTextVNode("情侣绑定")
+                            createTextVNode("\u60C5\u4FA3\u7ED1\u5B9A")
                           ]),
                           _: 1
                         })
@@ -2836,11 +2836,11 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                     createVNode(unref(_sfc_main$o), {
                       onClick: ($event) => isPushEnabled.value ? disableNotification() : enableNotification(),
                       disabled: pushLoading.value,
-                      "aria-label": isPushEnabled.value ? "关闭推送通知" : "开启推送通知"
+                      "aria-label": isPushEnabled.value ? "\u5173\u95ED\u63A8\u9001\u901A\u77E5" : "\u5F00\u542F\u63A8\u9001\u901A\u77E5"
                     }, {
                       default: withCtx(() => [
                         createVNode("div", { class: "flex items-center justify-between w-full" }, [
-                          createVNode("span", null, toDisplayString(isPushEnabled.value ? "关闭通知" : "开启通知"), 1),
+                          createVNode("span", null, toDisplayString(isPushEnabled.value ? "\u5173\u95ED\u901A\u77E5" : "\u5F00\u542F\u901A\u77E5"), 1),
                           pushLoading.value ? (openBlock(), createBlock("span", {
                             key: 0,
                             class: "text-xs text-muted-foreground",
@@ -2855,7 +2855,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       onClick: testNotification
                     }, {
                       default: withCtx(() => [
-                        createTextVNode(" 测试通知 ")
+                        createTextVNode(" \u6D4B\u8BD5\u901A\u77E5 ")
                       ]),
                       _: 1
                     })) : createCommentVNode("", true),
@@ -2865,7 +2865,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       class: "text-destructive focus:text-destructive"
                     }, {
                       default: withCtx(() => [
-                        createTextVNode(" 退出登录 ")
+                        createTextVNode(" \u9000\u51FA\u767B\u5F55 ")
                       ]),
                       _: 1
                     })
@@ -2889,10 +2889,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
               _push2(ssrRenderComponent(_component_NuxtLink, { to: "/user/login" }, {
                 default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                   if (_push3) {
-                    _push3(`登录`);
+                    _push3(`\u767B\u5F55`);
                   } else {
                     return [
-                      createTextVNode("登录")
+                      createTextVNode("\u767B\u5F55")
                     ];
                   }
                 }),
@@ -2902,7 +2902,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
               return [
                 createVNode(_component_NuxtLink, { to: "/user/login" }, {
                   default: withCtx(() => [
-                    createTextVNode("登录")
+                    createTextVNode("\u767B\u5F55")
                   ]),
                   _: 1
                 })
@@ -2917,10 +2917,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
               _push2(ssrRenderComponent(_component_NuxtLink, { to: "/user/register" }, {
                 default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                   if (_push3) {
-                    _push3(`注册`);
+                    _push3(`\u6CE8\u518C`);
                   } else {
                     return [
-                      createTextVNode("注册")
+                      createTextVNode("\u6CE8\u518C")
                     ];
                   }
                 }),
@@ -2930,7 +2930,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
               return [
                 createVNode(_component_NuxtLink, { to: "/user/register" }, {
                   default: withCtx(() => [
-                    createTextVNode("注册")
+                    createTextVNode("\u6CE8\u518C")
                   ]),
                   _: 1
                 })
@@ -2952,7 +2952,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       variant: "ghost",
                       size: "icon",
                       class: "md:hidden",
-                      "aria-label": "打开菜单"
+                      "aria-label": "\u6253\u5F00\u83DC\u5355"
                     }, {
                       default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                         if (_push4) {
@@ -2983,7 +2983,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         variant: "ghost",
                         size: "icon",
                         class: "md:hidden",
-                        "aria-label": "打开菜单"
+                        "aria-label": "\u6253\u5F00\u83DC\u5355"
                       }, {
                         default: withCtx(() => [
                           (openBlock(), createBlock("svg", {
@@ -3019,10 +3019,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           _push4(ssrRenderComponent(unref(_sfc_main$7), null, {
                             default: withCtx((_4, _push5, _parent5, _scopeId4) => {
                               if (_push5) {
-                                _push5(`导航`);
+                                _push5(`\u5BFC\u822A`);
                               } else {
                                 return [
-                                  createTextVNode("导航")
+                                  createTextVNode("\u5BFC\u822A")
                                 ];
                               }
                             }),
@@ -3033,7 +3033,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           return [
                             createVNode(unref(_sfc_main$7), null, {
                               default: withCtx(() => [
-                                createTextVNode("导航")
+                                createTextVNode("\u5BFC\u822A")
                               ]),
                               _: 1
                             }),
@@ -3053,10 +3053,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           _push4(ssrRenderComponent(unref(_sfc_main$4), null, {
                             default: withCtx((_4, _push5, _parent5, _scopeId4) => {
                               if (_push5) {
-                                _push5(`${ssrInterpolate(me.value?.nickName?.slice(0, 2) || "用户")}`);
+                                _push5(`${ssrInterpolate(me.value?.nickName?.slice(0, 2) || "\u7528\u6237")}`);
                               } else {
                                 return [
-                                  createTextVNode(toDisplayString(me.value?.nickName?.slice(0, 2) || "用户"), 1)
+                                  createTextVNode(toDisplayString(me.value?.nickName?.slice(0, 2) || "\u7528\u6237"), 1)
                                 ];
                               }
                             }),
@@ -3069,7 +3069,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                             }, null, 8, ["src"]),
                             createVNode(unref(_sfc_main$4), null, {
                               default: withCtx(() => [
-                                createTextVNode(toDisplayString(me.value?.nickName?.slice(0, 2) || "用户"), 1)
+                                createTextVNode(toDisplayString(me.value?.nickName?.slice(0, 2) || "\u7528\u6237"), 1)
                               ]),
                               _: 1
                             })
@@ -3084,11 +3084,11 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       onUpdate: updateStatusHandler,
                       size: "sm"
                     }, null, _parent3, _scopeId2));
-                    _push3(`</div></div><div class="flex items-center justify-between px-2 py-2"${_scopeId2}><span class="text-sm"${_scopeId2}>外观模式</span>`);
+                    _push3(`</div></div><div class="flex items-center justify-between px-2 py-2"${_scopeId2}><span class="text-sm"${_scopeId2}>\u5916\u89C2\u6A21\u5F0F</span>`);
                     _push3(ssrRenderComponent(_component_DarkToggle, null, null, _parent3, _scopeId2));
                     _push3(`</div>`);
                     _push3(ssrRenderComponent(unref(_sfc_main$1), null, null, _parent3, _scopeId2));
-                    _push3(`<nav class="flex flex-col gap-2" role="navigation" aria-label="移动端导航"${_scopeId2}>`);
+                    _push3(`<nav class="flex flex-col gap-2" role="navigation" aria-label="\u79FB\u52A8\u7AEF\u5BFC\u822A"${_scopeId2}>`);
                     _push3(ssrRenderComponent(unref(_sfc_main$d), { "as-child": "" }, {
                       default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                         if (_push4) {
@@ -3098,10 +3098,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           }, {
                             default: withCtx((_4, _push5, _parent5, _scopeId4) => {
                               if (_push5) {
-                                _push5(`首页`);
+                                _push5(`\u9996\u9875`);
                               } else {
                                 return [
-                                  createTextVNode("首页")
+                                  createTextVNode("\u9996\u9875")
                                 ];
                               }
                             }),
@@ -3114,7 +3114,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               class: "px-2 py-2 hover:bg-muted rounded-md transition-colors"
                             }, {
                               default: withCtx(() => [
-                                createTextVNode("首页")
+                                createTextVNode("\u9996\u9875")
                               ]),
                               _: 1
                             })
@@ -3132,10 +3132,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           }, {
                             default: withCtx((_4, _push5, _parent5, _scopeId4) => {
                               if (_push5) {
-                                _push5(`日常`);
+                                _push5(`\u65E5\u5E38`);
                               } else {
                                 return [
-                                  createTextVNode("日常")
+                                  createTextVNode("\u65E5\u5E38")
                                 ];
                               }
                             }),
@@ -3148,7 +3148,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               class: "px-2 py-2 hover:bg-muted rounded-md transition-colors"
                             }, {
                               default: withCtx(() => [
-                                createTextVNode("日常")
+                                createTextVNode("\u65E5\u5E38")
                               ]),
                               _: 1
                             })
@@ -3166,10 +3166,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           }, {
                             default: withCtx((_4, _push5, _parent5, _scopeId4) => {
                               if (_push5) {
-                                _push5(`纪念日`);
+                                _push5(`\u7EAA\u5FF5\u65E5`);
                               } else {
                                 return [
-                                  createTextVNode("纪念日")
+                                  createTextVNode("\u7EAA\u5FF5\u65E5")
                                 ];
                               }
                             }),
@@ -3182,7 +3182,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               class: "px-2 py-2 hover:bg-muted rounded-md transition-colors"
                             }, {
                               default: withCtx(() => [
-                                createTextVNode("纪念日")
+                                createTextVNode("\u7EAA\u5FF5\u65E5")
                               ]),
                               _: 1
                             })
@@ -3200,10 +3200,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           }, {
                             default: withCtx((_4, _push5, _parent5, _scopeId4) => {
                               if (_push5) {
-                                _push5(`愿望清单`);
+                                _push5(`\u613F\u671B\u6E05\u5355`);
                               } else {
                                 return [
-                                  createTextVNode("愿望清单")
+                                  createTextVNode("\u613F\u671B\u6E05\u5355")
                                 ];
                               }
                             }),
@@ -3216,7 +3216,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               class: "px-2 py-2 hover:bg-muted rounded-md transition-colors"
                             }, {
                               default: withCtx(() => [
-                                createTextVNode("愿望清单")
+                                createTextVNode("\u613F\u671B\u6E05\u5355")
                               ]),
                               _: 1
                             })
@@ -3234,10 +3234,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           }, {
                             default: withCtx((_4, _push5, _parent5, _scopeId4) => {
                               if (_push5) {
-                                _push5(`留言板`);
+                                _push5(`\u7559\u8A00\u677F`);
                               } else {
                                 return [
-                                  createTextVNode("留言板")
+                                  createTextVNode("\u7559\u8A00\u677F")
                                 ];
                               }
                             }),
@@ -3250,7 +3250,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               class: "px-2 py-2 hover:bg-muted rounded-md transition-colors"
                             }, {
                               default: withCtx(() => [
-                                createTextVNode("留言板")
+                                createTextVNode("\u7559\u8A00\u677F")
                               ]),
                               _: 1
                             })
@@ -3270,10 +3270,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           }, {
                             default: withCtx((_4, _push5, _parent5, _scopeId4) => {
                               if (_push5) {
-                                _push5(`用户资料`);
+                                _push5(`\u7528\u6237\u8D44\u6599`);
                               } else {
                                 return [
-                                  createTextVNode("用户资料")
+                                  createTextVNode("\u7528\u6237\u8D44\u6599")
                                 ];
                               }
                             }),
@@ -3286,7 +3286,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               class: "px-2 py-2 hover:bg-muted rounded-md transition-colors"
                             }, {
                               default: withCtx(() => [
-                                createTextVNode("用户资料")
+                                createTextVNode("\u7528\u6237\u8D44\u6599")
                               ]),
                               _: 1
                             })
@@ -3305,10 +3305,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           }, {
                             default: withCtx((_4, _push5, _parent5, _scopeId4) => {
                               if (_push5) {
-                                _push5(`退出登录`);
+                                _push5(`\u9000\u51FA\u767B\u5F55`);
                               } else {
                                 return [
-                                  createTextVNode("退出登录")
+                                  createTextVNode("\u9000\u51FA\u767B\u5F55")
                                 ];
                               }
                             }),
@@ -3322,7 +3322,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               onClick: doLogout
                             }, {
                               default: withCtx(() => [
-                                createTextVNode("退出登录")
+                                createTextVNode("\u9000\u51FA\u767B\u5F55")
                               ]),
                               _: 1
                             })
@@ -3338,7 +3338,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         default: withCtx(() => [
                           createVNode(unref(_sfc_main$7), null, {
                             default: withCtx(() => [
-                              createTextVNode("导航")
+                              createTextVNode("\u5BFC\u822A")
                             ]),
                             _: 1
                           }),
@@ -3355,7 +3355,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               }, null, 8, ["src"]),
                               createVNode(unref(_sfc_main$4), null, {
                                 default: withCtx(() => [
-                                  createTextVNode(toDisplayString(me.value?.nickName?.slice(0, 2) || "用户"), 1)
+                                  createTextVNode(toDisplayString(me.value?.nickName?.slice(0, 2) || "\u7528\u6237"), 1)
                                 ]),
                                 _: 1
                               })
@@ -3372,14 +3372,14 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           ])
                         ]),
                         createVNode("div", { class: "flex items-center justify-between px-2 py-2" }, [
-                          createVNode("span", { class: "text-sm" }, "外观模式"),
+                          createVNode("span", { class: "text-sm" }, "\u5916\u89C2\u6A21\u5F0F"),
                           createVNode(_component_DarkToggle)
                         ]),
                         createVNode(unref(_sfc_main$1)),
                         createVNode("nav", {
                           class: "flex flex-col gap-2",
                           role: "navigation",
-                          "aria-label": "移动端导航"
+                          "aria-label": "\u79FB\u52A8\u7AEF\u5BFC\u822A"
                         }, [
                           createVNode(unref(_sfc_main$d), { "as-child": "" }, {
                             default: withCtx(() => [
@@ -3388,7 +3388,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                 class: "px-2 py-2 hover:bg-muted rounded-md transition-colors"
                               }, {
                                 default: withCtx(() => [
-                                  createTextVNode("首页")
+                                  createTextVNode("\u9996\u9875")
                                 ]),
                                 _: 1
                               })
@@ -3402,7 +3402,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                 class: "px-2 py-2 hover:bg-muted rounded-md transition-colors"
                               }, {
                                 default: withCtx(() => [
-                                  createTextVNode("日常")
+                                  createTextVNode("\u65E5\u5E38")
                                 ]),
                                 _: 1
                               })
@@ -3416,7 +3416,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                 class: "px-2 py-2 hover:bg-muted rounded-md transition-colors"
                               }, {
                                 default: withCtx(() => [
-                                  createTextVNode("纪念日")
+                                  createTextVNode("\u7EAA\u5FF5\u65E5")
                                 ]),
                                 _: 1
                               })
@@ -3430,7 +3430,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                 class: "px-2 py-2 hover:bg-muted rounded-md transition-colors"
                               }, {
                                 default: withCtx(() => [
-                                  createTextVNode("愿望清单")
+                                  createTextVNode("\u613F\u671B\u6E05\u5355")
                                 ]),
                                 _: 1
                               })
@@ -3444,7 +3444,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                 class: "px-2 py-2 hover:bg-muted rounded-md transition-colors"
                               }, {
                                 default: withCtx(() => [
-                                  createTextVNode("留言板")
+                                  createTextVNode("\u7559\u8A00\u677F")
                                 ]),
                                 _: 1
                               })
@@ -3460,7 +3460,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               class: "px-2 py-2 hover:bg-muted rounded-md transition-colors"
                             }, {
                               default: withCtx(() => [
-                                createTextVNode("用户资料")
+                                createTextVNode("\u7528\u6237\u8D44\u6599")
                               ]),
                               _: 1
                             })
@@ -3475,7 +3475,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               onClick: doLogout
                             }, {
                               default: withCtx(() => [
-                                createTextVNode("退出登录")
+                                createTextVNode("\u9000\u51FA\u767B\u5F55")
                               ]),
                               _: 1
                             })
@@ -3496,7 +3496,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       variant: "ghost",
                       size: "icon",
                       class: "md:hidden",
-                      "aria-label": "打开菜单"
+                      "aria-label": "\u6253\u5F00\u83DC\u5355"
                     }, {
                       default: withCtx(() => [
                         (openBlock(), createBlock("svg", {
@@ -3527,7 +3527,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       default: withCtx(() => [
                         createVNode(unref(_sfc_main$7), null, {
                           default: withCtx(() => [
-                            createTextVNode("导航")
+                            createTextVNode("\u5BFC\u822A")
                           ]),
                           _: 1
                         }),
@@ -3544,7 +3544,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                             }, null, 8, ["src"]),
                             createVNode(unref(_sfc_main$4), null, {
                               default: withCtx(() => [
-                                createTextVNode(toDisplayString(me.value?.nickName?.slice(0, 2) || "用户"), 1)
+                                createTextVNode(toDisplayString(me.value?.nickName?.slice(0, 2) || "\u7528\u6237"), 1)
                               ]),
                               _: 1
                             })
@@ -3561,14 +3561,14 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         ])
                       ]),
                       createVNode("div", { class: "flex items-center justify-between px-2 py-2" }, [
-                        createVNode("span", { class: "text-sm" }, "外观模式"),
+                        createVNode("span", { class: "text-sm" }, "\u5916\u89C2\u6A21\u5F0F"),
                         createVNode(_component_DarkToggle)
                       ]),
                       createVNode(unref(_sfc_main$1)),
                       createVNode("nav", {
                         class: "flex flex-col gap-2",
                         role: "navigation",
-                        "aria-label": "移动端导航"
+                        "aria-label": "\u79FB\u52A8\u7AEF\u5BFC\u822A"
                       }, [
                         createVNode(unref(_sfc_main$d), { "as-child": "" }, {
                           default: withCtx(() => [
@@ -3577,7 +3577,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               class: "px-2 py-2 hover:bg-muted rounded-md transition-colors"
                             }, {
                               default: withCtx(() => [
-                                createTextVNode("首页")
+                                createTextVNode("\u9996\u9875")
                               ]),
                               _: 1
                             })
@@ -3591,7 +3591,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               class: "px-2 py-2 hover:bg-muted rounded-md transition-colors"
                             }, {
                               default: withCtx(() => [
-                                createTextVNode("日常")
+                                createTextVNode("\u65E5\u5E38")
                               ]),
                               _: 1
                             })
@@ -3605,7 +3605,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               class: "px-2 py-2 hover:bg-muted rounded-md transition-colors"
                             }, {
                               default: withCtx(() => [
-                                createTextVNode("纪念日")
+                                createTextVNode("\u7EAA\u5FF5\u65E5")
                               ]),
                               _: 1
                             })
@@ -3619,7 +3619,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               class: "px-2 py-2 hover:bg-muted rounded-md transition-colors"
                             }, {
                               default: withCtx(() => [
-                                createTextVNode("愿望清单")
+                                createTextVNode("\u613F\u671B\u6E05\u5355")
                               ]),
                               _: 1
                             })
@@ -3633,7 +3633,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               class: "px-2 py-2 hover:bg-muted rounded-md transition-colors"
                             }, {
                               default: withCtx(() => [
-                                createTextVNode("留言板")
+                                createTextVNode("\u7559\u8A00\u677F")
                               ]),
                               _: 1
                             })
@@ -3649,7 +3649,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                             class: "px-2 py-2 hover:bg-muted rounded-md transition-colors"
                           }, {
                             default: withCtx(() => [
-                              createTextVNode("用户资料")
+                              createTextVNode("\u7528\u6237\u8D44\u6599")
                             ]),
                             _: 1
                           })
@@ -3664,7 +3664,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                             onClick: doLogout
                           }, {
                             default: withCtx(() => [
-                              createTextVNode("退出登录")
+                              createTextVNode("\u9000\u51FA\u767B\u5F55")
                             ]),
                             _: 1
                           })

@@ -51,7 +51,7 @@ const _sfc_main$3 = /* @__PURE__ */ defineComponent({
       const date = new Date(dateStr);
       const month = date.getMonth() + 1;
       const day = date.getDate();
-      return `${month}月${day}日`;
+      return `${month}\u6708${day}\u65E5`;
     }
     function formatCountdown(days, format, anniversaryDate) {
       const absDays = Math.abs(days);
@@ -67,16 +67,16 @@ const _sfc_main$3 = /* @__PURE__ */ defineComponent({
               const afterYears = earlier.add(years, "year");
               const remainingDays = Math.abs(later.diff(afterYears, "day"));
               if (remainingDays === 0) {
-                return `${years}年`;
+                return `${years}\u5E74`;
               }
-              return `${years}年${remainingDays}天`;
+              return `${years}\u5E74${remainingDays}\u5929`;
             } else {
               const years = Math.floor(absDays / 365);
               const remainingDays = absDays % 365;
               if (remainingDays === 0) {
-                return `${years}年`;
+                return `${years}\u5E74`;
               }
-              return `${years}年${remainingDays}天`;
+              return `${years}\u5E74${remainingDays}\u5929`;
             }
           }
           return formatCountdown(days, "months", anniversaryDate);
@@ -91,16 +91,16 @@ const _sfc_main$3 = /* @__PURE__ */ defineComponent({
               const afterMonths = earlier.add(months, "month");
               const remainingDays = Math.abs(later.diff(afterMonths, "day"));
               if (remainingDays === 0) {
-                return `${months}个月`;
+                return `${months}\u4E2A\u6708`;
               }
-              return `${months}个月${remainingDays}天`;
+              return `${months}\u4E2A\u6708${remainingDays}\u5929`;
             } else {
               const months = Math.floor(absDays / 30);
               const remainingDays = absDays % 30;
               if (remainingDays === 0) {
-                return `${months}个月`;
+                return `${months}\u4E2A\u6708`;
               }
-              return `${months}个月${remainingDays}天`;
+              return `${months}\u4E2A\u6708${remainingDays}\u5929`;
             }
           }
           return formatCountdown(days, "weeks", anniversaryDate);
@@ -109,14 +109,14 @@ const _sfc_main$3 = /* @__PURE__ */ defineComponent({
             const weeks = Math.floor(absDays / 7);
             const remainingDays = absDays % 7;
             if (remainingDays === 0) {
-              return `${weeks}周`;
+              return `${weeks}\u5468`;
             }
-            return `${weeks}周${remainingDays}天`;
+            return `${weeks}\u5468${remainingDays}\u5929`;
           }
           return formatCountdown(days, "days", anniversaryDate);
         case "days":
         default:
-          return `${absDays}天`;
+          return `${absDays}\u5929`;
       }
     }
     const displayText = computed(() => {
@@ -146,13 +146,13 @@ const _sfc_main$3 = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       const _component_NuxtLink = __nuxt_component_0;
       if (!loading.value && upcomingAnniversary.value) {
-        _push(`<div${ssrRenderAttrs(mergeProps({ class: "card" }, _attrs))}><div class="flex items-center justify-between gap-4"><div class="flex-1 min-w-0"><div class="text-xs text-text-muted mb-1.5">纪念日提醒</div><div class="text-base font-semibold text-text-main mb-1 truncate">${ssrInterpolate(upcomingAnniversary.value.title)}</div><div class="text-xs text-text-secondary">${ssrInterpolate(formatDate(upcomingAnniversary.value.date))}</div></div><div class="text-right flex-shrink-0">`);
+        _push(`<div${ssrRenderAttrs(mergeProps({ class: "card" }, _attrs))}><div class="flex items-center justify-between gap-4"><div class="flex-1 min-w-0"><div class="text-xs text-text-muted mb-1.5">\u7EAA\u5FF5\u65E5\u63D0\u9192</div><div class="text-base font-semibold text-text-main mb-1 truncate">${ssrInterpolate(upcomingAnniversary.value.title)}</div><div class="text-xs text-text-secondary">${ssrInterpolate(formatDate(upcomingAnniversary.value.date))}</div></div><div class="text-right flex-shrink-0">`);
         if (countdown.value.days === 0) {
-          _push(`<div class="text-xl font-bold text-green-700 bg-green-50 px-3 py-1.5 rounded-lg whitespace-nowrap"> 🎉 就是今天！ </div>`);
+          _push(`<div class="text-xl font-bold text-green-700 bg-green-50 px-3 py-1.5 rounded-lg whitespace-nowrap"> \u{1F389} \u5C31\u662F\u4ECA\u5929\uFF01 </div>`);
         } else if (countdown.value.overdue) {
-          _push(`<div class="text-right"><div class="text-xs text-text-muted mb-0.5">已经</div><div class="text-xl font-bold text-red-600 cursor-pointer hover:opacity-80 transition-opacity" title="点击切换显示格式">${ssrInterpolate(displayText.value)}</div></div>`);
+          _push(`<div class="text-right"><div class="text-xs text-text-muted mb-0.5">\u5DF2\u7ECF</div><div class="text-xl font-bold text-red-600 cursor-pointer hover:opacity-80 transition-opacity" title="\u70B9\u51FB\u5207\u6362\u663E\u793A\u683C\u5F0F">${ssrInterpolate(displayText.value)}</div></div>`);
         } else {
-          _push(`<div class="text-right"><div class="text-xs text-text-muted mb-0.5">还有</div><div class="text-xl font-bold text-primary-800 cursor-pointer hover:opacity-80 transition-opacity" title="点击切换显示格式">${ssrInterpolate(displayText.value)}</div></div>`);
+          _push(`<div class="text-right"><div class="text-xs text-text-muted mb-0.5">\u8FD8\u6709</div><div class="text-xl font-bold text-primary-800 cursor-pointer hover:opacity-80 transition-opacity" title="\u70B9\u51FB\u5207\u6362\u663E\u793A\u683C\u5F0F">${ssrInterpolate(displayText.value)}</div></div>`);
         }
         _push(`</div></div>`);
         _push(ssrRenderComponent(_component_NuxtLink, {
@@ -161,10 +161,10 @@ const _sfc_main$3 = /* @__PURE__ */ defineComponent({
         }, {
           default: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
-              _push2(` 查看所有纪念日 → `);
+              _push2(` \u67E5\u770B\u6240\u6709\u7EAA\u5FF5\u65E5 \u2192 `);
             } else {
               return [
-                createTextVNode(" 查看所有纪念日 → ")
+                createTextVNode(" \u67E5\u770B\u6240\u6709\u7EAA\u5FF5\u65E5 \u2192 ")
               ];
             }
           }),
@@ -221,8 +221,8 @@ const _sfc_main$2 = /* @__PURE__ */ defineComponent({
         })
       ])
     };
-    const weekdays = ["一", "二", "三", "四", "五", "六", "日"];
-    const monthNames = ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"];
+    const weekdays = ["\u4E00", "\u4E8C", "\u4E09", "\u56DB", "\u4E94", "\u516D", "\u65E5"];
+    const monthNames = ["\u4E00\u6708", "\u4E8C\u6708", "\u4E09\u6708", "\u56DB\u6708", "\u4E94\u6708", "\u516D\u6708", "\u4E03\u6708", "\u516B\u6708", "\u4E5D\u6708", "\u5341\u6708", "\u5341\u4E00\u6708", "\u5341\u4E8C\u6708"];
     const currentDate = ref(/* @__PURE__ */ new Date());
     const currentYear = computed(() => currentDate.value.getFullYear());
     const currentMonth = computed(() => currentDate.value.getMonth());
@@ -261,7 +261,7 @@ const _sfc_main$2 = /* @__PURE__ */ defineComponent({
         const lunarObj = solar.getLunar();
         const yearGanzhi = lunarObj.getYearInGanZhi();
         const zodiac = lunarObj.getYearShengXiao();
-        return `${yearGanzhi}年 ${zodiac}年`;
+        return `${yearGanzhi}\u5E74 ${zodiac}\u5E74`;
       } catch (e) {
         return "";
       }
@@ -321,7 +321,7 @@ const _sfc_main$2 = /* @__PURE__ */ defineComponent({
         const lunarObj = solar.getLunar();
         lunar = lunarObj.getDayInChinese();
         lunarFull = lunarObj.toFullString();
-        ganzhi = `${lunarObj.getYearInGanZhi()}年 ${lunarObj.getMonthInGanZhi()}月 ${lunarObj.getDayInGanZhi()}日`;
+        ganzhi = `${lunarObj.getYearInGanZhi()}\u5E74 ${lunarObj.getMonthInGanZhi()}\u6708 ${lunarObj.getDayInGanZhi()}\u65E5`;
         const yiList = lunarObj.getDayYi();
         const jiList = lunarObj.getDayJi();
         if (yiList && yiList.length > 0) {
@@ -347,13 +347,13 @@ const _sfc_main$2 = /* @__PURE__ */ defineComponent({
           displayText = lunar;
         }
       } catch (e) {
-        console.error("计算农历失败:", e, date);
+        console.error("\u8BA1\u7B97\u519C\u5386\u5931\u8D25:", e, date);
       }
       const dateKey = dayjs(date).format("YYYY-MM-DD");
       const dayAnniversaries = anniversariesByDate.value.get(dateKey) || [];
       return {
         date: date.getDate(),
-        fullDate: dayjs(date).format("YYYY年MM月DD日"),
+        fullDate: dayjs(date).format("YYYY\u5E74MM\u6708DD\u65E5"),
         dateKey,
         isCurrentMonth: isCurrentMonth2,
         isToday,
@@ -397,19 +397,19 @@ const _sfc_main$2 = /* @__PURE__ */ defineComponent({
     });
     return (_ctx, _push, _parent, _attrs) => {
       const _component_Button = _sfc_main$v;
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "bg-white dark:bg-slate-800 rounded-lg shadow-lg border-2 border-slate-900 dark:border-slate-600 overflow-hidden" }, _attrs))} data-v-da5c1ac3><div class="flex flex-col md:flex-row" data-v-da5c1ac3><div class="flex-1 p-3 md:p-4" data-v-da5c1ac3><div class="relative mb-4" data-v-da5c1ac3><div class="flex items-start justify-between mb-3" data-v-da5c1ac3><div class="flex flex-col" data-v-da5c1ac3><button class="text-2xl md:text-3xl font-bold text-red-600 hover:text-red-700 dark:hover:text-red-500 transition-colors cursor-pointer drop-shadow-sm" data-v-da5c1ac3>${ssrInterpolate(currentYear.value)}</button><div class="text-xs md:text-sm text-slate-600 dark:text-slate-400 mt-1 font-medium" data-v-da5c1ac3>${ssrInterpolate(ganzhiYear.value)}</div></div><div class="flex items-center" data-v-da5c1ac3><button class="text-2xl md:text-3xl font-bold text-yellow-500 hover:text-yellow-600 dark:hover:text-yellow-400 transition-colors cursor-pointer drop-shadow-sm" data-v-da5c1ac3>${ssrInterpolate(currentMonth.value + 1)}月 </button></div></div><div class="flex items-center justify-end gap-2" data-v-da5c1ac3><button class="p-2 rounded hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200" title="上一个月" data-v-da5c1ac3><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-v-da5c1ac3><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" data-v-da5c1ac3></path></svg></button>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "bg-white dark:bg-slate-800 rounded-lg shadow-lg border-2 border-slate-900 dark:border-slate-600 overflow-hidden" }, _attrs))} data-v-da5c1ac3><div class="flex flex-col md:flex-row" data-v-da5c1ac3><div class="flex-1 p-3 md:p-4" data-v-da5c1ac3><div class="relative mb-4" data-v-da5c1ac3><div class="flex items-start justify-between mb-3" data-v-da5c1ac3><div class="flex flex-col" data-v-da5c1ac3><button class="text-2xl md:text-3xl font-bold text-red-600 hover:text-red-700 dark:hover:text-red-500 transition-colors cursor-pointer drop-shadow-sm" data-v-da5c1ac3>${ssrInterpolate(currentYear.value)}</button><div class="text-xs md:text-sm text-slate-600 dark:text-slate-400 mt-1 font-medium" data-v-da5c1ac3>${ssrInterpolate(ganzhiYear.value)}</div></div><div class="flex items-center" data-v-da5c1ac3><button class="text-2xl md:text-3xl font-bold text-yellow-500 hover:text-yellow-600 dark:hover:text-yellow-400 transition-colors cursor-pointer drop-shadow-sm" data-v-da5c1ac3>${ssrInterpolate(currentMonth.value + 1)}\u6708 </button></div></div><div class="flex items-center justify-end gap-2" data-v-da5c1ac3><button class="p-2 rounded hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200" title="\u4E0A\u4E00\u4E2A\u6708" data-v-da5c1ac3><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-v-da5c1ac3><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" data-v-da5c1ac3></path></svg></button>`);
       if (!isCurrentMonth.value) {
         _push(ssrRenderComponent(_component_Button, {
           class: "ml-auto px-3 py-1 text-sm bg-amber-600 hover:bg-amber-700 text-white shadow-sm rounded",
           onClick: goToToday,
-          title: "回到今天"
+          title: "\u56DE\u5230\u4ECA\u5929"
         }, {
           default: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
-              _push2(` 今天 `);
+              _push2(` \u4ECA\u5929 `);
             } else {
               return [
-                createTextVNode(" 今天 ")
+                createTextVNode(" \u4ECA\u5929 ")
               ];
             }
           }),
@@ -418,7 +418,7 @@ const _sfc_main$2 = /* @__PURE__ */ defineComponent({
       } else {
         _push(`<!---->`);
       }
-      _push(`<button class="p-2 rounded hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200" title="下一个月" data-v-da5c1ac3><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-v-da5c1ac3><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" data-v-da5c1ac3></path></svg></button></div>`);
+      _push(`<button class="p-2 rounded hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200" title="\u4E0B\u4E00\u4E2A\u6708" data-v-da5c1ac3><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-v-da5c1ac3><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" data-v-da5c1ac3></path></svg></button></div>`);
       if (showYearPicker.value) {
         _push(`<div class="absolute top-full left-1/2 -translate-x-1/2 w-64 mt-2 bg-white/95 dark:bg-slate-800/95 backdrop-blur-md border border-slate-200 dark:border-slate-700 rounded-lg shadow-lg z-20 p-4 max-h-64 overflow-y-auto" data-v-da5c1ac3><div class="grid grid-cols-4 gap-2" data-v-da5c1ac3><!--[-->`);
         ssrRenderList(yearRange.value, (year) => {
@@ -471,28 +471,28 @@ const _sfc_main$2 = /* @__PURE__ */ defineComponent({
       _push(`<!--]--></div></div></div></div>`);
       ssrRenderTeleport(_push, (_push2) => {
         if (selectedDate.value && showDetailModal.value) {
-          _push2(`<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" data-v-da5c1ac3><div class="bg-white/95 dark:bg-slate-800/95 backdrop-blur-md rounded-lg shadow-xl max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto border border-slate-200 dark:border-slate-700" data-v-da5c1ac3><div class="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700" data-v-da5c1ac3><h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100" data-v-da5c1ac3>黄历详情</h3><button class="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors text-slate-600 dark:text-slate-400" data-v-da5c1ac3><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-v-da5c1ac3><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" data-v-da5c1ac3></path></svg></button></div>`);
+          _push2(`<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" data-v-da5c1ac3><div class="bg-white/95 dark:bg-slate-800/95 backdrop-blur-md rounded-lg shadow-xl max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto border border-slate-200 dark:border-slate-700" data-v-da5c1ac3><div class="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700" data-v-da5c1ac3><h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100" data-v-da5c1ac3>\u9EC4\u5386\u8BE6\u60C5</h3><button class="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors text-slate-600 dark:text-slate-400" data-v-da5c1ac3><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-v-da5c1ac3><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" data-v-da5c1ac3></path></svg></button></div>`);
           if (selectedDate.value) {
-            _push2(`<div class="p-4 space-y-4" data-v-da5c1ac3><div class="space-y-2" data-v-da5c1ac3><div class="text-sm font-medium text-slate-600 dark:text-slate-400 mb-1" data-v-da5c1ac3>公历</div><div class="text-base text-slate-900 dark:text-slate-100" data-v-da5c1ac3>${ssrInterpolate(selectedDate.value.fullDate)}</div></div>`);
+            _push2(`<div class="p-4 space-y-4" data-v-da5c1ac3><div class="space-y-2" data-v-da5c1ac3><div class="text-sm font-medium text-slate-600 dark:text-slate-400 mb-1" data-v-da5c1ac3>\u516C\u5386</div><div class="text-base text-slate-900 dark:text-slate-100" data-v-da5c1ac3>${ssrInterpolate(selectedDate.value.fullDate)}</div></div>`);
             if (selectedDate.value.lunarFull) {
-              _push2(`<div class="space-y-2" data-v-da5c1ac3><div class="text-sm font-medium text-slate-600 dark:text-slate-400 mb-1" data-v-da5c1ac3>农历</div><div class="text-base text-slate-900 dark:text-slate-100" data-v-da5c1ac3>${ssrInterpolate(selectedDate.value.lunarFull)}</div></div>`);
+              _push2(`<div class="space-y-2" data-v-da5c1ac3><div class="text-sm font-medium text-slate-600 dark:text-slate-400 mb-1" data-v-da5c1ac3>\u519C\u5386</div><div class="text-base text-slate-900 dark:text-slate-100" data-v-da5c1ac3>${ssrInterpolate(selectedDate.value.lunarFull)}</div></div>`);
             } else {
               _push2(`<!---->`);
             }
             if (selectedDate.value.ganzhi) {
-              _push2(`<div class="space-y-2" data-v-da5c1ac3><div class="text-sm font-medium text-slate-600 dark:text-slate-400 mb-1" data-v-da5c1ac3>干支</div><div class="text-base text-slate-900 dark:text-slate-100" data-v-da5c1ac3>${ssrInterpolate(selectedDate.value.ganzhi)}</div></div>`);
+              _push2(`<div class="space-y-2" data-v-da5c1ac3><div class="text-sm font-medium text-slate-600 dark:text-slate-400 mb-1" data-v-da5c1ac3>\u5E72\u652F</div><div class="text-base text-slate-900 dark:text-slate-100" data-v-da5c1ac3>${ssrInterpolate(selectedDate.value.ganzhi)}</div></div>`);
             } else {
               _push2(`<!---->`);
             }
             if (selectedDate.value.yi || selectedDate.value.ji) {
               _push2(`<div class="space-y-2" data-v-da5c1ac3>`);
               if (selectedDate.value.yi) {
-                _push2(`<div class="mb-2" data-v-da5c1ac3><div class="inline-block px-2 py-1 text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded mr-2" data-v-da5c1ac3>宜</div><div class="text-sm text-slate-600 dark:text-slate-400 mt-1" data-v-da5c1ac3>${ssrInterpolate(selectedDate.value.yi)}</div></div>`);
+                _push2(`<div class="mb-2" data-v-da5c1ac3><div class="inline-block px-2 py-1 text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded mr-2" data-v-da5c1ac3>\u5B9C</div><div class="text-sm text-slate-600 dark:text-slate-400 mt-1" data-v-da5c1ac3>${ssrInterpolate(selectedDate.value.yi)}</div></div>`);
               } else {
                 _push2(`<!---->`);
               }
               if (selectedDate.value.ji) {
-                _push2(`<div class="mb-2" data-v-da5c1ac3><div class="inline-block px-2 py-1 text-xs font-medium bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded mr-2" data-v-da5c1ac3>忌</div><div class="text-sm text-slate-600 dark:text-slate-400 mt-1" data-v-da5c1ac3>${ssrInterpolate(selectedDate.value.ji)}</div></div>`);
+                _push2(`<div class="mb-2" data-v-da5c1ac3><div class="inline-block px-2 py-1 text-xs font-medium bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded mr-2" data-v-da5c1ac3>\u5FCC</div><div class="text-sm text-slate-600 dark:text-slate-400 mt-1" data-v-da5c1ac3>${ssrInterpolate(selectedDate.value.ji)}</div></div>`);
               } else {
                 _push2(`<!---->`);
               }
@@ -501,12 +501,12 @@ const _sfc_main$2 = /* @__PURE__ */ defineComponent({
               _push2(`<!---->`);
             }
             if (selectedDate.value.jieqi) {
-              _push2(`<div class="space-y-2" data-v-da5c1ac3><div class="text-sm font-medium text-slate-600 dark:text-slate-400 mb-1" data-v-da5c1ac3>节气</div><div class="text-base text-amber-600 dark:text-amber-500 font-semibold" data-v-da5c1ac3>${ssrInterpolate(selectedDate.value.jieqi)}</div></div>`);
+              _push2(`<div class="space-y-2" data-v-da5c1ac3><div class="text-sm font-medium text-slate-600 dark:text-slate-400 mb-1" data-v-da5c1ac3>\u8282\u6C14</div><div class="text-base text-amber-600 dark:text-amber-500 font-semibold" data-v-da5c1ac3>${ssrInterpolate(selectedDate.value.jieqi)}</div></div>`);
             } else {
               _push2(`<!---->`);
             }
             if (selectedDate.value.anniversaries && selectedDate.value.anniversaries.length > 0) {
-              _push2(`<div class="space-y-2" data-v-da5c1ac3><div class="text-sm font-medium text-slate-600 dark:text-slate-400 mb-1" data-v-da5c1ac3>纪念日</div><div class="space-y-2" data-v-da5c1ac3><!--[-->`);
+              _push2(`<div class="space-y-2" data-v-da5c1ac3><div class="text-sm font-medium text-slate-600 dark:text-slate-400 mb-1" data-v-da5c1ac3>\u7EAA\u5FF5\u65E5</div><div class="space-y-2" data-v-da5c1ac3><!--[-->`);
               ssrRenderList(selectedDate.value.anniversaries, (anniversary) => {
                 _push2(`<div class="px-3 py-2 bg-amber-50 dark:bg-amber-900/30 border border-amber-600/30 dark:border-amber-500/30 rounded text-sm text-slate-900 dark:text-slate-100" data-v-da5c1ac3>${ssrInterpolate(anniversary.title)}</div>`);
               });
@@ -606,7 +606,7 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
           }
           _push2(`<div class="max-w-[90vw] max-h-[90vh] flex items-center justify-center w-full h-full p-4" data-v-f903f1f2>`);
           if (previewImage.value !== null) {
-            _push2(`<img${ssrRenderAttr("src", previewImage.value)} class="max-w-full max-h-[85vh] object-contain shadow-2xl rounded-sm select-none" alt="预览" data-v-f903f1f2>`);
+            _push2(`<img${ssrRenderAttr("src", previewImage.value)} class="max-w-full max-h-[85vh] object-contain shadow-2xl rounded-sm select-none" alt="\u9884\u89C8" data-v-f903f1f2>`);
           } else {
             _push2(`<!---->`);
           }
@@ -664,7 +664,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
           images.value = [...presetImages];
         }
       } catch (e) {
-        console.error("加载首页照片失败", e);
+        console.error("\u52A0\u8F7D\u9996\u9875\u7167\u7247\u5931\u8D25", e);
       }
     }
     watch(() => authStore.user, (newUser) => {
@@ -678,22 +678,22 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       const _component_NuxtLink = __nuxt_component_0;
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "min-h-screen bg-gradient-to-br from-surface-100 via-surface-50 to-surface-100" }, _attrs))}>`);
       _push(ssrRenderComponent(DogHeader, null, null, _parent));
-      _push(`<div class="min-h-screen flex flex-col items-center pt-12 pb-8 px-4 relative"><div class="fixed top-20 left-10 w-64 h-64 bg-primary/8 rounded-full blur-3xl pointer-events-none z-0"></div><div class="fixed bottom-20 right-10 w-80 h-80 bg-accent/10 rounded-full blur-3xl pointer-events-none z-0"></div><div class="w-full max-w-4xl z-10 flex flex-col items-center space-y-8"><div class="bg-white/40 dark:bg-slate-800/40 backdrop-blur-sm px-6 py-2 rounded-full border border-white/50 dark:border-slate-700/50 shadow-sm animate-fade-in shrink-0"><h1 class="text-xl md:text-2xl font-serif text-text-secondary tracking-widest text-center opacity-90"> 爱的小事，值得被温柔记录 </h1></div><div class="w-full animate-fade-in shrink-0" style="${ssrRenderStyle({ "animation-delay": "0.2s" })}">`);
+      _push(`<div class="min-h-screen flex flex-col items-center pt-12 pb-8 px-4 relative"><div class="fixed top-20 left-10 w-64 h-64 bg-primary/8 rounded-full blur-3xl pointer-events-none z-0"></div><div class="fixed bottom-20 right-10 w-80 h-80 bg-accent/10 rounded-full blur-3xl pointer-events-none z-0"></div><div class="w-full max-w-4xl z-10 flex flex-col items-center space-y-8"><div class="bg-white/40 dark:bg-slate-800/40 backdrop-blur-sm px-6 py-2 rounded-full border border-white/50 dark:border-slate-700/50 shadow-sm animate-fade-in shrink-0"><h1 class="text-xl md:text-2xl font-serif text-text-secondary tracking-widest text-center opacity-90"> \u7231\u7684\u5C0F\u4E8B\uFF0C\u503C\u5F97\u88AB\u6E29\u67D4\u8BB0\u5F55 </h1></div><div class="w-full animate-fade-in shrink-0" style="${ssrRenderStyle({ "animation-delay": "0.2s" })}">`);
       _push(ssrRenderComponent(MemoryTree, {
         images: images.value,
         class: "h-[400px] md:h-[500px] !rounded-xl"
       }, null, _parent));
-      _push(`</div><div class="flex flex-col items-center space-y-8 w-full animate-slide-up shrink-0" style="${ssrRenderStyle({ "animation-delay": "0.4s" })}"><div class="flex gap-6"><button class="px-8 py-2.5 rounded-full bg-primary text-primary-foreground font-medium hover:bg-primary/90 hover:scale-105 transition-all shadow-lg active:scale-95 text-sm md:text-base"> 开始记录 </button>`);
+      _push(`</div><div class="flex flex-col items-center space-y-8 w-full animate-slide-up shrink-0" style="${ssrRenderStyle({ "animation-delay": "0.4s" })}"><div class="flex gap-6"><button class="px-8 py-2.5 rounded-full bg-primary text-primary-foreground font-medium hover:bg-primary/90 hover:scale-105 transition-all shadow-lg active:scale-95 text-sm md:text-base"> \u5F00\u59CB\u8BB0\u5F55 </button>`);
       _push(ssrRenderComponent(_component_NuxtLink, {
         to: "/daily",
         class: "px-8 py-2.5 rounded-full bg-background text-foreground font-medium border border-border hover:bg-accent hover:border-accent-foreground/20 transition-all shadow-sm text-sm md:text-base"
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(` 查看日常 `);
+            _push2(` \u67E5\u770B\u65E5\u5E38 `);
           } else {
             return [
-              createTextVNode(" 查看日常 ")
+              createTextVNode(" \u67E5\u770B\u65E5\u5E38 ")
             ];
           }
         }),

@@ -577,16 +577,16 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
               const afterYears = earlier.add(years, "year");
               const remainingDays = Math.abs(later.diff(afterYears, "day"));
               if (remainingDays === 0) {
-                return `${years}年`;
+                return `${years}\u5E74`;
               }
-              return `${years}年${remainingDays}天`;
+              return `${years}\u5E74${remainingDays}\u5929`;
             } else {
               const years = Math.floor(absDays / 365);
               const remainingDays = absDays % 365;
               if (remainingDays === 0) {
-                return `${years}年`;
+                return `${years}\u5E74`;
               }
-              return `${years}年${remainingDays}天`;
+              return `${years}\u5E74${remainingDays}\u5929`;
             }
           }
           return formatCountdown(days, "months", anniversaryDate);
@@ -601,16 +601,16 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
               const afterMonths = earlier.add(months, "month");
               const remainingDays = Math.abs(later.diff(afterMonths, "day"));
               if (remainingDays === 0) {
-                return `${months}个月`;
+                return `${months}\u4E2A\u6708`;
               }
-              return `${months}个月${remainingDays}天`;
+              return `${months}\u4E2A\u6708${remainingDays}\u5929`;
             } else {
               const months = Math.floor(absDays / 30);
               const remainingDays = absDays % 30;
               if (remainingDays === 0) {
-                return `${months}个月`;
+                return `${months}\u4E2A\u6708`;
               }
-              return `${months}个月${remainingDays}天`;
+              return `${months}\u4E2A\u6708${remainingDays}\u5929`;
             }
           }
           return formatCountdown(days, "weeks", anniversaryDate);
@@ -619,14 +619,14 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
             const weeks = Math.floor(absDays / 7);
             const remainingDays = absDays % 7;
             if (remainingDays === 0) {
-              return `${weeks}周`;
+              return `${weeks}\u5468`;
             }
-            return `${weeks}周${remainingDays}天`;
+            return `${weeks}\u5468${remainingDays}\u5929`;
           }
           return formatCountdown(days, "days", anniversaryDate);
         case "days":
         default:
-          return `${absDays}天`;
+          return `${absDays}\u5929`;
       }
     }
     function toggleFormat(id, days) {
@@ -666,7 +666,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       const diffDays = Math.round((t1 - t0) / (24 * 60 * 60 * 1e3));
       const overdue = diffDays < 0;
       const currentFormat = formatStates.value[a.id] || "days";
-      const formattedText = diffDays === 0 ? "就是今天" : overdue ? `已经 ${formatCountdown(diffDays, currentFormat, a.date)}` : `还有 ${formatCountdown(diffDays, currentFormat, a.date)}`;
+      const formattedText = diffDays === 0 ? "\u5C31\u662F\u4ECA\u5929" : overdue ? `\u5DF2\u7ECF ${formatCountdown(diffDays, currentFormat, a.date)}` : `\u8FD8\u6709 ${formatCountdown(diffDays, currentFormat, a.date)}`;
       return { days: diffDays, overdue, label: formattedText, canToggle: Math.abs(diffDays) >= 7 };
     }
     async function load() {
@@ -676,7 +676,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         items.value = res.items;
         formatStates.value = {};
       } catch (e) {
-        console.error("加载纪念日列表失败:", e);
+        console.error("\u52A0\u8F7D\u7EAA\u5FF5\u65E5\u5217\u8868\u5931\u8D25:", e);
       } finally {
         loading.value = false;
       }
@@ -689,7 +689,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         date.value = "";
         await load();
       } catch (e) {
-        console.error("创建纪念日失败:", e);
+        console.error("\u521B\u5EFA\u7EAA\u5FF5\u65E5\u5931\u8D25:", e);
       }
     }
     async function remove(id) {
@@ -697,7 +697,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         await deleteAnniversary(id);
         await load();
       } catch (e) {
-        console.error("删除纪念日失败:", e);
+        console.error("\u5220\u9664\u7EAA\u5FF5\u65E5\u5931\u8D25:", e);
       }
     }
     function openEdit(a) {
@@ -716,7 +716,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         editing.value = false;
         await load();
       } catch (e) {
-        console.error("更新纪念日失败:", e);
+        console.error("\u66F4\u65B0\u7EAA\u5FF5\u65E5\u5931\u8D25:", e);
       }
     }
     return (_ctx, _push, _parent, _attrs) => {
@@ -733,7 +733,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                   _push3(ssrRenderComponent(unref(_sfc_main$b), {
                     modelValue: title.value,
                     "onUpdate:modelValue": ($event) => title.value = $event,
-                    placeholder: "纪念日标题"
+                    placeholder: "\u7EAA\u5FF5\u65E5\u6807\u9898"
                   }, null, _parent3, _scopeId2));
                   _push3(`</div><div class="flex-1"${_scopeId2}>`);
                   _push3(ssrRenderComponent(unref(_sfc_main$b), {
@@ -748,10 +748,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                   }, {
                     default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                       if (_push4) {
-                        _push4(`创建`);
+                        _push4(`\u521B\u5EFA`);
                       } else {
                         return [
-                          createTextVNode("创建")
+                          createTextVNode("\u521B\u5EFA")
                         ];
                       }
                     }),
@@ -768,7 +768,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         createVNode(unref(_sfc_main$b), {
                           modelValue: title.value,
                           "onUpdate:modelValue": ($event) => title.value = $event,
-                          placeholder: "纪念日标题"
+                          placeholder: "\u7EAA\u5FF5\u65E5\u6807\u9898"
                         }, null, 8, ["modelValue", "onUpdate:modelValue"])
                       ]),
                       createVNode("div", { class: "flex-1" }, [
@@ -783,7 +783,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         class: "md:w-auto"
                       }, {
                         default: withCtx(() => [
-                          createTextVNode("创建")
+                          createTextVNode("\u521B\u5EFA")
                         ]),
                         _: 1
                       })
@@ -805,7 +805,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       createVNode(unref(_sfc_main$b), {
                         modelValue: title.value,
                         "onUpdate:modelValue": ($event) => title.value = $event,
-                        placeholder: "纪念日标题"
+                        placeholder: "\u7EAA\u5FF5\u65E5\u6807\u9898"
                       }, null, 8, ["modelValue", "onUpdate:modelValue"])
                     ]),
                     createVNode("div", { class: "flex-1" }, [
@@ -820,7 +820,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       class: "md:w-auto"
                     }, {
                       default: withCtx(() => [
-                        createTextVNode("创建")
+                        createTextVNode("\u521B\u5EFA")
                       ]),
                       _: 1
                     })
@@ -840,9 +840,9 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       } else if (items.value.length === 0) {
         _push(`<div>`);
         _push(ssrRenderComponent(EmptyState, {
-          text: "添加一个特别的日子吧",
+          text: "\u6DFB\u52A0\u4E00\u4E2A\u7279\u522B\u7684\u65E5\u5B50\u5427",
           img: "/assets/images/couple/couple-1.png",
-          "cta-text": "创建纪念日",
+          "cta-text": "\u521B\u5EFA\u7EAA\u5FF5\u65E5",
           "cta-to": "/anniversaries"
         }, null, _parent));
         _push(`</div>`);
@@ -862,7 +862,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       _push3(ssrRenderComponent(unref(_sfc_main$2$1), {
                         variant: meta(a).overdue ? "destructive" : meta(a).days === 0 ? "default" : "secondary",
                         class: meta(a).canToggle && meta(a).days !== 0 ? "cursor-pointer hover:opacity-80" : "",
-                        title: meta(a).canToggle && meta(a).days !== 0 ? "点击切换显示格式" : "",
+                        title: meta(a).canToggle && meta(a).days !== 0 ? "\u70B9\u51FB\u5207\u6362\u663E\u793A\u683C\u5F0F" : "",
                         onClick: ($event) => meta(a).canToggle && meta(a).days !== 0 ? toggleFormat(a.id, meta(a).days) : null
                       }, {
                         default: withCtx((_3, _push4, _parent4, _scopeId3) => {
@@ -884,10 +884,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       }, {
                         default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                           if (_push4) {
-                            _push4(`编辑`);
+                            _push4(`\u7F16\u8F91`);
                           } else {
                             return [
-                              createTextVNode("编辑")
+                              createTextVNode("\u7F16\u8F91")
                             ];
                           }
                         }),
@@ -900,10 +900,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       }, {
                         default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                           if (_push4) {
-                            _push4(`删除`);
+                            _push4(`\u5220\u9664`);
                           } else {
                             return [
-                              createTextVNode("删除")
+                              createTextVNode("\u5220\u9664")
                             ];
                           }
                         }),
@@ -920,7 +920,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           createVNode(unref(_sfc_main$2$1), {
                             variant: meta(a).overdue ? "destructive" : meta(a).days === 0 ? "default" : "secondary",
                             class: meta(a).canToggle && meta(a).days !== 0 ? "cursor-pointer hover:opacity-80" : "",
-                            title: meta(a).canToggle && meta(a).days !== 0 ? "点击切换显示格式" : "",
+                            title: meta(a).canToggle && meta(a).days !== 0 ? "\u70B9\u51FB\u5207\u6362\u663E\u793A\u683C\u5F0F" : "",
                             onClick: ($event) => meta(a).canToggle && meta(a).days !== 0 ? toggleFormat(a.id, meta(a).days) : null
                           }, {
                             default: withCtx(() => [
@@ -936,7 +936,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                             onClick: ($event) => openEdit(a)
                           }, {
                             default: withCtx(() => [
-                              createTextVNode("编辑")
+                              createTextVNode("\u7F16\u8F91")
                             ]),
                             _: 1
                           }, 8, ["onClick"]),
@@ -946,7 +946,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                             onClick: ($event) => remove(a.id)
                           }, {
                             default: withCtx(() => [
-                              createTextVNode("删除")
+                              createTextVNode("\u5220\u9664")
                             ]),
                             _: 1
                           }, 8, ["onClick"])
@@ -968,7 +968,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         createVNode(unref(_sfc_main$2$1), {
                           variant: meta(a).overdue ? "destructive" : meta(a).days === 0 ? "default" : "secondary",
                           class: meta(a).canToggle && meta(a).days !== 0 ? "cursor-pointer hover:opacity-80" : "",
-                          title: meta(a).canToggle && meta(a).days !== 0 ? "点击切换显示格式" : "",
+                          title: meta(a).canToggle && meta(a).days !== 0 ? "\u70B9\u51FB\u5207\u6362\u663E\u793A\u683C\u5F0F" : "",
                           onClick: ($event) => meta(a).canToggle && meta(a).days !== 0 ? toggleFormat(a.id, meta(a).days) : null
                         }, {
                           default: withCtx(() => [
@@ -984,7 +984,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           onClick: ($event) => openEdit(a)
                         }, {
                           default: withCtx(() => [
-                            createTextVNode("编辑")
+                            createTextVNode("\u7F16\u8F91")
                           ]),
                           _: 1
                         }, 8, ["onClick"]),
@@ -994,7 +994,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           onClick: ($event) => remove(a.id)
                         }, {
                           default: withCtx(() => [
-                            createTextVNode("删除")
+                            createTextVNode("\u5220\u9664")
                           ]),
                           _: 1
                         }, 8, ["onClick"])
@@ -1025,10 +1025,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         _push4(ssrRenderComponent(unref(_sfc_main$2), null, {
                           default: withCtx((_4, _push5, _parent5, _scopeId4) => {
                             if (_push5) {
-                              _push5(`编辑纪念日`);
+                              _push5(`\u7F16\u8F91\u7EAA\u5FF5\u65E5`);
                             } else {
                               return [
-                                createTextVNode("编辑纪念日")
+                                createTextVNode("\u7F16\u8F91\u7EAA\u5FF5\u65E5")
                               ];
                             }
                           }),
@@ -1038,7 +1038,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         return [
                           createVNode(unref(_sfc_main$2), null, {
                             default: withCtx(() => [
-                              createTextVNode("编辑纪念日")
+                              createTextVNode("\u7F16\u8F91\u7EAA\u5FF5\u65E5")
                             ]),
                             _: 1
                           })
@@ -1051,10 +1051,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                   _push3(ssrRenderComponent(unref(_sfc_main$c), { for: "edit-title" }, {
                     default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                       if (_push4) {
-                        _push4(`标题`);
+                        _push4(`\u6807\u9898`);
                       } else {
                         return [
-                          createTextVNode("标题")
+                          createTextVNode("\u6807\u9898")
                         ];
                       }
                     }),
@@ -1064,16 +1064,16 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                     id: "edit-title",
                     modelValue: editTitle.value,
                     "onUpdate:modelValue": ($event) => editTitle.value = $event,
-                    placeholder: "纪念日标题"
+                    placeholder: "\u7EAA\u5FF5\u65E5\u6807\u9898"
                   }, null, _parent3, _scopeId2));
                   _push3(`</div><div class="space-y-2"${_scopeId2}>`);
                   _push3(ssrRenderComponent(unref(_sfc_main$c), { for: "edit-date" }, {
                     default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                       if (_push4) {
-                        _push4(`日期`);
+                        _push4(`\u65E5\u671F`);
                       } else {
                         return [
-                          createTextVNode("日期")
+                          createTextVNode("\u65E5\u671F")
                         ];
                       }
                     }),
@@ -1096,10 +1096,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         }, {
                           default: withCtx((_4, _push5, _parent5, _scopeId4) => {
                             if (_push5) {
-                              _push5(`取消`);
+                              _push5(`\u53D6\u6D88`);
                             } else {
                               return [
-                                createTextVNode("取消")
+                                createTextVNode("\u53D6\u6D88")
                               ];
                             }
                           }),
@@ -1108,10 +1108,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         _push4(ssrRenderComponent(unref(_sfc_main$v), { type: "submit" }, {
                           default: withCtx((_4, _push5, _parent5, _scopeId4) => {
                             if (_push5) {
-                              _push5(`保存`);
+                              _push5(`\u4FDD\u5B58`);
                             } else {
                               return [
-                                createTextVNode("保存")
+                                createTextVNode("\u4FDD\u5B58")
                               ];
                             }
                           }),
@@ -1125,13 +1125,13 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                             onClick: closeEdit
                           }, {
                             default: withCtx(() => [
-                              createTextVNode("取消")
+                              createTextVNode("\u53D6\u6D88")
                             ]),
                             _: 1
                           }),
                           createVNode(unref(_sfc_main$v), { type: "submit" }, {
                             default: withCtx(() => [
-                              createTextVNode("保存")
+                              createTextVNode("\u4FDD\u5B58")
                             ]),
                             _: 1
                           })
@@ -1147,7 +1147,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       default: withCtx(() => [
                         createVNode(unref(_sfc_main$2), null, {
                           default: withCtx(() => [
-                            createTextVNode("编辑纪念日")
+                            createTextVNode("\u7F16\u8F91\u7EAA\u5FF5\u65E5")
                           ]),
                           _: 1
                         })
@@ -1161,7 +1161,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       createVNode("div", { class: "space-y-2" }, [
                         createVNode(unref(_sfc_main$c), { for: "edit-title" }, {
                           default: withCtx(() => [
-                            createTextVNode("标题")
+                            createTextVNode("\u6807\u9898")
                           ]),
                           _: 1
                         }),
@@ -1169,13 +1169,13 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           id: "edit-title",
                           modelValue: editTitle.value,
                           "onUpdate:modelValue": ($event) => editTitle.value = $event,
-                          placeholder: "纪念日标题"
+                          placeholder: "\u7EAA\u5FF5\u65E5\u6807\u9898"
                         }, null, 8, ["modelValue", "onUpdate:modelValue"])
                       ]),
                       createVNode("div", { class: "space-y-2" }, [
                         createVNode(unref(_sfc_main$c), { for: "edit-date" }, {
                           default: withCtx(() => [
-                            createTextVNode("日期")
+                            createTextVNode("\u65E5\u671F")
                           ]),
                           _: 1
                         }),
@@ -1194,13 +1194,13 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                             onClick: closeEdit
                           }, {
                             default: withCtx(() => [
-                              createTextVNode("取消")
+                              createTextVNode("\u53D6\u6D88")
                             ]),
                             _: 1
                           }),
                           createVNode(unref(_sfc_main$v), { type: "submit" }, {
                             default: withCtx(() => [
-                              createTextVNode("保存")
+                              createTextVNode("\u4FDD\u5B58")
                             ]),
                             _: 1
                           })
@@ -1221,7 +1221,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                     default: withCtx(() => [
                       createVNode(unref(_sfc_main$2), null, {
                         default: withCtx(() => [
-                          createTextVNode("编辑纪念日")
+                          createTextVNode("\u7F16\u8F91\u7EAA\u5FF5\u65E5")
                         ]),
                         _: 1
                       })
@@ -1235,7 +1235,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                     createVNode("div", { class: "space-y-2" }, [
                       createVNode(unref(_sfc_main$c), { for: "edit-title" }, {
                         default: withCtx(() => [
-                          createTextVNode("标题")
+                          createTextVNode("\u6807\u9898")
                         ]),
                         _: 1
                       }),
@@ -1243,13 +1243,13 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         id: "edit-title",
                         modelValue: editTitle.value,
                         "onUpdate:modelValue": ($event) => editTitle.value = $event,
-                        placeholder: "纪念日标题"
+                        placeholder: "\u7EAA\u5FF5\u65E5\u6807\u9898"
                       }, null, 8, ["modelValue", "onUpdate:modelValue"])
                     ]),
                     createVNode("div", { class: "space-y-2" }, [
                       createVNode(unref(_sfc_main$c), { for: "edit-date" }, {
                         default: withCtx(() => [
-                          createTextVNode("日期")
+                          createTextVNode("\u65E5\u671F")
                         ]),
                         _: 1
                       }),
@@ -1268,13 +1268,13 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           onClick: closeEdit
                         }, {
                           default: withCtx(() => [
-                            createTextVNode("取消")
+                            createTextVNode("\u53D6\u6D88")
                           ]),
                           _: 1
                         }),
                         createVNode(unref(_sfc_main$v), { type: "submit" }, {
                           default: withCtx(() => [
-                            createTextVNode("保存")
+                            createTextVNode("\u4FDD\u5B58")
                           ]),
                           _: 1
                         })

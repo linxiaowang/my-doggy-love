@@ -65,7 +65,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         });
         await refreshUnreadCount();
       } catch (e) {
-        console.error("全部标记为已读失败:", e);
+        console.error("\u5168\u90E8\u6807\u8BB0\u4E3A\u5DF2\u8BFB\u5931\u8D25:", e);
       } finally {
         markingAllAsRead.value = false;
       }
@@ -79,13 +79,13 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       const hours = Math.floor(minutes / 60);
       const days = Math.floor(hours / 24);
       if (seconds < 60) {
-        return "刚刚";
+        return "\u521A\u521A";
       } else if (minutes < 60) {
-        return `${minutes}分钟前`;
+        return `${minutes}\u5206\u949F\u524D`;
       } else if (hours < 24) {
-        return `${hours}小时前`;
+        return `${hours}\u5C0F\u65F6\u524D`;
       } else if (days < 7) {
-        return `${days}天前`;
+        return `${days}\u5929\u524D`;
       } else {
         return date.toLocaleDateString("zh-CN", { month: "short", day: "numeric" });
       }
@@ -94,7 +94,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       const _component_Button = _sfc_main$v;
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "min-h-screen bg-slate-50 dark:bg-slate-900" }, _attrs))}>`);
       _push(ssrRenderComponent(DogHeader, null, null, _parent));
-      _push(`<div class="max-w-3xl mx-auto px-4 py-6"><div class="rounded-xl bg-white dark:bg-slate-800 p-4 shadow mb-4"><div class="flex items-center justify-between mb-4"><h1 class="text-xl font-semibold">通知</h1>`);
+      _push(`<div class="max-w-3xl mx-auto px-4 py-6"><div class="rounded-xl bg-white dark:bg-slate-800 p-4 shadow mb-4"><div class="flex items-center justify-between mb-4"><h1 class="text-xl font-semibold">\u901A\u77E5</h1>`);
       if (unreadCount.value > 0) {
         _push(ssrRenderComponent(_component_Button, {
           size: "sm",
@@ -104,10 +104,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         }, {
           default: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
-              _push2(`${ssrInterpolate(markingAllAsRead.value ? "处理中..." : "全部标记为已读")}`);
+              _push2(`${ssrInterpolate(markingAllAsRead.value ? "\u5904\u7406\u4E2D..." : "\u5168\u90E8\u6807\u8BB0\u4E3A\u5DF2\u8BFB")}`);
             } else {
               return [
-                createTextVNode(toDisplayString(markingAllAsRead.value ? "处理中..." : "全部标记为已读"), 1)
+                createTextVNode(toDisplayString(markingAllAsRead.value ? "\u5904\u7406\u4E2D..." : "\u5168\u90E8\u6807\u8BB0\u4E3A\u5DF2\u8BFB"), 1)
               ];
             }
           }),
@@ -126,7 +126,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       } else if (items.value.length === 0) {
         _push(`<div class="text-center py-12">`);
         _push(ssrRenderComponent(EmptyState, {
-          text: "暂无通知",
+          text: "\u6682\u65E0\u901A\u77E5",
           img: "/assets/images/xiaojimao/xiaojimao-4.png"
         }, null, _parent));
         _push(`</div>`);
@@ -138,7 +138,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         _push(`<!--]--></div>`);
       }
       if (hasMore.value && !loading.value) {
-        _push(`<div class="mt-4 flex justify-center"><button class="btn-secondary"${ssrIncludeBooleanAttr(loadingMore.value) ? " disabled" : ""}>${ssrInterpolate(loadingMore.value ? "加载中…" : "加载更多")}</button></div>`);
+        _push(`<div class="mt-4 flex justify-center"><button class="btn-secondary"${ssrIncludeBooleanAttr(loadingMore.value) ? " disabled" : ""}>${ssrInterpolate(loadingMore.value ? "\u52A0\u8F7D\u4E2D\u2026" : "\u52A0\u8F7D\u66F4\u591A")}</button></div>`);
       } else {
         _push(`<!---->`);
       }

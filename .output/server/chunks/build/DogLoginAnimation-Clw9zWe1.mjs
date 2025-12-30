@@ -9,7 +9,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
   __ssrInlineRender: true,
   setup(__props) {
     return (_ctx, _push, _parent, _attrs) => {
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "relative w-full h-40 md:h-56 overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700" }, _attrs))} data-v-aea83cce><img${ssrRenderAttr("src", leftDog)} alt="xiaobai" class="abs-dog left-dog" data-v-aea83cce><img${ssrRenderAttr("src", rightDog)} alt="xiaojimao" class="abs-dog right-dog" data-v-aea83cce><div class="absolute inset-x-0 bottom-2 text-center text-slate-500 dark:text-slate-400 text-sm" data-v-aea83cce>两只小狗一起登录中…</div></div>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "relative w-full h-40 md:h-56 overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700" }, _attrs))} data-v-aea83cce><img${ssrRenderAttr("src", leftDog)} alt="xiaobai" class="abs-dog left-dog" data-v-aea83cce><img${ssrRenderAttr("src", rightDog)} alt="xiaojimao" class="abs-dog right-dog" data-v-aea83cce><div class="absolute inset-x-0 bottom-2 text-center text-slate-500 dark:text-slate-400 text-sm" data-v-aea83cce>\u4E24\u53EA\u5C0F\u72D7\u4E00\u8D77\u767B\u5F55\u4E2D\u2026</div></div>`);
     };
   }
 });

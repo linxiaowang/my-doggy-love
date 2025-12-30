@@ -91,7 +91,7 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
           }, null, _parent));
           _push2(`<span class="text-sm font-medium flex-1" data-v-dc524403>${ssrInterpolate(toast.message)}</span>`);
           if (toast.closable) {
-            _push2(`<button class="${ssrRenderClass([getCloseButtonClass(toast.type), "flex-shrink-0 hover:opacity-70 transition-opacity rounded-md p-0.5 -mr-1"])}" aria-label="关闭通知" data-v-dc524403><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-v-dc524403><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" data-v-dc524403></path></svg></button>`);
+            _push2(`<button class="${ssrRenderClass([getCloseButtonClass(toast.type), "flex-shrink-0 hover:opacity-70 transition-opacity rounded-md p-0.5 -mr-1"])}" aria-label="\u5173\u95ED\u901A\u77E5" data-v-dc524403><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-v-dc524403><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" data-v-dc524403></path></svg></button>`);
           } else {
             _push2(`<!---->`);
           }

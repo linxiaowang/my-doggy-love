@@ -41,16 +41,16 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
     async function onSubmit() {
       error.value = "";
       if (!email.value.trim()) {
-        error.value = "请输入邮箱";
+        error.value = "\u8BF7\u8F93\u5165\u90AE\u7BB1";
         return;
       }
       if (!password.value) {
-        error.value = "请输入密码";
+        error.value = "\u8BF7\u8F93\u5165\u5BC6\u7801";
         return;
       }
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email.value.trim())) {
-        error.value = "邮箱格式不正确";
+        error.value = "\u90AE\u7BB1\u683C\u5F0F\u4E0D\u6B63\u786E";
         return;
       }
       loading.value = true;
@@ -87,10 +87,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                   _push3(ssrRenderComponent(unref(_sfc_main$1), null, {
                     default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                       if (_push4) {
-                        _push4(`登录`);
+                        _push4(`\u767B\u5F55`);
                       } else {
                         return [
-                          createTextVNode("登录")
+                          createTextVNode("\u767B\u5F55")
                         ];
                       }
                     }),
@@ -99,10 +99,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                   _push3(ssrRenderComponent(unref(_sfc_main$4), null, {
                     default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                       if (_push4) {
-                        _push4(`使用邮箱和密码登录`);
+                        _push4(`\u4F7F\u7528\u90AE\u7BB1\u548C\u5BC6\u7801\u767B\u5F55`);
                       } else {
                         return [
-                          createTextVNode("使用邮箱和密码登录")
+                          createTextVNode("\u4F7F\u7528\u90AE\u7BB1\u548C\u5BC6\u7801\u767B\u5F55")
                         ];
                       }
                     }),
@@ -112,13 +112,13 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                   return [
                     createVNode(unref(_sfc_main$1), null, {
                       default: withCtx(() => [
-                        createTextVNode("登录")
+                        createTextVNode("\u767B\u5F55")
                       ]),
                       _: 1
                     }),
                     createVNode(unref(_sfc_main$4), null, {
                       default: withCtx(() => [
-                        createTextVNode("使用邮箱和密码登录")
+                        createTextVNode("\u4F7F\u7528\u90AE\u7BB1\u548C\u5BC6\u7801\u767B\u5F55")
                       ]),
                       _: 1
                     })
@@ -142,10 +142,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                   }, {
                     default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                       if (_push4) {
-                        _push4(`邮箱`);
+                        _push4(`\u90AE\u7BB1`);
                       } else {
                         return [
-                          createTextVNode("邮箱")
+                          createTextVNode("\u90AE\u7BB1")
                         ];
                       }
                     }),
@@ -157,7 +157,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                     "onUpdate:modelValue": ($event) => email.value = $event,
                     modelModifiers: { trim: true },
                     type: "email",
-                    placeholder: "邮箱",
+                    placeholder: "\u90AE\u7BB1",
                     required: "",
                     autocomplete: "email"
                   }, null, _parent3, _scopeId2));
@@ -168,10 +168,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                   }, {
                     default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                       if (_push4) {
-                        _push4(`密码`);
+                        _push4(`\u5BC6\u7801`);
                       } else {
                         return [
-                          createTextVNode("密码")
+                          createTextVNode("\u5BC6\u7801")
                         ];
                       }
                     }),
@@ -183,7 +183,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                     "onUpdate:modelValue": ($event) => password.value = $event,
                     modelModifiers: { trim: true },
                     type: "password",
-                    placeholder: "密码",
+                    placeholder: "\u5BC6\u7801",
                     required: "",
                     autocomplete: "current-password"
                   }, null, _parent3, _scopeId2));
@@ -195,16 +195,16 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                   }, {
                     default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                       if (_push4) {
-                        _push4(`${ssrInterpolate(loading.value ? "登录中…" : "登录")}`);
+                        _push4(`${ssrInterpolate(loading.value ? "\u767B\u5F55\u4E2D\u2026" : "\u767B\u5F55")}`);
                       } else {
                         return [
-                          createTextVNode(toDisplayString(loading.value ? "登录中…" : "登录"), 1)
+                          createTextVNode(toDisplayString(loading.value ? "\u767B\u5F55\u4E2D\u2026" : "\u767B\u5F55"), 1)
                         ];
                       }
                     }),
                     _: 1
                   }, _parent3, _scopeId2));
-                  _push3(`</form><div class="mt-6 flex items-center justify-between"${_scopeId2}><span class="text-sm text-muted-foreground"${_scopeId2}>还没有账号？</span>`);
+                  _push3(`</form><div class="mt-6 flex items-center justify-between"${_scopeId2}><span class="text-sm text-muted-foreground"${_scopeId2}>\u8FD8\u6CA1\u6709\u8D26\u53F7\uFF1F</span>`);
                   _push3(ssrRenderComponent(unref(_sfc_main$v), {
                     variant: "link",
                     class: "p-0 h-auto",
@@ -215,10 +215,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         _push4(ssrRenderComponent(_component_NuxtLink, { to: "/user/register" }, {
                           default: withCtx((_4, _push5, _parent5, _scopeId4) => {
                             if (_push5) {
-                              _push5(`去注册`);
+                              _push5(`\u53BB\u6CE8\u518C`);
                             } else {
                               return [
-                                createTextVNode("去注册")
+                                createTextVNode("\u53BB\u6CE8\u518C")
                               ];
                             }
                           }),
@@ -228,7 +228,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         return [
                           createVNode(_component_NuxtLink, { to: "/user/register" }, {
                             default: withCtx(() => [
-                              createTextVNode("去注册")
+                              createTextVNode("\u53BB\u6CE8\u518C")
                             ]),
                             _: 1
                           })
@@ -254,7 +254,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           class: "sr-only"
                         }, {
                           default: withCtx(() => [
-                            createTextVNode("邮箱")
+                            createTextVNode("\u90AE\u7BB1")
                           ]),
                           _: 1
                         }),
@@ -264,7 +264,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           "onUpdate:modelValue": ($event) => email.value = $event,
                           modelModifiers: { trim: true },
                           type: "email",
-                          placeholder: "邮箱",
+                          placeholder: "\u90AE\u7BB1",
                           required: "",
                           autocomplete: "email"
                         }, null, 8, ["modelValue", "onUpdate:modelValue"])
@@ -275,7 +275,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           class: "sr-only"
                         }, {
                           default: withCtx(() => [
-                            createTextVNode("密码")
+                            createTextVNode("\u5BC6\u7801")
                           ]),
                           _: 1
                         }),
@@ -285,7 +285,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           "onUpdate:modelValue": ($event) => password.value = $event,
                           modelModifiers: { trim: true },
                           type: "password",
-                          placeholder: "密码",
+                          placeholder: "\u5BC6\u7801",
                           required: "",
                           autocomplete: "current-password"
                         }, null, 8, ["modelValue", "onUpdate:modelValue"])
@@ -296,13 +296,13 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         disabled: loading.value || !email.value || !password.value
                       }, {
                         default: withCtx(() => [
-                          createTextVNode(toDisplayString(loading.value ? "登录中…" : "登录"), 1)
+                          createTextVNode(toDisplayString(loading.value ? "\u767B\u5F55\u4E2D\u2026" : "\u767B\u5F55"), 1)
                         ]),
                         _: 1
                       }, 8, ["disabled"])
                     ], 32),
                     createVNode("div", { class: "mt-6 flex items-center justify-between" }, [
-                      createVNode("span", { class: "text-sm text-muted-foreground" }, "还没有账号？"),
+                      createVNode("span", { class: "text-sm text-muted-foreground" }, "\u8FD8\u6CA1\u6709\u8D26\u53F7\uFF1F"),
                       createVNode(unref(_sfc_main$v), {
                         variant: "link",
                         class: "p-0 h-auto",
@@ -311,7 +311,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         default: withCtx(() => [
                           createVNode(_component_NuxtLink, { to: "/user/register" }, {
                             default: withCtx(() => [
-                              createTextVNode("去注册")
+                              createTextVNode("\u53BB\u6CE8\u518C")
                             ]),
                             _: 1
                           })
@@ -330,13 +330,13 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                 default: withCtx(() => [
                   createVNode(unref(_sfc_main$1), null, {
                     default: withCtx(() => [
-                      createTextVNode("登录")
+                      createTextVNode("\u767B\u5F55")
                     ]),
                     _: 1
                   }),
                   createVNode(unref(_sfc_main$4), null, {
                     default: withCtx(() => [
-                      createTextVNode("使用邮箱和密码登录")
+                      createTextVNode("\u4F7F\u7528\u90AE\u7BB1\u548C\u5BC6\u7801\u767B\u5F55")
                     ]),
                     _: 1
                   })
@@ -359,7 +359,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         class: "sr-only"
                       }, {
                         default: withCtx(() => [
-                          createTextVNode("邮箱")
+                          createTextVNode("\u90AE\u7BB1")
                         ]),
                         _: 1
                       }),
@@ -369,7 +369,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         "onUpdate:modelValue": ($event) => email.value = $event,
                         modelModifiers: { trim: true },
                         type: "email",
-                        placeholder: "邮箱",
+                        placeholder: "\u90AE\u7BB1",
                         required: "",
                         autocomplete: "email"
                       }, null, 8, ["modelValue", "onUpdate:modelValue"])
@@ -380,7 +380,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         class: "sr-only"
                       }, {
                         default: withCtx(() => [
-                          createTextVNode("密码")
+                          createTextVNode("\u5BC6\u7801")
                         ]),
                         _: 1
                       }),
@@ -390,7 +390,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         "onUpdate:modelValue": ($event) => password.value = $event,
                         modelModifiers: { trim: true },
                         type: "password",
-                        placeholder: "密码",
+                        placeholder: "\u5BC6\u7801",
                         required: "",
                         autocomplete: "current-password"
                       }, null, 8, ["modelValue", "onUpdate:modelValue"])
@@ -401,13 +401,13 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       disabled: loading.value || !email.value || !password.value
                     }, {
                       default: withCtx(() => [
-                        createTextVNode(toDisplayString(loading.value ? "登录中…" : "登录"), 1)
+                        createTextVNode(toDisplayString(loading.value ? "\u767B\u5F55\u4E2D\u2026" : "\u767B\u5F55"), 1)
                       ]),
                       _: 1
                     }, 8, ["disabled"])
                   ], 32),
                   createVNode("div", { class: "mt-6 flex items-center justify-between" }, [
-                    createVNode("span", { class: "text-sm text-muted-foreground" }, "还没有账号？"),
+                    createVNode("span", { class: "text-sm text-muted-foreground" }, "\u8FD8\u6CA1\u6709\u8D26\u53F7\uFF1F"),
                     createVNode(unref(_sfc_main$v), {
                       variant: "link",
                       class: "p-0 h-auto",
@@ -416,7 +416,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       default: withCtx(() => [
                         createVNode(_component_NuxtLink, { to: "/user/register" }, {
                           default: withCtx(() => [
-                            createTextVNode("去注册")
+                            createTextVNode("\u53BB\u6CE8\u518C")
                           ]),
                           _: 1
                         })

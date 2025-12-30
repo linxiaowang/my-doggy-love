@@ -301,7 +301,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         const res = await apiFetch("/api/wishes");
         items.value = res.items;
       } catch (e) {
-        console.error("加载愿望列表失败:", e);
+        console.error("\u52A0\u8F7D\u613F\u671B\u5217\u8868\u5931\u8D25:", e);
       } finally {
         loading.value = false;
       }
@@ -313,7 +313,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         title.value = "";
         await load();
       } catch (e) {
-        console.error("添加愿望失败:", e);
+        console.error("\u6DFB\u52A0\u613F\u671B\u5931\u8D25:", e);
       }
     }
     async function markDone(id) {
@@ -321,7 +321,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         await updateWish(id, { status: "done" });
         await load();
       } catch (e) {
-        console.error("标记完成失败:", e);
+        console.error("\u6807\u8BB0\u5B8C\u6210\u5931\u8D25:", e);
       }
     }
     async function markTodo(id) {
@@ -329,7 +329,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         await updateWish(id, { status: "todo" });
         await load();
       } catch (e) {
-        console.error("重置愿望失败:", e);
+        console.error("\u91CD\u7F6E\u613F\u671B\u5931\u8D25:", e);
       }
     }
     async function toggle(w) {
@@ -350,7 +350,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                   _push3(ssrRenderComponent(unref(_sfc_main$6), {
                     modelValue: title.value,
                     "onUpdate:modelValue": ($event) => title.value = $event,
-                    placeholder: "添加一个愿望…",
+                    placeholder: "\u6DFB\u52A0\u4E00\u4E2A\u613F\u671B\u2026",
                     class: "flex-1"
                   }, null, _parent3, _scopeId2));
                   _push3(ssrRenderComponent(unref(_sfc_main$v), {
@@ -359,16 +359,16 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                   }, {
                     default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                       if (_push4) {
-                        _push4(`添加`);
+                        _push4(`\u6DFB\u52A0`);
                       } else {
                         return [
-                          createTextVNode("添加")
+                          createTextVNode("\u6DFB\u52A0")
                         ];
                       }
                     }),
                     _: 1
                   }, _parent3, _scopeId2));
-                  _push3(`</form><div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"${_scopeId2}><div class="text-sm text-muted-foreground text-center sm:text-left"${_scopeId2}> 共 ${ssrInterpolate(items.value.length)} 个愿望 · 已完成 ${ssrInterpolate(doneList.value.length)} 个 </div>`);
+                  _push3(`</form><div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"${_scopeId2}><div class="text-sm text-muted-foreground text-center sm:text-left"${_scopeId2}> \u5171 ${ssrInterpolate(items.value.length)} \u4E2A\u613F\u671B \xB7 \u5DF2\u5B8C\u6210 ${ssrInterpolate(doneList.value.length)} \u4E2A </div>`);
                   _push3(ssrRenderComponent(unref(_sfc_main$4), {
                     "model-value": filter.value,
                     "onUpdate:modelValue": (val) => filter.value = val,
@@ -382,10 +382,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               _push5(ssrRenderComponent(unref(_sfc_main$1), { value: "all" }, {
                                 default: withCtx((_5, _push6, _parent6, _scopeId5) => {
                                   if (_push6) {
-                                    _push6(`全部`);
+                                    _push6(`\u5168\u90E8`);
                                   } else {
                                     return [
-                                      createTextVNode("全部")
+                                      createTextVNode("\u5168\u90E8")
                                     ];
                                   }
                                 }),
@@ -394,10 +394,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               _push5(ssrRenderComponent(unref(_sfc_main$1), { value: "todo" }, {
                                 default: withCtx((_5, _push6, _parent6, _scopeId5) => {
                                   if (_push6) {
-                                    _push6(`未完成`);
+                                    _push6(`\u672A\u5B8C\u6210`);
                                   } else {
                                     return [
-                                      createTextVNode("未完成")
+                                      createTextVNode("\u672A\u5B8C\u6210")
                                     ];
                                   }
                                 }),
@@ -406,10 +406,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               _push5(ssrRenderComponent(unref(_sfc_main$1), { value: "done" }, {
                                 default: withCtx((_5, _push6, _parent6, _scopeId5) => {
                                   if (_push6) {
-                                    _push6(`已完成`);
+                                    _push6(`\u5DF2\u5B8C\u6210`);
                                   } else {
                                     return [
-                                      createTextVNode("已完成")
+                                      createTextVNode("\u5DF2\u5B8C\u6210")
                                     ];
                                   }
                                 }),
@@ -419,19 +419,19 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               return [
                                 createVNode(unref(_sfc_main$1), { value: "all" }, {
                                   default: withCtx(() => [
-                                    createTextVNode("全部")
+                                    createTextVNode("\u5168\u90E8")
                                   ]),
                                   _: 1
                                 }),
                                 createVNode(unref(_sfc_main$1), { value: "todo" }, {
                                   default: withCtx(() => [
-                                    createTextVNode("未完成")
+                                    createTextVNode("\u672A\u5B8C\u6210")
                                   ]),
                                   _: 1
                                 }),
                                 createVNode(unref(_sfc_main$1), { value: "done" }, {
                                   default: withCtx(() => [
-                                    createTextVNode("已完成")
+                                    createTextVNode("\u5DF2\u5B8C\u6210")
                                   ]),
                                   _: 1
                                 })
@@ -446,19 +446,19 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                             default: withCtx(() => [
                               createVNode(unref(_sfc_main$1), { value: "all" }, {
                                 default: withCtx(() => [
-                                  createTextVNode("全部")
+                                  createTextVNode("\u5168\u90E8")
                                 ]),
                                 _: 1
                               }),
                               createVNode(unref(_sfc_main$1), { value: "todo" }, {
                                 default: withCtx(() => [
-                                  createTextVNode("未完成")
+                                  createTextVNode("\u672A\u5B8C\u6210")
                                 ]),
                                 _: 1
                               }),
                               createVNode(unref(_sfc_main$1), { value: "done" }, {
                                 default: withCtx(() => [
-                                  createTextVNode("已完成")
+                                  createTextVNode("\u5DF2\u5B8C\u6210")
                                 ]),
                                 _: 1
                               })
@@ -480,7 +480,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       createVNode(unref(_sfc_main$6), {
                         modelValue: title.value,
                         "onUpdate:modelValue": ($event) => title.value = $event,
-                        placeholder: "添加一个愿望…",
+                        placeholder: "\u6DFB\u52A0\u4E00\u4E2A\u613F\u671B\u2026",
                         class: "flex-1"
                       }, null, 8, ["modelValue", "onUpdate:modelValue"]),
                       createVNode(unref(_sfc_main$v), {
@@ -488,13 +488,13 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         class: "sm:w-auto"
                       }, {
                         default: withCtx(() => [
-                          createTextVNode("添加")
+                          createTextVNode("\u6DFB\u52A0")
                         ]),
                         _: 1
                       })
                     ], 32),
                     createVNode("div", { class: "flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between" }, [
-                      createVNode("div", { class: "text-sm text-muted-foreground text-center sm:text-left" }, " 共 " + toDisplayString(items.value.length) + " 个愿望 · 已完成 " + toDisplayString(doneList.value.length) + " 个 ", 1),
+                      createVNode("div", { class: "text-sm text-muted-foreground text-center sm:text-left" }, " \u5171 " + toDisplayString(items.value.length) + " \u4E2A\u613F\u671B \xB7 \u5DF2\u5B8C\u6210 " + toDisplayString(doneList.value.length) + " \u4E2A ", 1),
                       createVNode(unref(_sfc_main$4), {
                         "model-value": filter.value,
                         "onUpdate:modelValue": (val) => filter.value = val,
@@ -505,19 +505,19 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                             default: withCtx(() => [
                               createVNode(unref(_sfc_main$1), { value: "all" }, {
                                 default: withCtx(() => [
-                                  createTextVNode("全部")
+                                  createTextVNode("\u5168\u90E8")
                                 ]),
                                 _: 1
                               }),
                               createVNode(unref(_sfc_main$1), { value: "todo" }, {
                                 default: withCtx(() => [
-                                  createTextVNode("未完成")
+                                  createTextVNode("\u672A\u5B8C\u6210")
                                 ]),
                                 _: 1
                               }),
                               createVNode(unref(_sfc_main$1), { value: "done" }, {
                                 default: withCtx(() => [
-                                  createTextVNode("已完成")
+                                  createTextVNode("\u5DF2\u5B8C\u6210")
                                 ]),
                                 _: 1
                               })
@@ -544,7 +544,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                     createVNode(unref(_sfc_main$6), {
                       modelValue: title.value,
                       "onUpdate:modelValue": ($event) => title.value = $event,
-                      placeholder: "添加一个愿望…",
+                      placeholder: "\u6DFB\u52A0\u4E00\u4E2A\u613F\u671B\u2026",
                       class: "flex-1"
                     }, null, 8, ["modelValue", "onUpdate:modelValue"]),
                     createVNode(unref(_sfc_main$v), {
@@ -552,13 +552,13 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       class: "sm:w-auto"
                     }, {
                       default: withCtx(() => [
-                        createTextVNode("添加")
+                        createTextVNode("\u6DFB\u52A0")
                       ]),
                       _: 1
                     })
                   ], 32),
                   createVNode("div", { class: "flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between" }, [
-                    createVNode("div", { class: "text-sm text-muted-foreground text-center sm:text-left" }, " 共 " + toDisplayString(items.value.length) + " 个愿望 · 已完成 " + toDisplayString(doneList.value.length) + " 个 ", 1),
+                    createVNode("div", { class: "text-sm text-muted-foreground text-center sm:text-left" }, " \u5171 " + toDisplayString(items.value.length) + " \u4E2A\u613F\u671B \xB7 \u5DF2\u5B8C\u6210 " + toDisplayString(doneList.value.length) + " \u4E2A ", 1),
                     createVNode(unref(_sfc_main$4), {
                       "model-value": filter.value,
                       "onUpdate:modelValue": (val) => filter.value = val,
@@ -569,19 +569,19 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           default: withCtx(() => [
                             createVNode(unref(_sfc_main$1), { value: "all" }, {
                               default: withCtx(() => [
-                                createTextVNode("全部")
+                                createTextVNode("\u5168\u90E8")
                               ]),
                               _: 1
                             }),
                             createVNode(unref(_sfc_main$1), { value: "todo" }, {
                               default: withCtx(() => [
-                                createTextVNode("未完成")
+                                createTextVNode("\u672A\u5B8C\u6210")
                               ]),
                               _: 1
                             }),
                             createVNode(unref(_sfc_main$1), { value: "done" }, {
                               default: withCtx(() => [
-                                createTextVNode("已完成")
+                                createTextVNode("\u5DF2\u5B8C\u6210")
                               ]),
                               _: 1
                             })
@@ -607,9 +607,9 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       } else if (filteredList.value.length === 0) {
         _push(`<div>`);
         _push(ssrRenderComponent(EmptyState, {
-          text: "还没有愿望，添加一个吧",
+          text: "\u8FD8\u6CA1\u6709\u613F\u671B\uFF0C\u6DFB\u52A0\u4E00\u4E2A\u5427",
           img: "/assets/images/xiaobai/xiaobai-1.png",
-          "cta-text": "添加愿望",
+          "cta-text": "\u6DFB\u52A0\u613F\u671B",
           "cta-to": "/wishes"
         }, null, _parent));
         _push(`</div>`);
@@ -639,10 +639,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         }, {
                           default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                             if (_push4) {
-                              _push4(`已完成`);
+                              _push4(`\u5DF2\u5B8C\u6210`);
                             } else {
                               return [
-                                createTextVNode("已完成")
+                                createTextVNode("\u5DF2\u5B8C\u6210")
                               ];
                             }
                           }),
@@ -661,10 +661,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         }, {
                           default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                             if (_push4) {
-                              _push4(`标记完成`);
+                              _push4(`\u6807\u8BB0\u5B8C\u6210`);
                             } else {
                               return [
-                                createTextVNode("标记完成")
+                                createTextVNode("\u6807\u8BB0\u5B8C\u6210")
                               ];
                             }
                           }),
@@ -678,10 +678,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         }, {
                           default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                             if (_push4) {
-                              _push4(`重置`);
+                              _push4(`\u91CD\u7F6E`);
                             } else {
                               return [
-                                createTextVNode("重置")
+                                createTextVNode("\u91CD\u7F6E")
                               ];
                             }
                           }),
@@ -710,7 +710,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                 class: "text-xs"
                               }, {
                                 default: withCtx(() => [
-                                  createTextVNode("已完成")
+                                  createTextVNode("\u5DF2\u5B8C\u6210")
                                 ]),
                                 _: 1
                               }),
@@ -725,7 +725,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               onClick: ($event) => markDone(w.id)
                             }, {
                               default: withCtx(() => [
-                                createTextVNode("标记完成")
+                                createTextVNode("\u6807\u8BB0\u5B8C\u6210")
                               ]),
                               _: 1
                             }, 8, ["onClick"])) : (openBlock(), createBlock(unref(_sfc_main$v), {
@@ -735,7 +735,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               onClick: ($event) => markTodo(w.id)
                             }, {
                               default: withCtx(() => [
-                                createTextVNode("重置")
+                                createTextVNode("\u91CD\u7F6E")
                               ]),
                               _: 1
                             }, 8, ["onClick"]))
@@ -769,7 +769,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               class: "text-xs"
                             }, {
                               default: withCtx(() => [
-                                createTextVNode("已完成")
+                                createTextVNode("\u5DF2\u5B8C\u6210")
                               ]),
                               _: 1
                             }),
@@ -784,7 +784,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                             onClick: ($event) => markDone(w.id)
                           }, {
                             default: withCtx(() => [
-                              createTextVNode("标记完成")
+                              createTextVNode("\u6807\u8BB0\u5B8C\u6210")
                             ]),
                             _: 1
                           }, 8, ["onClick"])) : (openBlock(), createBlock(unref(_sfc_main$v), {
@@ -794,7 +794,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                             onClick: ($event) => markTodo(w.id)
                           }, {
                             default: withCtx(() => [
-                              createTextVNode("重置")
+                              createTextVNode("\u91CD\u7F6E")
                             ]),
                             _: 1
                           }, 8, ["onClick"]))

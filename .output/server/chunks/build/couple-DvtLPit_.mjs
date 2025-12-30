@@ -47,24 +47,24 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       const minutes = Math.floor(diff / 6e4);
       const hours = Math.floor(diff / 36e5);
       const days = Math.floor(diff / 864e5);
-      if (minutes < 1) return "刚刚";
-      if (minutes < 60) return `${minutes}分钟前`;
-      if (hours < 24) return `${hours}小时前`;
-      if (days < 7) return `${days}天前`;
+      if (minutes < 1) return "\u521A\u521A";
+      if (minutes < 60) return `${minutes}\u5206\u949F\u524D`;
+      if (hours < 24) return `${hours}\u5C0F\u65F6\u524D`;
+      if (days < 7) return `${days}\u5929\u524D`;
       const month = date.getMonth() + 1;
       const day = date.getDate();
-      return `${month}月${day}日`;
+      return `${month}\u6708${day}\u65E5`;
     }
     return (_ctx, _push, _parent, _attrs) => {
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "min-h-screen bg-slate-50 dark:bg-slate-900" }, _attrs))}>`);
       _push(ssrRenderComponent(DogHeader, null, null, _parent));
-      _push(`<div class="max-w-xl mx-auto px-4 py-8"><div class="card space-y-4"><div class="text-lg">情侣绑定</div>`);
+      _push(`<div class="max-w-xl mx-auto px-4 py-8"><div class="card space-y-4"><div class="text-lg">\u60C5\u4FA3\u7ED1\u5B9A</div>`);
       if (loading.value) {
-        _push(`<div class="text-sm text-slate-500 dark:text-slate-400">加载中…</div>`);
+        _push(`<div class="text-sm text-slate-500 dark:text-slate-400">\u52A0\u8F7D\u4E2D\u2026</div>`);
       } else if (couple.value) {
-        _push(`<div class="space-y-4"><div class="flex items-center justify-between"><div>邀请码：<span class="font-mono">${ssrInterpolate(couple.value.code)}</span></div><button class="btn-secondary text-xs">${ssrInterpolate(copied.value ? "已复制" : "复制")}</button></div><div class="space-y-3"><!--[-->`);
+        _push(`<div class="space-y-4"><div class="flex items-center justify-between"><div>\u9080\u8BF7\u7801\uFF1A<span class="font-mono">${ssrInterpolate(couple.value.code)}</span></div><button class="btn-secondary text-xs">${ssrInterpolate(copied.value ? "\u5DF2\u590D\u5236" : "\u590D\u5236")}</button></div><div class="space-y-3"><!--[-->`);
         ssrRenderList(couple.value.members, (m) => {
-          _push(`<div class="flex items-start gap-3 p-3 rounded-lg bg-slate-50 hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-700 transition"><img${ssrRenderAttr("src", m.avatarUrl || "/assets/images/xiaojimao/xiaojimao-2.png")}${ssrRenderAttr("alt", m.nickName)} loading="lazy" class="w-12 h-12 rounded-full border-2 border-white object-cover flex-shrink-0"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 mb-1"><span class="font-medium text-slate-900 dark:text-slate-100">${ssrInterpolate(m.nickName)}</span><span class="text-xs text-slate-400 dark:text-slate-500">（${ssrInterpolate(m.role === "A" ? "发起者" : "伴侣")}）</span></div>`);
+          _push(`<div class="flex items-start gap-3 p-3 rounded-lg bg-slate-50 hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-700 transition"><img${ssrRenderAttr("src", m.avatarUrl || "/assets/images/xiaojimao/xiaojimao-2.png")}${ssrRenderAttr("alt", m.nickName)} loading="lazy" class="w-12 h-12 rounded-full border-2 border-white object-cover flex-shrink-0"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 mb-1"><span class="font-medium text-slate-900 dark:text-slate-100">${ssrInterpolate(m.nickName)}</span><span class="text-xs text-slate-400 dark:text-slate-500">\uFF08${ssrInterpolate(m.role === "A" ? "\u53D1\u8D77\u8005" : "\u4F34\u4FA3")}\uFF09</span></div>`);
           if (m.status) {
             _push(`<div class="flex items-center gap-2 mb-2"><span class="px-2 py-0.5 rounded-full bg-slate-200 text-slate-600 dark:bg-slate-700 dark:text-slate-400 text-sm">${ssrInterpolate(m.status)}</span>`);
             if (m.statusUpdatedAt) {
@@ -74,19 +74,19 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
             }
             _push(`</div>`);
           } else {
-            _push(`<div class="text-xs text-slate-400 dark:text-slate-500 mb-2">暂无状态</div>`);
+            _push(`<div class="text-xs text-slate-400 dark:text-slate-500 mb-2">\u6682\u65E0\u72B6\u6001</div>`);
           }
-          _push(`<div class="flex items-center gap-2"><button class="text-xs text-amber-600 hover:text-amber-700 dark:text-amber-500 dark:hover:text-amber-400 underline">${ssrInterpolate(m.id === currentUserId.value ? "查看我的主页" : "查看主页")}</button></div></div></div>`);
+          _push(`<div class="flex items-center gap-2"><button class="text-xs text-amber-600 hover:text-amber-700 dark:text-amber-500 dark:hover:text-amber-400 underline">${ssrInterpolate(m.id === currentUserId.value ? "\u67E5\u770B\u6211\u7684\u4E3B\u9875" : "\u67E5\u770B\u4E3B\u9875")}</button></div></div></div>`);
         });
         _push(`<!--]--></div>`);
         if (couple.value.members.length === 1) {
-          _push(`<div class="space-y-2"><div class="text-xs text-slate-500 dark:text-slate-400">已创建情侣：等待对方加入。你也可以直接加入对方的情侣（将切换绑定）。</div><form class="flex gap-2"><input${ssrRenderAttr("value", switchCode.value)} placeholder="输入对方的邀请码切换绑定" class="input"><button class="btn-secondary">切换加入</button></form></div>`);
+          _push(`<div class="space-y-2"><div class="text-xs text-slate-500 dark:text-slate-400">\u5DF2\u521B\u5EFA\u60C5\u4FA3\uFF1A\u7B49\u5F85\u5BF9\u65B9\u52A0\u5165\u3002\u4F60\u4E5F\u53EF\u4EE5\u76F4\u63A5\u52A0\u5165\u5BF9\u65B9\u7684\u60C5\u4FA3\uFF08\u5C06\u5207\u6362\u7ED1\u5B9A\uFF09\u3002</div><form class="flex gap-2"><input${ssrRenderAttr("value", switchCode.value)} placeholder="\u8F93\u5165\u5BF9\u65B9\u7684\u9080\u8BF7\u7801\u5207\u6362\u7ED1\u5B9A" class="input"><button class="btn-secondary">\u5207\u6362\u52A0\u5165</button></form></div>`);
         } else {
           _push(`<!---->`);
         }
         _push(`</div>`);
       } else {
-        _push(`<div class="space-y-4"><div class="text-sm text-slate-500 dark:text-slate-400">你还没有绑定情侣。可以创建情侣，或直接输入对方的邀请码加入。</div><div class="flex flex-col sm:flex-row gap-3 items-start sm:items-center"><button class="btn-primary">创建情侣</button><form class="flex gap-2 w-full sm:w-auto"><input${ssrRenderAttr("value", code.value)} placeholder="输入邀请码（如 ABC123）" class="input w-full sm:w-56"><button class="btn-secondary">加入</button></form></div></div>`);
+        _push(`<div class="space-y-4"><div class="text-sm text-slate-500 dark:text-slate-400">\u4F60\u8FD8\u6CA1\u6709\u7ED1\u5B9A\u60C5\u4FA3\u3002\u53EF\u4EE5\u521B\u5EFA\u60C5\u4FA3\uFF0C\u6216\u76F4\u63A5\u8F93\u5165\u5BF9\u65B9\u7684\u9080\u8BF7\u7801\u52A0\u5165\u3002</div><div class="flex flex-col sm:flex-row gap-3 items-start sm:items-center"><button class="btn-primary">\u521B\u5EFA\u60C5\u4FA3</button><form class="flex gap-2 w-full sm:w-auto"><input${ssrRenderAttr("value", code.value)} placeholder="\u8F93\u5165\u9080\u8BF7\u7801\uFF08\u5982 ABC123\uFF09" class="input w-full sm:w-56"><button class="btn-secondary">\u52A0\u5165</button></form></div></div>`);
       }
       _push(`</div></div></div>`);
     };

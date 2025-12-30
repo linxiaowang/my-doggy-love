@@ -5,7 +5,7 @@ import { _ as __nuxt_component_0$1 } from './nuxt-link-qMRI1Itf.mjs';
 
 const _sfc_main$1 = {};
 function _sfc_ssrRender(_ctx, _push, _parent, _attrs) {
-  _push(`<footer${ssrRenderAttrs(mergeProps({ class: "border-t border-border py-6" }, _attrs))}><div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row gap-3 items-center justify-between"><div class="text-sm text-muted-foreground flex flex-wrap gap-2 items-center justify-center md:justify-start"><span>© ${ssrInterpolate((/* @__PURE__ */ new Date()).getFullYear())} My Doggy Love</span><span class="text-muted-foreground/50">·</span><span>以爱为名，记录每一帧心动</span><span class="text-muted-foreground/50">·</span><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" class="hover:underline hover:text-foreground transition-colors">闽ICP备2025120753号</a></div><div class="flex items-center gap-3"><a href="https://github.com/linxiaowang/my-doggy-love" target="_blank" rel="noopener" title="GitHub" class="text-muted-foreground hover:text-foreground transition-colors"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path></svg></a><a href="https://github.com/linxiaowang/my-doggy-love/issues" target="_blank" rel="noopener" class="text-sm text-muted-foreground hover:text-foreground hover:underline transition-colors" title="反馈">反馈</a><a href="https://github.com/linxiaowang/my-doggy-love/blob/main/LICENSE" target="_blank" rel="noopener" class="text-sm text-muted-foreground hover:text-foreground hover:underline transition-colors" title="许可证">许可证</a></div></div></footer>`);
+  _push(`<footer${ssrRenderAttrs(mergeProps({ class: "border-t border-border py-6" }, _attrs))}><div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row gap-3 items-center justify-between"><div class="text-sm text-muted-foreground flex flex-wrap gap-2 items-center justify-center md:justify-start"><span>\xA9 ${ssrInterpolate((/* @__PURE__ */ new Date()).getFullYear())} My Doggy Love</span><span class="text-muted-foreground/50">\xB7</span><span>\u4EE5\u7231\u4E3A\u540D\uFF0C\u8BB0\u5F55\u6BCF\u4E00\u5E27\u5FC3\u52A8</span><span class="text-muted-foreground/50">\xB7</span><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" class="hover:underline hover:text-foreground transition-colors">\u95FDICP\u59072025120753\u53F7</a></div><div class="flex items-center gap-3"><a href="https://github.com/linxiaowang/my-doggy-love" target="_blank" rel="noopener" title="GitHub" class="text-muted-foreground hover:text-foreground transition-colors"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path></svg></a><a href="https://github.com/linxiaowang/my-doggy-love/issues" target="_blank" rel="noopener" class="text-sm text-muted-foreground hover:text-foreground hover:underline transition-colors" title="\u53CD\u9988">\u53CD\u9988</a><a href="https://github.com/linxiaowang/my-doggy-love/blob/main/LICENSE" target="_blank" rel="noopener" class="text-sm text-muted-foreground hover:text-foreground hover:underline transition-colors" title="\u8BB8\u53EF\u8BC1">\u8BB8\u53EF\u8BC1</a></div></div></footer>`);
 }
 const _sfc_setup$1 = _sfc_main$1.setup;
 _sfc_main$1.setup = (props, ctx) => {
@@ -51,7 +51,7 @@ const useAuth = () => {
       user.value = null;
       await navigateTo("/user/login");
     } catch (error) {
-      console.error("退出登录失败:", error);
+      console.error("\u9000\u51FA\u767B\u5F55\u5931\u8D25:", error);
     }
   }
   return {
@@ -70,11 +70,11 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
     const route = useRoute();
     const { isAuthenticated } = useAuth();
     const navItems = [
-      { name: "首页", path: "/", icon: "home", ariaLabel: "首页" },
-      { name: "日常", path: "/daily", icon: "image", ariaLabel: "日常动态" },
-      { name: "愿望", path: "/wishes", icon: "star", ariaLabel: "愿望清单" },
-      { name: "留言", path: "/messages", icon: "message-circle", ariaLabel: "留言板" },
-      { name: "我的", path: "/user/profile", icon: "user", ariaLabel: "个人中心" }
+      { name: "\u9996\u9875", path: "/", icon: "home", ariaLabel: "\u9996\u9875" },
+      { name: "\u65E5\u5E38", path: "/daily", icon: "image", ariaLabel: "\u65E5\u5E38\u52A8\u6001" },
+      { name: "\u613F\u671B", path: "/wishes", icon: "star", ariaLabel: "\u613F\u671B\u6E05\u5355" },
+      { name: "\u7559\u8A00", path: "/messages", icon: "message-circle", ariaLabel: "\u7559\u8A00\u677F" },
+      { name: "\u6211\u7684", path: "/user/profile", icon: "user", ariaLabel: "\u4E2A\u4EBA\u4E2D\u5FC3" }
     ];
     function isActive(path) {
       if (path === "/") return route.path === "/";
@@ -93,7 +93,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         _push(`<nav${ssrRenderAttrs(mergeProps({
           class: "fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-md border-t border-border pb-[env(safe-area-inset-bottom)] z-50 md:hidden",
           role: "navigation",
-          "aria-label": "主导航"
+          "aria-label": "\u4E3B\u5BFC\u822A"
         }, _attrs))}><div class="flex justify-around items-center h-16 px-2"><!--[-->`);
         ssrRenderList(navItems, (item) => {
           _push(ssrRenderComponent(_component_NuxtLink, {
