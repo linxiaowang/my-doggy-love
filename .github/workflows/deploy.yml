@@ -174,6 +174,16 @@ jobs:
             mkdir -p "$APP_DIR/public/uploads"
             chmod 755 "$APP_DIR/public/uploads"
 
+            # 创建应用环境变量文件
+            echo "📝 创建应用环境变量文件..."
+            echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > "$APP_DIR/.env"
+            echo "UPLOAD_DIR=public/uploads" >> "$APP_DIR/.env"
+            echo "AUTH_SECRET=${{ secrets.AUTH_SECRET }}" >> "$APP_DIR/.env"
+            echo "NUXT_PUBLIC_VAPID_KEY=${{ secrets.NUXT_PUBLIC_VAPID_KEY }}" >> "$APP_DIR/.env"
+            echo "NUXT_VAPID_PRIVATE_KEY=${{ secrets.NUXT_VAPID_PRIVATE_KEY }}" >> "$APP_DIR/.env"
+            echo "NUXT_VAPID_SUBJECT=${{ secrets.NUXT_VAPID_SUBJECT }}" >> "$APP_DIR/.env"
+            echo "✅ 环境变量文件已创建"
+
             # 启动 Docker 和 MySQL
             echo "🐳 检查 Docker 服务..."
             if ! command -v docker &> /dev/null; then
