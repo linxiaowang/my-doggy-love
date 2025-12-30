@@ -47,7 +47,7 @@
               v-if="unreadCount > 0"
               variant="destructive"
               :aria-label="`${unreadCount} 条未读通知`"
-              class="absolute -top-1 -right-1 px-1.5 py-0.5 h-5 min-w-[18px] flex items-center justify-center text-[10px] font-semibold shadow-md border-2 border-background animate-in zoom-in-50 duration-200 group-hover:scale-110 transition-transform"
+              class="absolute -top-1 -right-1 px-1.5 py-0.5 h-5 min-w-[18px] flex items-center justify-center text-[10px] font-semibold shadow-md border-2 border-white dark:border-slate-900 bg-red-600 dark:bg-red-600 text-white animate-in zoom-in-50 duration-200 group-hover:scale-110 transition-transform"
             >
               {{ unreadCount > 99 ? '99+' : unreadCount }}
             </Badge>
