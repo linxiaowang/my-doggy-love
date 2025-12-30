@@ -62,7 +62,7 @@ jobs:
       - name: Create deployment package
         run: |
           # 打包构建产物和必要的配置文件
-          tar -czf output.tar.gz .output docker-compose.yml
+          tar -czf output.tar.gz .output docker-compose.yml ecosystem.config.cjs
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -173,6 +173,10 @@ jobs:
             # 创建上传目录
             mkdir -p "$APP_DIR/public/uploads"
             chmod 755 "$APP_DIR/public/uploads"
+
+            # 创建 PM2 日志目录
+            mkdir -p "$APP_DIR/logs"
+            chmod 755 "$APP_DIR/logs"
 
             # 创建应用环境变量文件
             echo "📝 创建应用环境变量文件..."
@@ -334,12 +338,18 @@ jobs:
             $PM2_CMD delete "$APP_NAME" 2>/dev/null || echo "无旧进程需要删除"
             echo ""
 
-            # 启动新进程
+            # 启动新进程（使用 ecosystem.config.cjs 以加载环境变量）
             echo "启动 PM2 进程..."
-            $PM2_CMD start ".output/server/index.mjs" \
-              --name "$APP_NAME" \
-              --env production \
-              --max-memory-restart 1G
+            if [ -f "ecosystem.config.cjs" ]; then
+              echo "✅ 使用 ecosystem.config.cjs 配置文件"
+              $PM2_CMD start ecosystem.config.cjs
+            else
+              echo "⚠️  ecosystem.config.cjs 不存在，使用默认配置"
+              $PM2_CMD start ".output/server/index.mjs" \
+                --name "$APP_NAME" \
+                --env production \
+                --max-memory-restart 1G
+            fi
 
             PM2_EXIT_CODE=$?
 
