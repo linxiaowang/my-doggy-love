@@ -5,7 +5,17 @@ dist
 .output
 .nuxt
 .env
+.env.production
 .idea/
 public/assets/fonts
 .pnpm-store
 /public/uploads/
+
+# 构建缓存
+.nitro
+node_modules/.vite
+node_modules/.cache
+~/.nuxt
+
+# 构建临时文件
+build-debug.log
