@@ -110,44 +110,46 @@ openssl rand -base64 32
 
 ## 📦 生产环境部署
 
-详细部署指南请查看 [DEPLOY.md](./DEPLOY.md)
+### GitHub Actions CI/CD（推荐）
 
-### 快速部署（服务器）
+项目使用 GitHub Actions 实现自动化 CI/CD，推送代码即自动部署。
 
-#### 首次部署（完整设置）
-
-```bash
-# 1. 上传代码到服务器
-cd /opt/my-doggy-love
-
-# 2. 执行完整部署脚本（包含数据库迁移、环境初始化）
-chmod +x deploy.sh
-./deploy.sh
-```
-
-#### 日常更新部署（推荐）
+**首次配置**：
 
 ```bash
-# 1. 进入项目目录
-cd /opt/my-doggy-love
+# 运行配置脚本
+./setup-ci-cd.sh
 
-# 2. 执行快速部署脚本（仅构建和重启应用）
-chmod +x quick-deploy.sh
-./quick-deploy.sh
-
-# 如果需要安装新的依赖
-./quick-deploy.sh --install
+# 或手动配置，查看快速开始指南
+cat QUICK_START.md
 ```
 
-### 手动部署步骤
+**日常使用**：
 
-1. **安装环境依赖**：Node.js、pnpm、Docker、PM2、Nginx
-2. **配置环境变量**：创建 `.env` 文件
+```bash
+# 1. 开发代码
+vim app/pages/index.vue
+
+# 2. 提交代码
+git add .
+git commit -m "feat: 新功能"
+git push origin main
+
+# 3. GitHub Actions 自动构建和部署 🚀
+```
+
+查看部署状态：https://github.com/linxiaowang/my-doggy-love/actions
+
+### 手动部署
+
+如需手动部署到服务器：
+
+1. **安装环境依赖**：Node.js 20、pnpm、Docker、PM2
+2. **配置环境变量**：创建 `.env` 文件（参考 QUICK_START.md）
 3. **启动 MySQL**：`docker-compose up -d`
 4. **初始化数据库**：`pnpm prisma migrate deploy`
 5. **构建项目**：`pnpm build`
 6. **启动应用**：`pm2 start ecosystem.config.cjs`
-7. **配置 Nginx**：参考 `nginx.example.conf`
 
 ## 📁 项目结构
 
@@ -194,11 +196,11 @@ my-doggy-love/
 ├── public/
 │   ├── assets/
 │   │   └── images/      # 线条小狗 IP 图片资源
-│   └── uploads/         # 本地文件上传目录（可选，使用 OSS 时不需要）
+│   └── uploads/         # 本地文件上传目录
 ├── docker-compose.yml   # MySQL 容器配置
 ├── ecosystem.config.cjs # PM2 配置
-├── deploy.sh            # 完整部署脚本
-└── quick-deploy.sh      # 快速部署脚本
+├── prisma/              # Prisma 数据库 schema
+└── .github/             # GitHub Actions CI/CD 配置
 ```
 
 ## 🎨 设计特色
