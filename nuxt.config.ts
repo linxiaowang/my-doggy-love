@@ -38,6 +38,9 @@ export default defineNuxtConfig({
   runtimeConfig: {
     vapidPrivateKey: process.env.NUXT_VAPID_PRIVATE_KEY,
     vapidSubject: process.env.NUXT_VAPID_SUBJECT,
+    databaseUrl: process.env.DATABASE_URL,
+    uploadDir: process.env.UPLOAD_DIR,
+    authSecret: process.env.AUTH_SECRET,
     public: {
       vapidPublicKey: process.env.NUXT_PUBLIC_VAPID_KEY,
     },
