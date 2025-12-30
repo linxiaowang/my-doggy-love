@@ -103,7 +103,39 @@ export default defineNuxtConfig({
         if (id === 'sharp' || id.startsWith('sharp/')) {
           return true
         }
+        // 排除一些可能导致构建卡顿的可选依赖
+        if (id.includes('optional')) {
+          return true
+        }
         return false
+      },
+    },
+    // 禁用一些可能导致构建卡顿的功能
+    experimental: {
+      openAPI: false,
+      wasm: false,
+    },
+    // 减少构建并行度，避免内存耗尽
+    workers: {
+      threadCount: 1,
+    },
+  },
+
+  // 优化 Vite 构建
+  vite: {
+    plugins: [
+      tailwindcss(),
+    ],
+    build: {
+      // 减少并行构建
+      parallel: false,
+      // 优化依赖预构建
+      optimizeDeps: {
+        include: [
+          'vue',
+          'pinia',
+          '@vueuse/core',
+        ],
       },
     },
   },
