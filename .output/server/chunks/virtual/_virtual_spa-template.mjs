@@ -1,3 +1,0 @@
-const template = "";
-
-export { template };

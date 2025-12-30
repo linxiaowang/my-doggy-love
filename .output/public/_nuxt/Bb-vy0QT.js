@@ -1,1 +1,0 @@
-import{M as r,k as n}from"./DW3SVq1p.js";function s(){return r("/api/anniversaries")}async function t(e){return n("/api/anniversaries",{method:"POST",body:e})}async function o(e,a){return n(`/api/anniversaries/${e}`,{method:"PATCH",body:a})}async function u(e){return n(`/api/anniversaries/${e}`,{method:"DELETE"})}export{o as a,t as c,u as d,s as u};

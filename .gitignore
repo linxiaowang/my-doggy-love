@@ -15,9 +15,8 @@ node_modules/.vite
 node_modules/.cache
 ~/.nuxt
 
+# 构建产物（由 GitHub Actions 构建，无需提交）
+.output
+
 # 构建临时文件
 build-debug.log
-
-# 注意：.output 目录需要提交到 Git，以便服务器直接拉取部署
-# 如果不想提交 .output，请取消下面的注释
-# .output
