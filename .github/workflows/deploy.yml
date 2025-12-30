@@ -204,12 +204,7 @@ jobs:
             # 检查 package.json 是否存在（PM2 生态系统需要）
             if [ ! -f "package.json" ]; then
               echo "⚠️  package.json 不存在，创建占位文件..."
-              cat > package.json << EOF
-{
-  "name": "my-doggy-love",
-  "version": "1.0.0"
-}
-EOF
+              echo '{"name":"my-doggy-love","version":"1.0.0"}' > package.json
             fi
 
             # 删除旧进程
