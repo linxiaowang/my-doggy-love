@@ -165,10 +165,68 @@
       </TransitionGroup>
     </div>
 
-    <!-- Info hint -->
-    <div class="absolute top-4 right-4 z-20 text-xs text-slate-500 dark:text-slate-400 bg-white/70 dark:bg-slate-800/70 px-3 py-1.5 rounded-full backdrop-blur-sm border border-slate-200 dark:border-slate-700 shadow-sm">
-      点击查看图片
-    </div>
+    <!-- Image Preview Modal -->
+    <Teleport to="body">
+      <div
+        v-if="previewImage !== null"
+        class="fixed inset-0 z-50 bg-black/95 flex items-center justify-center backdrop-blur-sm"
+        @click.self="closePreview"
+        @keydown.esc="closePreview"
+        tabindex="-1"
+      >
+        <!-- Close button -->
+        <button
+          class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center z-50 transition-all duration-200 hover:scale-110 active:scale-95 border-none cursor-pointer"
+          @click="closePreview"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+
+        <!-- Previous button -->
+        <button
+          v-if="previewIndex > 0"
+          class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center z-50 cursor-pointer transition-all duration-200 hover:scale-110 active:scale-95 border-none"
+          @click.stop.prevent="prevImage"
+          type="button"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+
+        <!-- Next button -->
+        <button
+          v-if="previewIndex < images.length - 1"
+          class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center z-50 cursor-pointer transition-all duration-200 hover:scale-110 active:scale-95 border-none"
+          @click.stop.prevent="nextImage"
+          type="button"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+
+        <!-- Image content -->
+        <div class="max-w-[90vw] max-h-[90vh] flex items-center justify-center w-full h-full p-4" @click.stop>
+          <img
+            v-if="previewImage !== null"
+            :src="previewImage"
+            class="max-w-full max-h-[85vh] object-contain shadow-2xl rounded-sm select-none"
+            alt="预览"
+          />
+        </div>
+
+        <!-- Page indicator -->
+        <div
+          v-if="images.length > 1"
+          class="absolute bottom-6 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md text-white/90 text-sm font-medium border border-white/5"
+        >
+          {{ previewIndex + 1 }} / {{ images.length }}
+        </div>
+      </div>
+    </Teleport>
   </div>
 </template>
 
@@ -197,6 +255,10 @@ const treeHeight = ref(700)
 let nextId = 0
 let timer: any = null
 let resizeObserver: ResizeObserver | null = null
+
+// Preview state
+const previewIndex = ref<number>(0)
+const previewImage = ref<string | null>(null)
 
 function spawnItems() {
   // Always spawn hearts as decorative elements
@@ -247,9 +309,49 @@ function createItem(type: 'photo' | 'heart') {
   }, item.animationDuration * 1000 - 100)
 }
 
+// Open preview with specific image
 function handleImageClick(src: string) {
-  // Open image in lightbox or new tab
-  window.open(src, '_blank')
+  const index = props.images.indexOf(src)
+  if (index !== -1) {
+    previewIndex.value = index
+    previewImage.value = src
+    document.body.style.overflow = 'hidden'
+  }
+}
+
+// Close preview
+function closePreview() {
+  previewImage.value = null
+  document.body.style.overflow = ''
+}
+
+// Previous image
+function prevImage() {
+  if (previewIndex.value > 0) {
+    previewIndex.value--
+    previewImage.value = props.images[previewIndex.value] || null
+  }
+}
+
+// Next image
+function nextImage() {
+  if (previewIndex.value < props.images.length - 1) {
+    previewIndex.value++
+    previewImage.value = props.images[previewIndex.value] || null
+  }
+}
+
+// Keyboard shortcuts
+function handleKeydown(event: KeyboardEvent) {
+  if (previewImage.value === null) return
+
+  if (event.key === 'Escape') {
+    closePreview()
+  } else if (event.key === 'ArrowLeft') {
+    prevImage()
+  } else if (event.key === 'ArrowRight') {
+    nextImage()
+  }
 }
 
 function updateTreeHeight() {
@@ -271,6 +373,11 @@ onMounted(() => {
     resizeObserver.observe(treeContainer.value)
   }
 
+  // Listen for keyboard events
+  if (typeof window !== 'undefined') {
+    window.addEventListener('keydown', handleKeydown)
+  }
+
   spawnItems()
   timer = setInterval(spawnItems, 1800)
 })
@@ -278,8 +385,12 @@ onMounted(() => {
 onUnmounted(() => {
   if (timer) clearInterval(timer)
   if (resizeObserver) resizeObserver.disconnect()
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('keydown', handleKeydown)
+  }
   activeItems.value = []
   fallenItems.value = []
+  document.body.style.overflow = ''
 })
 </script>
 
