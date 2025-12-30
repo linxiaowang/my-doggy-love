@@ -151,21 +151,20 @@ jobs:
 
             # 检查解压结果
             echo "🔍 检查解压结果..."
-            ls -la "$APP_DIR/" || echo "目录为空"
+            ls -la "$APP_DIR/"
             echo ""
 
             # 清理临时文件
             rm -f "$TEMP_FILE"
 
-            # 设置权限（只对存在的文件/目录）
-            if [ -d "$APP_DIR/.output" ]; then
-              echo "🔐 设置 .output 权限..."
-              chmod -R 755 "$APP_DIR/.output"
-            else
-              # 可能解压到了其他位置，检查一下
-              echo "⚠️  .output 目录不存在，检查其他目录..."
-              ls -la "$APP_DIR/"
-            fi
+            # 设置权限
+            echo "🔐 设置权限..."
+            chmod -R 755 "$APP_DIR/.output"
+
+            # 清理解压时产生的其他文件（如果存在）
+            rm -f "$APP_DIR/nitro.json"
+            rm -rf "$APP_DIR/public"
+            rm -rf "$APP_DIR/server"
 
             # 创建上传目录
             mkdir -p "$APP_DIR/public/uploads"
@@ -176,14 +175,26 @@ jobs:
               echo "🚀 启动应用..."
               cd "$APP_DIR"
 
+              # 检查文件是否存在
+              echo "🔍 检查应用文件..."
+              ls -la .output/server/index.mjs || echo "❌ server/index.mjs 不存在"
+              echo ""
+
               # 删除旧进程
               pm2 delete "$APP_NAME" 2>/dev/null || true
 
               # 启动新进程
+              echo "启动 PM2 进程..."
               pm2 start ".output/server/index.mjs" \
                 --name "$APP_NAME" \
                 --env production \
-                --max-memory-restart 1G
+                --max-memory-restart 1G \
+                || {
+                  echo "❌ PM2 启动失败"
+                  echo "查看 PM2 日志:"
+                  pm2 logs "$APP_NAME" --lines 20
+                  exit 1
+                }
 
               # 保存 PM2 配置
               pm2 save
@@ -192,6 +203,9 @@ jobs:
               echo "✅ 应用已启动"
               echo ""
               pm2 status "$APP_NAME"
+              echo ""
+              echo "查看应用状态:"
+              pm2 info "$APP_NAME"
             else
               echo "⚠️  PM2 未安装"
             fi
