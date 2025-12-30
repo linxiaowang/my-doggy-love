@@ -1,100 +1,154 @@
-# 本地构建并部署到服务器
+# 本地构建 + Git 部署方案
 
-由于服务器构建环境不稳定，推荐使用**本地构建 + 上传部署**的方式。
+由于服务器构建环境不稳定，采用**本地构建 + Git 部署**的方式。
+
+## 工作流程
+
+```
+本地构建 → 提交到 Git → 服务器 git pull → 运行部署脚本
+```
+
+1. **本地构建** - 在本地（Mac）执行构建，生成 `.output` 目录
+2. **提交到 Git** - 将 `.output` 目录提交到 Git 仓库
+3. **服务器拉取** - 在服务器上 `git pull` 拉取最新代码（包括构建产物）
+4. **服务器部署** - 在服务器上运行部署脚本，自动部署应用
 
 ## 快速开始
 
-### 1. 准备工作
+### 第一次使用
 
-#### 创建生产环境配置文件
+#### 1. 创建生产环境配置文件
 
 ```bash
-# 复制配置模板
+# 在本地
 cp .env.production.example .env.production
-
-# 编辑配置文件，填写实际的生产环境信息
 vim .env.production
+
+# 填写生产环境数据库连接等信息
 ```
 
-需要配置的内容：
-- `DATABASE_URL`: 生产环境数据库连接
-- `AUTH_SECRET`: 认证密钥（使用 `openssl rand -base64 32` 生成）
-- 其他环境变量
-
-#### 配置服务器信息
-
-编辑 `deploy-to-server.sh`，设置服务器连接信息：
+#### 2. 在服务器上首次部署
 
 ```bash
-SERVER_USER="root"           # 服务器用户名
-SERVER_HOST="your-server-ip"  # 服务器 IP 地址
-SERVER_PATH="/var/www/my-doggy-love"  # 应用部署路径
+# SSH 到服务器
+ssh user@server
+
+# 克隆或拉取代码
+cd /var/www/my-doggy-love
+git pull
+
+# 创建生产环境变量（如果本地有 .env.production，会自动复制）
+# 或者手动创建
+cp .env.production.example .env
+vim .env  # 填写实际的生产环境配置
+
+# 运行部署脚本
+bash server-pull-deploy.sh
 ```
 
-### 2. 本地构建
+### 日常部署流程
+
+#### 本地操作
 
 ```bash
-# 方式一：构建并询问是否部署
+# 1. 本地构建
 ./build-local.sh
 
-# 方式二：只构建，不部署
-./build-local.sh
-# 选择 'n' 不立即部署
+# 2. 提交到 Git（脚本会提示）
+git add .output
+git commit -m "chore: 更新构建产物"
+git push
 ```
 
-构建过程：
+#### 服务器操作
+
+```bash
+# SSH 到服务器
+ssh user@server
+
+# 进入项目目录
+cd /var/www/my-doggy-love
+
+# 拉取最新代码（包括构建产物）
+git pull
+
+# 运行部署脚本
+bash server-pull-deploy.sh
+```
+
+## 脚本说明
+
+### build-local.sh（本地运行）
+
+本地构建脚本，执行以下操作：
 1. 检查 `.env.production` 文件是否存在
 2. 清理旧的构建产物
-3. 使用生产环境配置进行构建
-4. 生成 `.output` 目录
+3. 执行 `pnpm build` 生成 `.output` 目录
+4. 显示构建产物大小
+5. 询问是否提交到 Git
 
-### 3. 部署到服务器
+### server-pull-deploy.sh（服务器运行）
+
+服务器部署脚本，执行以下操作：
+1. 检查 `.output` 目录是否存在
+2. 停止旧应用（PM2）
+3. 备份旧版本到 `/var/backups/my-doggy-love/`
+4. 复制新的 `.output` 到应用目录
+5. 设置权限
+6. 启动新应用（PM2）
+7. 清理临时文件
+
+## 注意事项
+
+### 1. .output 目录大小
+
+构建产物约 50-100MB，提交到 Git 会增加仓库大小。
+
+**优点**：
+- ✅ 服务器不需要构建，直接拉取即可
+- ✅ 版本可追溯，可以快速回滚
+- ✅ 部署速度快
+
+**缺点**：
+- ❌ Git 仓库体积会变大
+- ❌ clone/pull 时间会增加
+
+### 2. Git LFS 方案（可选）
+
+如果不想将二进制文件提交到 Git，可以使用 Git LFS：
 
 ```bash
-# 部署构建产物到服务器
-./deploy-to-server.sh
+# 安装 Git LFS
+git lfs install
+
+# 跟踪 .output 目录
+git lfs track ".output/**"
+git add .gitattributes
+git commit -m "chore: 添加 Git LFS 配置"
 ```
 
-部署过程：
-1. 检查本地 `.output` 目录是否存在
-2. 压缩构建产物为 `output.tar.gz`
-3. 通过 SCP 上传到服务器
-4. 在服务器上：
-   - 停止旧应用（PM2）
-   - 备份旧版本
-   - 解压新版本
-   - 启动新应用（PM2）
-5. 清理临时文件
+### 3. 备份策略
 
-## 手动部署
-
-如果自动部署脚本不适用，可以手动上传：
-
-### 使用 SCP 上传
+部署脚本会自动备份旧版本，保留最近 5 个版本：
 
 ```bash
-# 压缩构建产物
-tar -czf output.tar.gz .output
+# 查看备份
+ls -lh /var/backups/my-doggy-love/
 
-# 上传到服务器
-scp output.tar.gz user@server:/tmp/
-
-# 在服务器上解压
-ssh user@server
+# 手动回滚
 cd /var/www/my-doggy-love
-tar -xzf /tmp/output.tar.gz
-rm /tmp/output.tar.gz
-
-# 重启应用
+pm2 stop my-doggy-love
+rm -rf .output
+cp -r /var/backups/my-doggy-love/.output.20251230_120000 .output
 pm2 restart my-doggy-love
 ```
 
-### 使用 SFTP 客户端
+### 4. 环境变量
 
-使用 FileZilla、WinSCP 等工具：
-1. 连接到服务器
-2. 上传 `.output` 目录到服务器指定位置
-3. SSH 到服务器重启应用
+- `.env.production` - 本地构建时使用的配置（不提交到 Git）
+- `.env` - 服务器运行时的配置（需要手动创建）
+
+两者应该保持一致，但注意不要将敏感信息提交到 Git。
 
 ## 常见问题
 
@@ -106,22 +160,21 @@ A:
 3. 检查 `.env.production` 文件格式是否正确
 4. 查看构建错误日志
 
-### Q: 无法连接到服务器怎么办？
+### Q: 服务器拉取后找不到 .output？
 
 A:
-1. 检查服务器 IP 和端口是否正确
-2. 确保 SSH 服务已启动：`systemctl status sshd`
-3. 检查防火墙规则
-4. 确认 SSH 密钥或密码配置正确
+1. 检查本地是否已提交 `.output` 到 Git
+2. 在服务器上运行 `git status` 查看是否有未追踪的文件
+3. 确保 `.gitignore` 没有忽略 `.output` 目录
 
-### Q: PM2 命令找不到怎么办？
+### Q: PM2 命令找不到？
 
 A: 在服务器上安装 PM2：
 ```bash
 npm install -g pm2
 ```
 
-### Q: 部署后应用无法启动怎么办？
+### Q: 部署后应用无法启动？
 
 A: 查看应用日志：
 ```bash
@@ -133,145 +186,103 @@ tail -f /var/www/my-doggy-love/logs/*.log
 ```
 
 常见原因：
-- 数据库连接失败：检查 `DATABASE_URL` 配置
+- 数据库连接失败：检查 `.env` 中的 `DATABASE_URL`
 - 端口被占用：`lsof -i :3000`
-- 环境变量缺失：检查 `.env.production` 文件
+- 环境变量缺失：检查服务器上的 `.env` 文件
 
 ### Q: 如何回滚到旧版本？
 
-A: 脚本会自动备份旧版本，可以手动恢复：
+A:
 ```bash
 # 在服务器上
 cd /var/www/my-doggy-love
-ls -la .output.backup.*
+
+# 查看备份版本
+ls -lh /var/backups/my-doggy-love/
+
+# 停止应用
 pm2 stop my-doggy-love
+
+# 恢复旧版本
 rm -rf .output
-mv .output.backup.YYYYMMDD_HHMMSS .output
+cp -r /var/backups/my-doggy-love/.output.YYYYMMDD_HHMMSS .output
+
+# 重启应用
 pm2 restart my-doggy-love
 ```
 
-## 工作流程对比
+或者通过 Git 回滚：
+```bash
+# 查看历史版本
+git log --oneline
 
-### 服务器构建（旧方式，不推荐）
-
+# 回滚到指定版本
+git checkout <commit-hash>
+bash server-pull-deploy.sh
 ```
-本地代码 → Git 推送 → 服务器拉取 → 服务器构建（容易卡住）→ 启动应用
-```
-
-问题：
-- 服务器资源有限，构建容易卡住
-- 构建时间长，容易超时
-- 难以调试构建问题
-
-### 本地构建（新方式，推荐）
-
-```
-本地代码 → 本地构建 → 压缩上传 → 服务器解压 → 启动应用
-```
-
-优势：
-- 本地资源充足，构建快速稳定
-- 构建失败容易调试
-- 服务器只需要解压和启动，速度快
-- 可以保留多个历史版本便于回滚
 
 ## 优化建议
 
-### 1. 使用 CI/CD 自动化
+### 1. 自动化部署（可选）
 
-可以配置 GitHub Actions 或其他 CI 工具自动构建：
-```yaml
-# .github/workflows/deploy.yml
-name: Deploy
-on:
-  push:
-    branches: [main]
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-      - name: Install dependencies
-        run: pnpm install
-      - name: Build
-        run: pnpm build
-      - name: Deploy to server
-        uses: easingthemes/ssh-deploy@main
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
-          REMOTE_HOST: ${{ secrets.SERVER_HOST }}
-          REMOTE_USER: ${{ secrets.SERVER_USER }}
-          SOURCE: ".output/"
-          TARGET: "/var/www/my-doggy-love/"
-```
-
-### 2. 增量部署
-
-如果项目很大，可以只上传变更的文件：
-```bash
-# 使用 rsync 同步
-rsync -avz --delete .output/ user@server:/var/www/my-doggy-love/.output/
-pm2 restart my-doggy-love -u
-```
-
-### 3. 版本管理
-
-建议使用 Git tag 管理版本：
-```bash
-# 创建版本标签
-git tag -a v1.0.0 -m "Release version 1.0.0"
-git push origin v1.0.0
-
-# 构建时带上版本信息
-./build-local.sh $(git describe --tags)
-```
-
-## 监控和日志
-
-### 查看应用状态
+可以在本地创建一键部署脚本：
 
 ```bash
-# SSH 到服务器
-ssh user@server
+#!/bin/bash
+# quick-deploy.sh - 本地一键部署脚本
 
-# 查看 PM2 状态
-pm2 status
+echo "🚀 开始一键部署..."
 
-# 查看实时日志
-pm2 logs my-doggy-love
+# 本地构建
+./build-local.sh
 
-# 查看资源占用
-pm2 monit
+# 提交到 Git
+git add .output
+git commit -m "chore: 更新构建产物"
+git push
+
+# 在服务器上拉取并部署
+ssh user@server 'cd /var/www/my-doggy-love && git pull && bash server-pull-deploy.sh'
+
+echo "✅ 部署完成！"
 ```
 
-### 设置日志自动清理
+### 2. 使用 Git Hooks（可选）
+
+配置 Git push 后自动在服务器上部署：
 
 ```bash
-# 安装 logrotate
-sudo apt install logrotate
+# 在服务器的 Git 仓库中配置 post-merge hook
+cd /var/www/my-doggy-love/.git/hooks
+cat > post-merge << 'EOF'
+#!/bin/bash
+bash /var/www/my-doggy-love/server-pull-deploy.sh
+EOF
+chmod +x post-merge
+```
 
-# 配置 PM2 日志轮转
-pm2 install pm2-logrotate
-pm2 set pm2-logrotate:max_size 10M
-pm2 set pm2-logrotate:retain 7
+### 3. 多环境支持
+
+可以为不同环境创建不同的配置：
+
+```bash
+.env.local      # 本地开发环境
+.env.staging    # 测试环境
+.env.production # 生产环境
 ```
 
 ## 总结
 
-使用本地构建 + 上传部署的方式可以：
+使用本地构建 + Git 部署的方式可以：
 - ✅ 避免服务器构建卡住的问题
-- ✅ 加快部署速度
-- ✅ 方便调试和回滚
-- ✅ 减少服务器资源消耗
+- ✅ 本地资源充足，构建快速稳定
+- ✅ 服务器只需要拉取和部署，速度快
+- ✅ 支持版本回滚
+- ✅ 部署流程简单清晰
 
-推荐工作流：
+**推荐工作流**：
 1. 本地开发和测试
 2. 运行 `./build-local.sh` 构建
-3. 运行 `./deploy-to-server.sh` 部署
-4. 在服务器上验证应用运行状态
+3. 提交到 Git：`git push`
+4. 服务器上运行：`git pull && bash server-pull-deploy.sh`
+5. 验证应用运行状态
