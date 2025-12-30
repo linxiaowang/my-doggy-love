@@ -96,7 +96,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SERVER_PORT || 22 }}
-          script_stop: true
+          script_stop: false
           script: |
             # 检查文件是否存在
             echo "🔍 检查上传的文件..."
