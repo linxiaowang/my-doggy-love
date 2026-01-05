@@ -89,15 +89,6 @@
         </div>
       </TransitionGroup>
 
-      <!-- 底部祝福语 - 马年主题 -->
-      <div class="absolute bottom-20 left-0 right-0 text-center md:bottom-4">
-        <div class="inline-block px-6 py-3 bg-gradient-to-r from-red-600 to-red-500 rounded-full shadow-xl animate-bounce-slow">
-          <span class="text-white text-sm md:text-base font-bold tracking-wider">
-            🐴 2026 马年大吉 · 万马奔腾 🐴
-          </span>
-        </div>
-      </div>
-
       <!-- 左右两侧飘带装饰 -->
       <div class="absolute top-24 left-0 w-16 h-64 md:w-20 md:h-80 opacity-20">
         <svg class="w-full h-full" viewBox="0 0 80 320" preserveAspectRatio="none">
@@ -162,7 +153,7 @@ function createFirework(x: number, y: number) {
     id: fireworkId++,
     left: x,
     top: y,
-    color: colors[Math.floor(Math.random() * colors.length)]
+    color: colors[Math.floor(Math.random() * colors.length)] as string
   }
   fireworks.value.push(firework)
 
