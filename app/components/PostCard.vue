@@ -321,9 +321,20 @@ function handleVideoMetadata(event: Event) {
 function handleThumbnailError(event: Event) {
   const img = event.target as HTMLImageElement
   const originalUrl = img.getAttribute('data-original')
+
+  // 标记该图片已尝试加载失败，避免重复触发
+  if (img.hasAttribute('data-error-handled')) {
+    return
+  }
+
+  // 如果原图 URL 存在且当前 src 不是原图，则尝试加载原图
   if (originalUrl && img.src !== originalUrl) {
+    img.setAttribute('data-error-handled', 'true')
     img.src = originalUrl
   }
+
+  // 如果原图也加载失败，移除 opacity-0 类以显示错误占位符
+  img.classList.remove('opacity-0')
 }
 
 // 打开预览
