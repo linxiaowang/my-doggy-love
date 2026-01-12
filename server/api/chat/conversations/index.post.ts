@@ -16,7 +16,9 @@ export default defineEventHandler(async (event) => {
     customSystemPrompt?: string
   }
 
-  // 验证会话类型
+  let coupleId: string | null = null
+
+  // 验证会话类型并获取 coupleId
   if (type === 'couple') {
     // 检查用户是否已绑定情侣
     const user = await prisma.user.findUnique({
@@ -37,13 +39,17 @@ export default defineEventHandler(async (event) => {
         message: '您还没有绑定情侣，无法创建情侣会话',
       })
     }
+
+    // 从用户的情侣关系中获取 coupleId
+    coupleId = user.coupleMemberships[0].coupleId
+    console.log('[Create Conversation] Couple mode:', { userId: payload.userId, coupleId })
   }
 
   // 创建会话
   const conversation = await prisma.chatConversation.create({
     data: {
       userId: payload.userId,
-      coupleId: type === 'couple' ? body.coupleId : null,
+      coupleId,
       title: title || '新对话',
       type: type || 'personal',
       systemPromptId,

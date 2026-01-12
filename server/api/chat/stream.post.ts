@@ -96,9 +96,20 @@ export default defineEventHandler(async (event) => {
 
     // 确定会话类型：情侣会话需要 coupleId
     let type: 'personal' | 'couple' = 'personal'
-    if (conversationType === 'couple' && coupleId) {
+    if (conversationType === 'couple') {
+      if (!coupleId) {
+        console.error('[Chat Stream] Couple conversation requested but no coupleId found for user:', payload.userId)
+        return createEventStream(event, { error: '请先建立情侣关系后再创建情侣会话' }, true)
+      }
       type = 'couple'
     }
+
+    console.log('[Chat Stream] Creating conversation:', {
+      userId: payload.userId,
+      coupleId,
+      requestedType: conversationType,
+      actualType: type,
+    })
 
     conversation = await prisma.chatConversation.create({
       data: {
@@ -110,6 +121,12 @@ export default defineEventHandler(async (event) => {
       include: {
         systemPromptTemplate: true,
       },
+    })
+
+    console.log('[Chat Stream] Conversation created:', {
+      id: conversation.id,
+      type: conversation.type,
+      coupleId: conversation.coupleId,
     })
   }
 
@@ -212,6 +229,20 @@ export default defineEventHandler(async (event) => {
         content: fullContent,
       },
     })
+
+    // 自动更新会话标题（如果是"新对话"且这是第一次有消息）
+    if (conversation.title === '新对话' && userMessageContent) {
+      const newTitle = generateTitleFromMessage(userMessageContent)
+      await prisma.chatConversation.update({
+        where: { id: conversation.id },
+        data: { title: newTitle },
+      })
+      console.log('[Chat Stream] Auto-updated conversation title:', {
+        conversationId: conversation.id,
+        oldTitle: conversation.title,
+        newTitle,
+      })
+    }
 
     // 发送完成事件
     sendEvent(event, 'done', JSON.stringify({

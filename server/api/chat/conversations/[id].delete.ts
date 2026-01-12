@@ -22,28 +22,10 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 404, statusMessage: 'conversation not found' })
   }
 
-  // 检查权限：个人会话只能由创建者删除，情侣会话可以由情侣双方删除
-  if (conversation.type === 'personal') {
-    if (conversation.userId !== payload.userId) {
-      throw createError({ statusCode: 403, statusMessage: 'forbidden' })
-    }
-  } else {
-    // 情侣会话：检查是否是情侣成员
-    if (conversation.userId !== payload.userId && conversation.coupleId !== payload.coupleId) {
-      // 需要检查当前用户是否是该情侣的成员
-      const user = await prisma.user.findUnique({
-        where: { id: payload.userId },
-        include: {
-          coupleMemberships: {
-            where: { coupleId: conversation.coupleId! },
-          },
-        },
-      })
-
-      if (!user || !user.coupleMemberships.length) {
-        throw createError({ statusCode: 403, statusMessage: 'forbidden' })
-      }
-    }
+  // 检查权限：只能由创建者删除
+  // （个人会话和情侣会话都只能由创建者删除，避免误删对方数据）
+  if (conversation.userId !== payload.userId) {
+    throw createError({ statusCode: 403, statusMessage: 'forbidden' })
   }
 
   // 删除会话（消息会通过 cascade 自动删除）

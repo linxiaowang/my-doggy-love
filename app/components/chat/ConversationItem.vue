@@ -36,8 +36,9 @@
       </p>
     </div>
 
-    <!-- 删除按钮 -->
+    <!-- 删除按钮（仅个人会话显示） -->
     <button
+      v-if="conversation.type === 'personal'"
       class="opacity-0 group-hover:opacity-100 p-1.5 hover:bg-destructive/10 rounded transition-all"
       @click.stop="$emit('delete', conversation.id)"
     >

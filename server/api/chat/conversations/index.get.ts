@@ -74,6 +74,16 @@ export default defineEventHandler(async (event) => {
     filteredConversations = conversations.filter((conv) => conv.type === 'personal')
   }
 
+  console.log('[Chat Conversations] Fetch result:', {
+    userId: payload.userId,
+    coupleId,
+    type,
+    totalFound: conversations.length,
+    afterFilter: filteredConversations.length,
+    beforeFilter: conversations.map(c => ({ id: c.id, type: c.type, coupleId: c.coupleId })),
+    afterFilterList: filteredConversations.map(c => ({ id: c.id, type: c.type, coupleId: c.coupleId })),
+  })
+
   return {
     items: filteredConversations.map((conv) => ({
       id: conv.id,

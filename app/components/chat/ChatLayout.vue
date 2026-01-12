@@ -51,7 +51,6 @@ import { ref, computed, watch, onMounted } from 'vue'
 import type { ChatConversation, ChatMessage } from '@/services/api/chat'
 import {
   getConversations,
-  createConversation,
   deleteConversation,
   getMessages,
   streamChat,
@@ -80,6 +79,10 @@ let cancelStream: (() => void) | null = null
 
 // 当前会话标题
 const currentConversationTitle = computed(() => {
+  // 如果没有选中的会话，显示新建会话的标题
+  if (!activeConversationId.value) {
+    return filterType.value === 'couple' ? '💑 新建情侣对话' : '新建对话'
+  }
   const conv = conversations.value.find(c => c.id === activeConversationId.value)
   return conv?.title || 'AI 对话'
 })
@@ -121,20 +124,11 @@ async function handleSelectConversation(id: string) {
   await loadCurrentMessages()
 }
 
-// 新建会话
-async function handleNewConversation() {
-  try {
-    const newConv = await createConversation({
-      type: filterType.value === 'couple' ? 'couple' : 'personal',
-    })
-    conversations.value.unshift(newConv)
-    await handleSelectConversation(newConv.id)
-  } catch (error: any) {
-    console.error('Failed to create conversation:', error)
-    if (error.friendlyMessage) {
-      alert(error.friendlyMessage)
-    }
-  }
+// 新建会话（只是清空视图，不真正创建会话）
+function handleNewConversation() {
+  activeConversationId.value = null
+  currentMessages.value = []
+  showSidebar.value = false
 }
 
 // 删除会话
