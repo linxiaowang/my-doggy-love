@@ -94,8 +94,9 @@ function handleSend() {
   input.value = ''
 
   // 重置高度
-  if (textareaRef.value) {
-    textareaRef.value.style.height = 'auto'
+  const textarea = textareaRef.value?.$el?.querySelector('textarea')
+  if (textarea) {
+    textarea.style.height = 'auto'
   }
 }
 
@@ -126,8 +127,9 @@ function focusInput() {
 // 外部清空输入
 function clearInput() {
   input.value = ''
-  if (textareaRef.value) {
-    textareaRef.value.style.height = 'auto'
+  const textarea = textareaRef.value?.$el?.querySelector('textarea')
+  if (textarea) {
+    textarea.style.height = 'auto'
   }
 }
 

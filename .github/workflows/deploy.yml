@@ -110,6 +110,8 @@ jobs:
 
       - name: Deploy on server
         uses: appleboy/ssh-action@v1.0.0
+        env:
+          ZHIPU_API_KEY: ${{ secrets.ZHIPU_API_KEY }}
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
@@ -238,7 +240,18 @@ jobs:
                 echo "MYSQL_DATABASE=my_doggy_love" >> .env
                 echo "MYSQL_USER=my_doggy_love_user" >> .env
                 echo "MYSQL_PASSWORD=my_doggy_love_pass" >> .env
+                # 添加 ZHIPU_API_KEY（如果配置了的话）
+                if [ -n "$ZHIPU_API_KEY" ]; then
+                  echo "ZHIPU_API_KEY=$ZHIPU_API_KEY" >> .env
+                  echo "✅ 已添加 ZHIPU_API_KEY"
+                fi
                 echo "✅ .env 文件已创建"
+              else
+                # 如果 .env 已存在，确保包含 ZHIPU_API_KEY
+                if [ -n "$ZHIPU_API_KEY" ] && ! grep -q "ZHIPU_API_KEY" .env; then
+                  echo "ZHIPU_API_KEY=$ZHIPU_API_KEY" >> .env
+                  echo "✅ 已添加 ZHIPU_API_KEY 到现有 .env"
+                fi
               fi
 
               # 检查容器是否已经在运行
