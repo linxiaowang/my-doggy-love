@@ -1,10 +1,10 @@
 <template>
-  <div class="h-[calc(100vh-64px)] flex">
+  <div class="flex h-[calc(100vh-64px-64px)] md:h-[calc(100vh-64px)]">
     <!-- 侧边栏（桌面端显示，移动端根据 showSidebar 控制） -->
     <div
       :class="[
         'w-72 flex-shrink-0 transition-transform duration-300',
-        'fixed md:relative z-40 h-full',
+        'fixed left-0 top-0 md:relative md:left-auto md:top-auto z-40 h-full',
         // 移动端：根据 showSidebar 控制显示/隐藏
         showSidebar ? 'translate-x-0' : '-translate-x-full md:translate-x-0',
       ]"
@@ -40,7 +40,7 @@
         :title="currentConversationTitle"
         @send="handleSend"
         @regenerate="handleRegenerate"
-        @back="handleBack"
+        @back="handleBackToSidebar"
       />
     </div>
   </div>
@@ -288,8 +288,8 @@ async function handleRegenerate() {
   }
 }
 
-// 返回（移动端）
-function handleBack() {
+// 返回侧边栏（移动端）
+function handleBackToSidebar() {
   showSidebar.value = true
 }
 
@@ -313,6 +313,12 @@ onMounted(() => {
   loadConversations()
   if (activeConversationId.value) {
     loadCurrentMessages()
+  } else {
+    // 移动端初始显示侧边栏，桌面端不显示（让用户看到会话列表）
+    // 通过检查窗口宽度判断
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      showSidebar.value = true
+    }
   }
 })
 </script>

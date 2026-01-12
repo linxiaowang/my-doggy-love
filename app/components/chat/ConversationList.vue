@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full flex flex-col bg-muted/30 border-r">
+  <div class="h-full flex flex-col bg-background border-r">
     <!-- 头部 -->
     <div class="p-4 border-b flex items-center justify-between">
       <h2 class="font-semibold text-sm">对话列表</h2>

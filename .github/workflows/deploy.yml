@@ -205,6 +205,11 @@ jobs:
             echo "NUXT_PUBLIC_VAPID_KEY=${{ secrets.NUXT_PUBLIC_VAPID_KEY }}" >> "$APP_DIR/.env"
             echo "NUXT_VAPID_PRIVATE_KEY=${{ secrets.NUXT_VAPID_PRIVATE_KEY }}" >> "$APP_DIR/.env"
             echo "NUXT_VAPID_SUBJECT=${{ secrets.NUXT_VAPID_SUBJECT }}" >> "$APP_DIR/.env"
+            # 添加 ZHIPU_API_KEY（如果配置了）
+            if [ -n "$ZHIPU_API_KEY" ]; then
+              echo "ZHIPU_API_KEY=$ZHIPU_API_KEY" >> "$APP_DIR/.env"
+              echo "✅ 已添加 ZHIPU_API_KEY 到应用 .env"
+            fi
             echo "✅ 环境变量文件已创建"
 
             # 启动 Docker 和 MySQL
