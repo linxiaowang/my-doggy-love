@@ -7,9 +7,10 @@
           v-if="showBackButton"
           class="md:hidden p-2 -ml-2 hover:bg-muted rounded-lg transition-colors"
           @click="$emit('back')"
+          aria-label="查看会话列表"
         >
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
         <h1 class="font-semibold">{{ currentTitle }}</h1>
@@ -47,6 +48,13 @@
           <p class="text-sm text-muted-foreground max-w-sm mb-6">
             你可以问我任何问题，我会尽力帮助你。
           </p>
+          <!-- 移动端提示：打开会话列表 -->
+          <button
+            class="md:hidden mb-4 px-4 py-2 text-sm bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+            @click="$emit('back')"
+          >
+            查看历史对话
+          </button>
           <!-- 快捷提示 -->
           <div class="flex flex-wrap gap-2 justify-center max-w-md">
             <button

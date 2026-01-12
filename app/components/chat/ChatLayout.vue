@@ -1,10 +1,12 @@
 <template>
-  <div class="flex h-[calc(100vh-64px-64px)] md:h-[calc(100vh-64px)]">
+  <div class="flex h-[calc(100vh-64px-64px)] md:h-[calc(100vh-64px)] overflow-hidden">
     <!-- 侧边栏（桌面端显示，移动端根据 showSidebar 控制） -->
     <div
       :class="[
         'w-72 flex-shrink-0 transition-transform duration-300',
-        'fixed left-0 top-0 md:relative md:left-auto md:top-auto z-40 h-full',
+        'fixed left-0 top-0 md:relative md:left-auto md:top-auto z-40',
+        // 移动端全屏高度，桌面端适应容器
+        'h-screen md:h-full',
         // 移动端：根据 showSidebar 控制显示/隐藏
         showSidebar ? 'translate-x-0' : '-translate-x-full md:translate-x-0',
       ]"
@@ -30,7 +32,7 @@
     />
 
     <!-- 聊天区域 -->
-    <div class="flex-1 min-w-0">
+    <div class="flex-1 min-w-0 h-full overflow-hidden">
       <ChatArea
         ref="chatAreaRef"
         :messages="currentMessages"
@@ -313,12 +315,7 @@ onMounted(() => {
   loadConversations()
   if (activeConversationId.value) {
     loadCurrentMessages()
-  } else {
-    // 移动端初始显示侧边栏，桌面端不显示（让用户看到会话列表）
-    // 通过检查窗口宽度判断
-    if (typeof window !== 'undefined' && window.innerWidth < 768) {
-      showSidebar.value = true
-    }
   }
+  // 移动端不再自动打开侧边栏，用户需要点击返回按钮才会显示
 })
 </script>

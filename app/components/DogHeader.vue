@@ -31,17 +31,6 @@
       <!-- 暗黑模式切换按钮 -->
       <DarkToggle />
 
-      <!-- 节日装饰切换按钮 -->
-      <Button
-        variant="ghost"
-        size="icon"
-        class="relative w-8 h-8 hover:bg-muted/50"
-        @click="toggleDecoration"
-        :aria-label="decorationLabel"
-        title="切换节日装饰"
-      >
-        <span class="text-xl">{{ decorationIcon }}</span>
-      </Button>
 
       <template v-if="me">
         <div class="md:block hidden">
@@ -203,7 +192,6 @@ import { apiFetch } from '@/services/api'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger, SheetClose } from '@/components/ui/sheet'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
-import { useThemeDecorations } from '@/composables/useThemeDecorations'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
@@ -219,23 +207,7 @@ const me = computed(() => authStore.user)
 const { data: unreadCountData, refresh: refreshUnreadCount } = useUnreadNotificationCount()
 const unreadCount = computed(() => unreadCountData.value?.count || 0)
 
-// 节日装饰相关
-const {
-  currentDecoration,
-  isNewYear,
-  toggleDecoration,
-} = useThemeDecorations()
 
-// 装饰图标和标签
-const decorationIcon = computed(() => {
-  if (isNewYear.value) return '🐴'
-  return '✨'
-})
-
-const decorationLabel = computed(() => {
-  if (isNewYear.value) return '马年装饰已开启,点击切换'
-  return '开启节日装饰'
-})
 
 // 监听未读数量变化，更新 PWA 角标
 watch(unreadCount, (count) => {

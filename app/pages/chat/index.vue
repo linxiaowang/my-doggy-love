@@ -13,6 +13,7 @@ import ChatLayout from '@/components/chat/ChatLayout.vue'
 // 检查登录状态
 definePageMeta({
   middleware: 'auth',
+  layout: false,
 })
 
 // 获取路由参数
