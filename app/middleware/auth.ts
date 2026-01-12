@@ -9,29 +9,32 @@ export default defineNuxtRouteMiddleware(async (to) => {
   }
 
   // 只在客户端执行认证检查，避免 SSR 时的 cookie 问题
-  // 以及开发模式下热更新时的临时性问题
   if (!process.client) {
     return
   }
 
   const authStore = useAuthStore()
 
-  // 如果还未初始化，等待初始化完成
-  if (!authStore.initialized) {
+  // 如果还未初始化且不在加载中，才发起请求
+  if (!authStore.initialized && !authStore.loading) {
     await authStore.fetchUser()
+  }
+
+  // 如果正在加载，等待加载完成（最多等 1 秒）
+  if (authStore.loading) {
+    await new Promise(resolve => setTimeout(resolve, 1000))
   }
 
   // 检查用户是否已登录
   if (!authStore.user) {
-      // 开发模式下，如果未登录也允许继续加载，避免热更新时的频繁跳转
-      // 让页面组件在 onMounted 时处理认证检查
-      if (process.dev) {
-        return
-      }
-      return navigateTo({
-        path: '/user/login',
-        query: { redirect: to.fullPath },
-      })
+    // 开发模式下，如果未登录也允许继续加载，避免热更新时的频繁跳转
+    if (process.dev) {
+      return
+    }
+    return navigateTo({
+      path: '/user/login',
+      query: { redirect: to.fullPath },
+    })
   }
 })
 
