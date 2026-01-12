@@ -1,10 +1,5 @@
 <template>
-  <div
-    :class="[
-      'flex gap-3 group',
-      message.role === 'user' ? 'flex-row-reverse' : 'flex-row'
-    ]"
-  >
+  <div class="flex gap-3 group" :class="message.role === 'user' ? 'flex-row-reverse' : 'flex-row'">
     <!-- 头像 -->
     <Avatar :class="message.role === 'user' ? 'bg-primary' : 'bg-muted'" class="w-8 h-8 flex-shrink-0">
       <template v-if="message.role === 'user'">
@@ -16,15 +11,14 @@
       </template>
     </Avatar>
 
-    <!-- 消息内容 -->
-    <div :class="['flex flex-col', message.role === 'user' ? 'items-end' : 'items-start']">
+    <!-- 消息内容区域 -->
+    <div class="flex flex-col min-w-0 flex-1" :class="message.role === 'user' ? 'items-end' : 'items-start'">
+      <!-- 消息气泡 -->
       <div
-        :class="[
-          'max-w-[80%] rounded-2xl px-4 py-2.5',
-          message.role === 'user'
-            ? 'bg-primary text-primary-foreground rounded-tr-sm'
-            : 'bg-muted text-foreground rounded-tl-sm'
-        ]"
+        class="inline-block max-w-full rounded-2xl px-4 py-2.5 text-left break-words"
+        :class="message.role === 'user'
+          ? 'bg-primary text-primary-foreground rounded-tr-sm'
+          : 'bg-muted text-foreground rounded-tl-sm'"
       >
         <!-- AI 消息使用 Markdown 渲染 -->
         <div
@@ -33,7 +27,7 @@
           v-html="renderedContent"
         />
         <!-- 用户消息直接显示文本 -->
-        <p v-else class="whitespace-pre-wrap break-words leading-relaxed">{{ message.content }}</p>
+        <span v-else>{{ message.content }}</span>
       </div>
       <!-- 时间戳 -->
       <span class="text-xs text-muted-foreground mt-1 px-1">{{ formatTime(message.createdAt) }}</span>

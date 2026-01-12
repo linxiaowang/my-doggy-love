@@ -216,23 +216,17 @@ function checkScrollToBottom() {
 
 // 自动滚动到底部
 watch(
-  () => [props.messages, props.streamingMessage],
+  () => [props.messages.length, props.streamingMessage],
   () => {
     nextTick(() => {
       if (messagesContainer.value) {
-        // 如果用户已经在底部附近，自动滚动
-        const { scrollTop, scrollHeight, clientHeight } = messagesContainer.value
-        const distanceFromBottom = scrollHeight - scrollTop - clientHeight
-        if (distanceFromBottom < 300) {
-          messagesContainer.value.scrollTo({
-            top: messagesContainer.value.scrollHeight,
-            behavior: 'smooth',
-          })
-        }
+        messagesContainer.value.scrollTo({
+          top: messagesContainer.value.scrollHeight,
+          behavior: 'smooth',
+        })
       }
     })
-  },
-  { deep: true }
+  }
 )
 
 // 监听滚动事件

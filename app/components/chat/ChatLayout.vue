@@ -304,6 +304,16 @@ watch(filterType, () => {
   loadConversations()
 })
 
+// 自动选择第一个会话（当没有选中会话且列表加载完成后）
+watch(conversations, (newConversations) => {
+  if (newConversations.length > 0 && !activeConversationId.value) {
+    activeConversationId.value = newConversations[0]?.id || null
+    if (activeConversationId.value) {
+      loadCurrentMessages()
+    }
+  }
+})
+
 // 初始化
 onMounted(() => {
   loadConversations()
