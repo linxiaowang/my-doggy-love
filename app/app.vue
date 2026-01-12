@@ -21,7 +21,7 @@ const { isNewYear } = useThemeDecorations()
 
     <!-- 新年装饰 -->
     <ClientOnly>
-      <NewYearDecorations v-if="isNewYear" />
+      <!-- <NewYearDecorations v-if="isNewYear" /> -->
     </ClientOnly>
   </NuxtLayout>
 </template>

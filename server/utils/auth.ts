@@ -9,6 +9,7 @@ function getSecret(): string {
 
 export interface AuthTokenPayload {
   userId: string
+  coupleId?: string // 情侣 ID，用于情侣会话权限验证
   sessionId?: string // 会话 ID，用于多设备管理
   iat: number
   exp?: number // 过期时间（Unix 时间戳）

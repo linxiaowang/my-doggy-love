@@ -20,15 +20,18 @@ export default defineEventHandler(async (event) => {
 
   // 查找用户并验证密码
   const passwordHash = hashPassword(password)
-  const user = await prisma.user.findFirst({ where: { email, passwordHash } })
-  
+  const user = await prisma.user.findFirst({
+    where: { email, passwordHash },
+    include: { coupleMemberships: true },
+  })
+
   if (!user) {
     throw createError({ statusCode: 401, statusMessage: '邮箱或密码错误' })
   }
 
   // 获取设备信息
   const { userAgent, ipAddress, deviceInfo } = getDeviceInfo(event)
-  
+
   // 创建 session 记录，支持多设备登录
   const expiresAt = new Date(Date.now() + TOKEN_EXPIRY_SECONDS * 1000)
   const session = await prisma.session.create({
@@ -41,8 +44,11 @@ export default defineEventHandler(async (event) => {
     },
   })
 
-  // 在 token 中包含 sessionId
-  const token = signToken({ userId: user.id, sessionId: session.id, iat: Date.now() })
+  // 获取情侣 ID
+  const coupleId = user.coupleMemberships[0]?.coupleId
+
+  // 在 token 中包含 sessionId 和 coupleId
+  const token = signToken({ userId: user.id, coupleId, sessionId: session.id, iat: Date.now() })
   setAuthCookie(event, token)
   return { user: { id: user.id, email: user.email, nickName: user.nickName, avatarUrl: user.avatarUrl } }
 })

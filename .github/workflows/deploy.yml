@@ -61,8 +61,8 @@ jobs:
 
       - name: Create deployment package
         run: |
-          # 打包构建产物和必要的配置文件
-          tar -czf output.tar.gz .output docker-compose.yml ecosystem.config.cjs
+          # 打包构建产物、迁移文件和必要的配置文件
+          tar -czf output.tar.gz .output prisma docker-compose.yml ecosystem.config.cjs package.json pnpm-lock.yaml
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -277,6 +277,38 @@ jobs:
               echo "⚠️  未找到 docker-compose.yml，跳过 MySQL 启动"
             fi
 
+            echo ""
+
+            # ===== 数据库迁移 =====
+            echo "🗄️  开始数据库迁移..."
+            cd "$APP_DIR"
+
+            # 检查 pnpm 是否可用
+            if ! command -v pnpm &> /dev/null; then
+              echo "⚠️  pnpm 未安装，使用 npx 执行迁移..."
+              PACKAGE_MANAGER="npx"
+            else
+              PACKAGE_MANAGER="pnpm"
+            fi
+
+            # 等待 MySQL 完全就绪（额外确认）
+            echo "⏳ 等待 MySQL 完全就绪..."
+            sleep 3
+
+            # 执行数据库迁移
+            echo "📋 应用数据库迁移..."
+            if [ "$PACKAGE_MANAGER" = "pnpm" ]; then
+              pnpm prisma migrate deploy || {
+                echo "⚠️  数据库迁移失败，尝试继续部署..."
+                echo "   如果这是首次部署，请检查数据库连接是否正常"
+              }
+            else
+              npx prisma migrate deploy || {
+                echo "⚠️  数据库迁移失败，尝试继续部署..."
+                echo "   如果这是首次部署，请检查数据库连接是否正常"
+              }
+            fi
+            echo "✅ 数据库迁移完成"
             echo ""
 
             # 启动应用

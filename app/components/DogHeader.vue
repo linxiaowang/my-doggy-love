@@ -22,6 +22,9 @@
       <Button variant="link" as-child class="text-foreground hover:no-underline px-0">
         <NuxtLink to="/messages">留言板</NuxtLink>
       </Button>
+      <Button variant="link" as-child class="text-foreground hover:no-underline px-0">
+        <NuxtLink to="/chat">AI 聊天</NuxtLink>
+      </Button>
     </nav>
 
     <div class="flex items-center gap-1.5 md:gap-2 relative flex-shrink-0">
@@ -166,6 +169,9 @@
               </SheetClose>
               <SheetClose as-child>
                 <NuxtLink to="/messages" class="px-2 py-2 hover:bg-muted rounded-md transition-colors">留言板</NuxtLink>
+              </SheetClose>
+              <SheetClose as-child>
+                <NuxtLink to="/chat" class="px-2 py-2 hover:bg-muted rounded-md transition-colors">AI 聊天</NuxtLink>
               </SheetClose>
             </nav>
             

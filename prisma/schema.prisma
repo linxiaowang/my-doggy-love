@@ -29,6 +29,7 @@ model User {
   notifications     Notification[]
   pushSubscriptions PushSubscription[]
   sessions          Session[]
+  chatConversations ChatConversation[] @relation("ChatConversations")
 }
 
 model PushSubscription {
@@ -54,6 +55,7 @@ model Couple {
   wishes    Wish[]
   messages  Message[]
   anniversaries Anniversary[]
+  chatConversations ChatConversation[] @relation("ChatConversations")
 }
 
 model CoupleMember {
@@ -170,6 +172,55 @@ model Session {
 
   @@index([userId])
   @@index([userId, expiresAt])
+}
+
+// AI 聊天会话
+model ChatConversation {
+  id          String   @id @default(cuid())
+  userId      String   // 创建者
+  coupleId    String?  // 情侣共享会话关联
+  title       String   @default("新对话")
+  type        String   @default("personal") // personal | couple
+  systemPromptId String? // 关联的系统提示词模板
+  customSystemPrompt String? // 用户自定义系统提示词
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  messages    ChatMessage[]
+  systemPromptTemplate SystemPromptTemplate? @relation(fields: [systemPromptId], references: [id])
+
+  user        User     @relation("ChatConversations", fields: [userId], references: [id])
+  couple      Couple?  @relation("ChatConversations", fields: [coupleId], references: [id])
+
+  @@index([userId])
+  @@index([coupleId])
+}
+
+// AI 聊天消息
+model ChatMessage {
+  id             String   @id @default(cuid())
+  conversationId String
+  role           String   // user | assistant | system
+  content        String   @db.Text
+  createdAt      DateTime @default(now())
+
+  conversation   ChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId])
+}
+
+// 系统提示词模板
+model SystemPromptTemplate {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  displayName String
+  description String?
+  prompt      String   @db.Text
+  category    String?
+  isDefault   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  conversations ChatConversation[]
 }
 
 

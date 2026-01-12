@@ -58,7 +58,10 @@ export default defineEventHandler(async (event) => {
     }
 
     // 查找或创建用户
-    let user = await prisma.user.findUnique({ where: { wechatOpenId: openid } })
+    let user = await prisma.user.findUnique({
+      where: { wechatOpenId: openid },
+      include: { coupleMemberships: true },
+    })
 
     if (user) {
       // 用户已存在，更新微信信息
@@ -69,11 +72,12 @@ export default defineEventHandler(async (event) => {
           wechatAvatar: userInfo.headimgurl || null,
           wechatUnionId: unionid || null,
         },
+        include: { coupleMemberships: true },
       })
     } else {
       // 新用户，创建账号
       const nickName = userInfo.nickname || `微信用户_${openid.substring(0, 8)}`
-      
+
       user = await prisma.user.create({
         data: {
           wechatOpenId: openid,
@@ -83,6 +87,7 @@ export default defineEventHandler(async (event) => {
           nickName,
           avatarUrl: userInfo.headimgurl || null,
         },
+        include: { coupleMemberships: true },
       })
     }
 
@@ -98,9 +103,12 @@ export default defineEventHandler(async (event) => {
         expiresAt,
       },
     })
-    
-    // 在 token 中包含 sessionId
-    const token = signToken({ userId: user.id, sessionId: session.id, iat: Date.now() })
+
+    // 获取情侣 ID
+    const coupleId = user.coupleMemberships[0]?.coupleId
+
+    // 在 token 中包含 sessionId 和 coupleId
+    const token = signToken({ userId: user.id, coupleId, sessionId: session.id, iat: Date.now() })
     setAuthCookie(event, token)
 
     // 重定向到保存的路径或首页

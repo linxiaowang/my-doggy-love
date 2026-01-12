@@ -7,7 +7,7 @@ const navItems = [
   { name: '日常', path: '/daily', icon: 'image', ariaLabel: '日常动态' },
   { name: '愿望', path: '/wishes', icon: 'star', ariaLabel: '愿望清单' },
   { name: '留言', path: '/messages', icon: 'message-circle', ariaLabel: '留言板' },
-  { name: '我的', path: '/user/profile', icon: 'user', ariaLabel: '个人中心' },
+  { name: 'AI', path: '/chat', icon: 'bot', ariaLabel: 'AI聊天' },
 ]
 
 function isActive(path: string) {
@@ -21,7 +21,7 @@ const icons: Record<string, string> = {
   'image': 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5-5 5 5M12 15V3',
   'star': 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z',
   'message-circle': 'M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z',
-  'user': 'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z'
+  'bot': 'M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z M8 10a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-8z M12 18a1 1 0 1 0 0 2 1 1 0 0 0 0-2z M8 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4z M16 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4z'
 }
 </script>
 
