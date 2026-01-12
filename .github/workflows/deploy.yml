@@ -183,14 +183,36 @@ jobs:
             echo "🔐 设置权限..."
             chmod -R 755 "$APP_DIR/.output" 2>/dev/null || echo "⚠️  权限设置跳过"
 
-            # 清理解压时产生的其他文件（如果存在）
+            # 清理旧的构建产物（保留用户上传的文件）
+            echo "🧹 清理旧的构建产物..."
             rm -f "$APP_DIR/nitro.json" 2>/dev/null || true
-            rm -rf "$APP_DIR/public" 2>/dev/null || true
-            rm -rf "$APP_DIR/server" 2>/dev/null || true
 
-            # 创建上传目录
-            mkdir -p "$APP_DIR/public/uploads"
-            chmod 755 "$APP_DIR/public/uploads"
+            # 删除 public 目录，但保留 uploads 子目录
+            if [ -d "$APP_DIR/public" ]; then
+              # 备份 uploads 目录
+              if [ -d "$APP_DIR/public/uploads" ]; then
+                echo "💾 暂时保存上传目录..."
+                mv "$APP_DIR/public/uploads" "$APP_DIR/.uploads_temp"
+              fi
+              # 删除整个 public 目录
+              rm -rf "$APP_DIR/public"
+              # 重新创建 public 和 uploads 目录
+              mkdir -p "$APP_DIR/public/uploads"
+              chmod 755 "$APP_DIR/public/uploads"
+              # 恢复 uploads 文件
+              if [ -d "$APP_DIR/.uploads_temp" ]; then
+                cp -rp "$APP_DIR/.uploads_temp"/* "$APP_DIR/public/uploads/" 2>/dev/null || true
+                rm -rf "$APP_DIR/.uploads_temp"
+                echo "✅ 上传文件已保留"
+              fi
+            else
+              # 如果 public 目录不存在，直接创建
+              mkdir -p "$APP_DIR/public/uploads"
+              chmod 755 "$APP_DIR/public/uploads"
+            fi
+
+            # 清理旧的 server 目录
+            rm -rf "$APP_DIR/server" 2>/dev/null || true
 
             # 创建 PM2 日志目录
             mkdir -p "$APP_DIR/logs"
