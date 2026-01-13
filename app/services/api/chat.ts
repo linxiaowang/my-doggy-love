@@ -32,6 +32,7 @@ export interface ChatMessage {
   role: 'user' | 'assistant' | 'system'
   content: string
   createdAt: string
+  userId?: string | null
   user?: {
     id: string
     nickName: string

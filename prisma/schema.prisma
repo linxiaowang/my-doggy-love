@@ -1,6 +1,6 @@
 generator client {
-  provider        = "prisma-client-js"
-  binaryTargets   = ["native", "debian-openssl-1.1.x", "debian-openssl-3.0.x", "rhel-openssl-1.1.x", "rhel-openssl-3.0.x", "linux-musl-openssl-3.0.x"]
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x", "debian-openssl-3.0.x", "rhel-openssl-1.1.x", "rhel-openssl-3.0.x", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -9,21 +9,21 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(cuid())
-  email        String?  @unique
-  passwordHash String?
-  nickName     String
-  avatarUrl    String?
-  status       String?  // 用户状态，如：开心、忙碌、在思考等
-  statusUpdatedAt DateTime?  // 状态更新时间
-  wechatOpenId String?  @unique // 微信 OpenID
-  wechatUnionId String?  // 微信 UnionID（可选，用于多平台统一）
-  wechatNickName String? // 微信昵称
-  wechatAvatar String? // 微信头像
-  createdAt    DateTime @default(now())
+  id              String    @id @default(cuid())
+  email           String?   @unique
+  passwordHash    String?
+  nickName        String
+  avatarUrl       String?
+  status          String? // 用户状态，如：开心、忙碌、在思考等
+  statusUpdatedAt DateTime? // 状态更新时间
+  wechatOpenId    String?   @unique // 微信 OpenID
+  wechatUnionId   String? // 微信 UnionID（可选，用于多平台统一）
+  wechatNickName  String? // 微信昵称
+  wechatAvatar    String? // 微信头像
+  createdAt       DateTime  @default(now())
 
   coupleMemberships CoupleMember[]
-  posts             DailyPost[]      @relation("UserPosts")
+  posts             DailyPost[]        @relation("UserPosts")
   comments          Comment[]
   messages          Message[]
   notifications     Notification[]
@@ -37,7 +37,7 @@ model PushSubscription {
   id        String   @id @default(cuid())
   userId    String
   endpoint  String   @db.Text
-  keys      Json     // 存储 p256dh 和 auth keys
+  keys      Json // 存储 p256dh 和 auth keys
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -47,24 +47,24 @@ model PushSubscription {
 }
 
 model Couple {
-  id        String         @id @default(cuid())
-  code      String         @unique
-  createdAt DateTime       @default(now())
+  id        String   @id @default(cuid())
+  code      String   @unique
+  createdAt DateTime @default(now())
 
-  members   CoupleMember[]
-  posts     DailyPost[]
-  wishes    Wish[]
-  messages  Message[]
-  anniversaries Anniversary[]
+  members           CoupleMember[]
+  posts             DailyPost[]
+  wishes            Wish[]
+  messages          Message[]
+  anniversaries     Anniversary[]
   chatConversations ChatConversation[] @relation("ChatConversations")
 }
 
 model CoupleMember {
-  id        String   @id @default(cuid())
-  userId    String
-  coupleId  String
-  role      String   @default("A")
-  joinedAt  DateTime @default(now())
+  id       String   @id @default(cuid())
+  userId   String
+  coupleId String
+  role     String   @default("A")
+  joinedAt DateTime @default(now())
 
   user   User   @relation(fields: [userId], references: [id])
   couple Couple @relation(fields: [coupleId], references: [id])
@@ -81,8 +81,8 @@ model DailyPost {
   tags      Json
   createdAt DateTime @default(now())
 
-  couple Couple @relation(fields: [coupleId], references: [id])
-  author User   @relation("UserPosts", fields: [authorId], references: [id])
+  couple   Couple    @relation(fields: [coupleId], references: [id])
+  author   User      @relation("UserPosts", fields: [authorId], references: [id])
   comments Comment[]
 }
 
@@ -93,31 +93,31 @@ model Comment {
   createdAt DateTime @default(now())
 
   // 可挂载到不同实体之一
-  postId   String?
-  wishId   String?
+  postId    String?
+  wishId    String?
   messageId String?
 
   // 回复父评论（可为空表示顶层）
   parentId String?
-  parent   Comment? @relation("CommentToComment", fields: [parentId], references: [id])
+  parent   Comment?  @relation("CommentToComment", fields: [parentId], references: [id])
   replies  Comment[] @relation("CommentToComment")
 
-  author  User   @relation(fields: [authorId], references: [id])
+  author  User       @relation(fields: [authorId], references: [id])
   post    DailyPost? @relation(fields: [postId], references: [id])
   wish    Wish?      @relation(fields: [wishId], references: [id])
   message Message?   @relation(fields: [messageId], references: [id])
 }
 
 model Wish {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   coupleId    String
   title       String
   description String?
-  status      String   @default("todo")
+  status      String    @default("todo")
   finishedAt  DateTime?
-  createdAt   DateTime @default(now())
+  createdAt   DateTime  @default(now())
 
-  couple   Couple  @relation(fields: [coupleId], references: [id])
+  couple   Couple    @relation(fields: [coupleId], references: [id])
   comments Comment[]
 }
 
@@ -139,16 +139,16 @@ model Message {
   content   String
   createdAt DateTime @default(now())
 
-  couple  Couple @relation(fields: [coupleId], references: [id])
-  author  User   @relation(fields: [authorId], references: [id])
+  couple   Couple    @relation(fields: [coupleId], references: [id])
+  author   User      @relation(fields: [authorId], references: [id])
   comments Comment[]
 }
 
 model Notification {
   id        String   @id @default(cuid())
-  userId    String   // 接收通知的用户
-  type      String   // 通知类型：message_posted, daily_posted, daily_comment, daily_comment_reply, message_comment, message_comment_reply
-  relatedId String?  // 相关ID（postId, messageId, commentId等）
+  userId    String // 接收通知的用户
+  type      String // 通知类型：message_posted, daily_posted, daily_comment, daily_comment_reply, message_comment, message_comment_reply
+  relatedId String? // 相关ID（postId, messageId, commentId等）
   content   String   @db.Text // 通知内容
   read      Boolean  @default(false)
   createdAt DateTime @default(now())
@@ -160,14 +160,14 @@ model Notification {
 }
 
 model Session {
-  id        String   @id @default(cuid())
-  userId    String
-  deviceInfo String? // 设备信息（浏览器、操作系统等）
-  userAgent String?  @db.Text // User-Agent 字符串
-  ipAddress String?  // IP 地址
+  id           String   @id @default(cuid())
+  userId       String
+  deviceInfo   String? // 设备信息（浏览器、操作系统等）
+  userAgent    String?  @db.Text // User-Agent 字符串
+  ipAddress    String? // IP 地址
   lastActiveAt DateTime @default(now()) @updatedAt // 最后活跃时间
-  expiresAt DateTime // 过期时间
-  createdAt DateTime @default(now())
+  expiresAt    DateTime // 过期时间
+  createdAt    DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -177,21 +177,21 @@ model Session {
 
 // AI 聊天会话
 model ChatConversation {
-  id          String   @id @default(cuid())
-  userId      String   // 创建者
-  coupleId    String?  // 情侣共享会话关联
-  title       String   @default("新对话")
-  type        String   @default("personal") // personal | couple
-  systemPromptId String? // 关联的系统提示词模板
+  id                 String   @id @default(cuid())
+  userId             String // 创建者
+  coupleId           String? // 情侣共享会话关联
+  title              String   @default("新对话")
+  type               String   @default("personal") // personal | couple
+  systemPromptId     String? // 关联的系统提示词模板
   customSystemPrompt String? // 用户自定义系统提示词
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
-  messages    ChatMessage[]
+  messages             ChatMessage[]
   systemPromptTemplate SystemPromptTemplate? @relation(fields: [systemPromptId], references: [id])
 
-  user        User     @relation("ChatConversations", fields: [userId], references: [id])
-  couple      Couple?  @relation("ChatConversations", fields: [coupleId], references: [id])
+  user   User    @relation("ChatConversations", fields: [userId], references: [id])
+  couple Couple? @relation("ChatConversations", fields: [coupleId], references: [id])
 
   @@index([userId])
   @@index([coupleId])
@@ -201,13 +201,13 @@ model ChatConversation {
 model ChatMessage {
   id             String   @id @default(cuid())
   conversationId String
-  userId         String?  // 发送者（仅用户消息有值，AI 消息为 null）
-  role           String   // user | assistant | system
+  userId         String? // 发送者（仅用户消息有值，AI 消息为 null）
+  role           String // user | assistant | system
   content        String   @db.Text
   createdAt      DateTime @default(now())
 
-  conversation   ChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  user           User?            @relation(fields: [userId], references: [id])
+  conversation ChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user         User?            @relation(fields: [userId], references: [id])
 
   @@index([conversationId])
   @@index([userId])
@@ -226,5 +226,3 @@ model SystemPromptTemplate {
 
   conversations ChatConversation[]
 }
-
-

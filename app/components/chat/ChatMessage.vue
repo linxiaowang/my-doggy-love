@@ -1,7 +1,11 @@
 <template>
-  <div class="flex gap-3 group" :class="message.role === 'user' ? 'flex-row-reverse' : 'flex-row'">
+  <div class="flex gap-3 group" :class="isOwnMessage ? 'flex-row-reverse' : 'flex-row'">
     <!-- 头像 -->
-    <Avatar :class="message.role === 'user' ? 'bg-primary' : 'bg-muted'" class="w-8 h-8 flex-shrink-0">
+    <Avatar
+      :class="['w-8 h-8 flex-shrink-0', isOwnMessage ? 'bg-primary' : 'bg-muted', !isOwnMessage && message.role === 'user' ? 'cursor-pointer hover:ring-2 hover:ring-primary/50' : '']"
+      @click="handleAvatarClick"
+      @contextmenu.prevent="handleContextMenu"
+    >
       <template v-if="message.role === 'user'">
         <!-- 用户消息：显示消息发送者的头像 -->
         <img
@@ -20,8 +24,30 @@
       </template>
     </Avatar>
 
+    <!-- 右键菜单 -->
+    <Teleport to="body">
+      <Transition name="context-menu">
+        <div
+          v-if="showContextMenu"
+          :style="contextMenuStyle"
+          class="fixed bg-background rounded-lg border shadow-lg z-50 py-1 min-w-[150px]"
+          @click="closeContextMenu"
+        >
+          <button
+            class="w-full px-3 py-2 text-left text-sm hover:bg-muted flex items-center gap-2 transition-colors"
+            @click.stop="handleMentionUser"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+            </svg>
+            提及 @{{ message.user?.nickName }}
+          </button>
+        </div>
+      </Transition>
+    </Teleport>
+
     <!-- 消息内容区域 -->
-    <div class="flex flex-col min-w-0 flex-1" :class="message.role === 'user' ? 'items-end' : 'items-start'">
+    <div class="flex flex-col min-w-0 flex-1" :class="isOwnMessage ? 'items-end' : 'items-start'">
       <!-- 发送者名称（仅情侣会话且非自己时显示） -->
       <span v-if="shouldShowUserName" class="text-xs text-muted-foreground mb-1 px-1">
         {{ message.user?.nickName }}
@@ -30,7 +56,7 @@
       <!-- 消息气泡 -->
       <div
         class="inline-block max-w-full rounded-2xl px-4 py-2.5 text-left break-words"
-        :class="message.role === 'user'
+        :class="isOwnMessage
           ? 'bg-primary text-primary-foreground rounded-tr-sm'
           : 'bg-muted text-foreground rounded-tl-sm'"
       >
@@ -50,7 +76,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { Avatar } from '@/components/ui/avatar'
 import type { ChatMessage } from '@/services/api/chat'
 import { useAuth } from '@/composables/useAuth'
@@ -65,14 +91,76 @@ const props = defineProps<{
   message: ChatMessage
 }>()
 
+const emit = defineEmits<{
+  mentionUser: [user: { id: string; nickName: string }]
+}>()
+
 const { user: currentUser } = useAuth()
+
+// 右键菜单状态
+const showContextMenu = ref(false)
+const contextMenuStyle = ref({
+  left: '0px',
+  top: '0px',
+})
+
+// 判断是否是自己的消息
+const isOwnMessage = computed(() => {
+  // AI 消息不是自己的消息
+  if (props.message.role === 'assistant') {
+    return false
+  }
+  // 用户消息：检查 userId 或 user.id
+  const senderId = props.message.userId || props.message.user?.id
+  return senderId === currentUser?.id
+})
 
 // 判断是否显示用户名（情侣会话中非自己的消息）
 const shouldShowUserName = computed(() => {
   return props.message.role === 'user' &&
-    props.message.user &&
-    props.message.user.id !== currentUser?.id
+    !isOwnMessage.value &&
+    props.message.user
 })
+
+// 处理头像点击（也可以触发提及）
+function handleAvatarClick() {
+  // 只有非自己的用户消息才能提及
+  if (props.message.role === 'user' && !isOwnMessage.value && props.message.user) {
+    emit('mentionUser', {
+      id: props.message.user.id,
+      nickName: props.message.user.nickName,
+    })
+  }
+}
+
+// 处理右键菜单
+function handleContextMenu(e: MouseEvent) {
+  // 只有非自己的用户消息才显示右键菜单
+  if (props.message.role === 'user' && !isOwnMessage.value && props.message.user) {
+    showContextMenu.value = true
+    contextMenuStyle.value = {
+      left: `${e.clientX}px`,
+      top: `${e.clientY}px`,
+    }
+
+    // 点击其他地方关闭菜单
+    document.addEventListener('click', closeContextMenu, { once: true })
+  }
+}
+
+function closeContextMenu() {
+  showContextMenu.value = false
+}
+
+function handleMentionUser() {
+  if (props.message.user) {
+    emit('mentionUser', {
+      id: props.message.user.id,
+      nickName: props.message.user.nickName,
+    })
+  }
+  closeContextMenu()
+}
 
 // 格式化时间
 function formatTime(dateStr: string): string {
@@ -122,3 +210,16 @@ const renderedContent = computed(() => {
   return content
 })
 </script>
+
+<style scoped>
+.context-menu-enter-active,
+.context-menu-leave-active {
+  transition: all 0.15s ease;
+}
+
+.context-menu-enter-from,
+.context-menu-leave-to {
+  opacity: 0;
+  transform: scale(0.95);
+}
+</style>

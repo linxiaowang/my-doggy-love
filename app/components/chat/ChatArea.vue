@@ -79,6 +79,7 @@
               v-for="msg in messages"
               :key="msg.id"
               :message="msg"
+              @mention-user="handleMentionUser"
             />
           </TransitionGroup>
 
@@ -118,6 +119,7 @@
     <ChatInput
       ref="inputRef"
       :disabled="isStreaming"
+      :is-couple-conversation="isCoupleConversation"
       @send="handleSend"
     />
   </div>
@@ -140,6 +142,7 @@ const props = defineProps<{
   isStreaming: boolean
   showBackButton?: boolean
   title?: string
+  isCoupleConversation?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -201,6 +204,12 @@ const renderStreamingContent = computed(() => {
 
 function handleSend(message: string) {
   emit('send', message)
+}
+
+function handleMentionUser(user: { id: string; nickName: string }) {
+  // 调用 ChatInput 的方法插入提及
+  inputRef.value?.insertMention(`@${user.nickName} `)
+  inputRef.value?.focusInput()
 }
 
 function scrollToBottom() {

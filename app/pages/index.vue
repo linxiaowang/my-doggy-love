@@ -2,7 +2,7 @@
 import { ref, onMounted, watch } from 'vue'
 import { apiFetch } from '@/services/api'
 import AnniversaryCountdown from '@/components/AnniversaryCountdown.vue'
-import Calendar from '@/components/ui/Calendar.vue'
+import Calendar from '@/components/ui/CustomCalendar.vue'
 
 definePageMeta({
   layout: 'home',

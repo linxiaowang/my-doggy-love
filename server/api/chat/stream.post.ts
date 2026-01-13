@@ -2,6 +2,7 @@ import { defineEventHandler, readBody, createError, setHeader } from 'h3'
 import { readAuthFromCookie } from '../../utils/auth'
 import prisma from '../../utils/db'
 import { streamZhipuChat, type ZhipuMessage } from '../../utils/zhipu'
+import { broadcastToRoom } from '../chat-ws'
 
 export default defineEventHandler(async (event) => {
   const payload = readAuthFromCookie(event)
@@ -30,6 +31,26 @@ export default defineEventHandler(async (event) => {
   let conversationIdToUse = conversationId
   let userMessageContent = message
 
+  // 检测是否需要调用 AI（个人会话自动调用，情侣会话需要 @AI 提及）
+  const trimmedMessage = message?.trimStart() || ''
+  const shouldInvokeAI = conversationType === 'personal' ||
+                         trimmedMessage.startsWith('@AI ') ||
+                         trimmedMessage.startsWith('@ai ') ||
+                         trimmedMessage.startsWith('@AI') ||
+                         trimmedMessage.startsWith('@ai')
+
+  // 如果是情侣会话且检测到 @AI，去除前缀
+  if (conversationType === 'couple' && shouldInvokeAI && message) {
+    // 使用更精确的正则：匹配 @AI 或 @ai，后面可选的空格
+    // ^@AI\s? 会匹配 "@AI " 或 "@AI"
+    userMessageContent = message.replace(/^@AI\s?|^@ai\s?/, '').trimStart()
+
+    console.log('[Chat Stream] @AI detected in couple conversation, stripped prefix:', {
+      original: message,
+      cleaned: userMessageContent,
+    })
+  }
+
   // 如果是重新生成，获取会话和历史消息
   if (regenerateMessageId) {
     const regenerateMsg = await prisma.chatMessage.findUnique({
@@ -41,17 +62,6 @@ export default defineEventHandler(async (event) => {
     }
 
     conversationIdToUse = regenerateMsg.conversationId
-
-    // 获取该消息之前的所有消息作为上下文
-    const previousMessages = await prisma.chatMessage.findMany({
-      where: {
-        conversationId,
-        createdAt: {
-          lt: regenerateMsg.createdAt,
-        },
-      },
-      orderBy: { createdAt: 'asc' },
-    })
 
     // 删除要重新生成的消息之后的所有消息
     await prisma.chatMessage.deleteMany({
@@ -156,8 +166,9 @@ export default defineEventHandler(async (event) => {
   }
 
   // 保存用户消息
+  let newUserMessage = null
   if (userMessageContent) {
-    await prisma.chatMessage.create({
+    newUserMessage = await prisma.chatMessage.create({
       data: {
         conversationId: conversation.id,
         userId: payload.userId,
@@ -166,10 +177,31 @@ export default defineEventHandler(async (event) => {
       },
     })
 
+    // 获取用户信息用于广播
+    const user = await prisma.user.findUnique({
+      where: { id: payload.userId },
+      select: {
+        id: true,
+        nickName: true,
+        avatarUrl: true,
+      },
+    })
+
     // 更新会话的最后更新时间
     await prisma.chatConversation.update({
       where: { id: conversation.id },
       data: { updatedAt: new Date() },
+    })
+
+    // 广播消息到 WebSocket 房间（实时同步给伴侣）
+    broadcastToRoom(`conversation:${conversation.id}`, 'chat:message:new', {
+      id: newUserMessage.id,
+      conversationId: conversation.id,
+      role: 'user',
+      content: userMessageContent,
+      userId: payload.userId,
+      user: user,
+      createdAt: newUserMessage.createdAt,
     })
   }
 
@@ -210,6 +242,18 @@ export default defineEventHandler(async (event) => {
   // 发送会话 ID
   sendEvent(event, 'conversation_id', conversation.id)
 
+  // 只有在需要时才调用 AI
+  if (!shouldInvokeAI) {
+    console.log('[Chat Stream] AI invocation skipped (couple conversation without @AI)')
+    // 发送完成事件（但没有 AI 消息）
+    sendEvent(event, 'done', JSON.stringify({
+      messageId: '',
+      content: '',
+    }))
+    sendEvent(event, 'end', '')
+    return
+  }
+
   // 流式调用智谱 AI
   let fullContent = ''
   try {
@@ -229,6 +273,17 @@ export default defineEventHandler(async (event) => {
         role: 'assistant',
         content: fullContent,
       },
+    })
+
+    // 广播 AI 消息到 WebSocket 房间
+    broadcastToRoom(`conversation:${conversation.id}`, 'chat:message:new', {
+      id: assistantMessage.id,
+      conversationId: conversation.id,
+      role: 'assistant',
+      content: fullContent,
+      userId: null,
+      user: null,
+      createdAt: assistantMessage.createdAt,
     })
 
     // 自动更新会话标题（如果是"新对话"且这是第一次有消息）

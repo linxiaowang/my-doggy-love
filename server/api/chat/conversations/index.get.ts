@@ -57,7 +57,6 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  console.log('[Chat Conversations] Query clause:', JSON.stringify(whereClause, null, 2))
 
   // 获取会话列表
   const conversations = await prisma.chatConversation.findMany({
@@ -83,16 +82,6 @@ export default defineEventHandler(async (event) => {
   if (!coupleId) {
     filteredConversations = conversations.filter((conv) => conv.type === 'personal')
   }
-
-  console.log('[Chat Conversations] Fetch result:', {
-    userId: payload.userId,
-    coupleId,
-    type,
-    totalFound: conversations.length,
-    afterFilter: filteredConversations.length,
-    beforeFilter: conversations.map(c => ({ id: c.id, type: c.type, coupleId: c.coupleId })),
-    afterFilterList: filteredConversations.map(c => ({ id: c.id, type: c.type, coupleId: c.coupleId })),
-  })
 
   return {
     items: filteredConversations.map((conv) => ({

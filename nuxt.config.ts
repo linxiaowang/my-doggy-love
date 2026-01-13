@@ -112,6 +112,8 @@ export default defineNuxtConfig({
     experimental: {
       openAPI: false,
       wasm: false,
+      // 启用 WebSocket 支持
+      websocket: true,
     },
     // 严格的类型检查，避免类型循环导致的卡顿
     typescript: {

@@ -40,6 +40,7 @@
         :is-streaming="isStreaming"
         :show-back-button="!!activeConversationId"
         :title="currentConversationTitle"
+        :is-couple-conversation="isCoupleConversation"
         @send="handleSend"
         @regenerate="handleRegenerate"
         @back="handleBackToSidebar"
@@ -49,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import type { ChatConversation, ChatMessage } from '@/services/api/chat'
 import {
   getConversations,
@@ -57,6 +58,8 @@ import {
   getMessages,
   streamChat,
 } from '@/services/api/chat'
+import { useAuth } from '@/composables/useAuth'
+import { useGlobalWebSocket } from '@/composables/useWebSocket'
 import ConversationList from './ConversationList.vue'
 import ChatArea from './ChatArea.vue'
 
@@ -76,6 +79,10 @@ const filterType = ref<'all' | 'personal' | 'couple'>('all')
 const showSidebar = ref(false)
 const chatAreaRef = ref<InstanceType<typeof ChatArea>>()
 
+// WebSocket 和 Auth
+const { user: currentUser } = useAuth()
+const ws = useGlobalWebSocket()
+
 // 取消流式请求的函数
 let cancelStream: (() => void) | null = null
 
@@ -87,6 +94,15 @@ const currentConversationTitle = computed(() => {
   }
   const conv = conversations.value.find(c => c.id === activeConversationId.value)
   return conv?.title || 'AI 对话'
+})
+
+// 当前会话是否是情侣会话
+const isCoupleConversation = computed(() => {
+  if (!activeConversationId.value) {
+    return filterType.value === 'couple'
+  }
+  const conv = conversations.value.find(c => c.id === activeConversationId.value)
+  return conv?.type === 'couple' || false
 })
 
 // 加载会话列表
@@ -167,6 +183,12 @@ async function handleSend(message: string) {
     conversationId: activeConversationId.value || 'temp',
     role: 'user',
     content: message,
+    userId: currentUser?.id,
+    user: currentUser ? {
+      id: currentUser.id,
+      nickName: currentUser.nickName,
+      avatarUrl: currentUser.avatarUrl,
+    } : undefined,
     createdAt: new Date().toISOString(),
   }
   currentMessages.value.push(userMessage)
@@ -193,15 +215,17 @@ async function handleSend(message: string) {
           streamingMessage.value += chunk
         },
         onDone: (data) => {
-          // 添加助手消息到列表
-          const assistantMessage: ChatMessage = {
-            id: data.messageId,
-            conversationId: activeConversationId.value!,
-            role: 'assistant',
-            content: data.content,
-            createdAt: new Date().toISOString(),
+          // 只有当有实际内容时才添加助手消息
+          if (data.content && data.messageId) {
+            const assistantMessage: ChatMessage = {
+              id: data.messageId,
+              conversationId: activeConversationId.value!,
+              role: 'assistant',
+              content: data.content,
+              createdAt: new Date().toISOString(),
+            }
+            currentMessages.value.push(assistantMessage)
           }
-          currentMessages.value.push(assistantMessage)
 
           // 清空流式消息
           streamingMessage.value = ''
@@ -312,10 +336,89 @@ watch(conversations, (newConversations) => {
 
 // 初始化
 onMounted(() => {
+  // 监听 WebSocket 新消息事件
+  const unsubscribe = ws.on('chat:message:new', (message: ChatMessage) => {
+    console.log('[ChatLayout] Received WebSocket message:', {
+      message,
+      currentConversationId: activeConversationId.value,
+      currentUserId: currentUser?.id,
+    })
+
+    // 只处理当前会话的消息
+    if (message.conversationId === activeConversationId.value) {
+      // 对于 AI 消息，检查是否已经存在（通过 SSE 添加的）
+      if (message.role === 'assistant') {
+        const exists = currentMessages.value.some(m => m.id === message.id)
+        if (exists) {
+          console.log('[ChatLayout] AI message already exists (from SSE), ignoring WebSocket message', message.id)
+          return
+        }
+        // 不存在的话，说明是对方触发的 AI 回复，需要添加
+        console.log('[ChatLayout] Adding AI message from partner (triggered by partner)', message.id)
+        currentMessages.value.push({ ...message })
+        return
+      }
+
+      // 对于用户消息，只添加不是自己发送的消息
+      const senderId = message.userId || message.user?.id
+      console.log('[ChatLayout] Message sender ID:', senderId, 'Current user ID:', currentUser?.id)
+
+      if (senderId !== currentUser?.id) {
+        // 检查是否已存在该消息（避免重复）
+        const exists = currentMessages.value.some(m => m.id === message.id)
+        if (!exists) {
+          console.log('[ChatLayout] Adding new message from partner:', message)
+          // 创建新对象确保响应式
+          currentMessages.value.push({ ...message })
+          console.log('[ChatLayout] Message added. Total messages:', currentMessages.value.length)
+        } else {
+          console.log('[ChatLayout] Message already exists, skipping')
+        }
+      } else {
+        console.log('[ChatLayout] Ignoring own message:', message.id)
+      }
+    } else {
+      console.log('[ChatLayout] Message for different conversation, ignoring')
+    }
+  })
+
+  // 保存取消订阅函数，在组件卸载时调用
+  onUnmounted(() => {
+    unsubscribe()
+  })
+
   loadConversations()
   if (activeConversationId.value) {
     loadCurrentMessages()
   }
   // 移动端不再自动打开侧边栏，用户需要点击返回按钮才会显示
+})
+
+// 监听会话切换，自动加入/离开 WebSocket 房间
+watch(activeConversationId, (newId, oldId) => {
+  console.log('[ChatLayout] Conversation changed:', { oldId, newId })
+
+  // 离开旧房间
+  if (oldId) {
+    ws.leaveRoom(`conversation:${oldId}`)
+  }
+  // 加入新房间
+  if (newId) {
+    // 延迟加入房间，确保 WebSocket 已连接
+    nextTick(() => {
+      ws.joinRoom(`conversation:${newId}`)
+    })
+  }
+})
+
+// 监听 WebSocket 连接状态，确保在连接成功后加入当前房间
+watch(() => ws.status.value, (newStatus) => {
+  console.log('[ChatLayout] WebSocket status changed:', newStatus)
+
+  if (newStatus === 'OPEN' && activeConversationId.value) {
+    // WebSocket 连接成功后，加入当前会话房间
+    console.log('[ChatLayout] WebSocket connected, joining room:', activeConversationId.value)
+    ws.joinRoom(`conversation:${activeConversationId.value}`)
+  }
 })
 </script>
