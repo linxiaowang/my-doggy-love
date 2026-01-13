@@ -3,16 +3,30 @@
     <!-- 头像 -->
     <Avatar :class="message.role === 'user' ? 'bg-primary' : 'bg-muted'" class="w-8 h-8 flex-shrink-0">
       <template v-if="message.role === 'user'">
-        <img v-if="userAvatar" :src="userAvatar" alt="我" class="w-full h-full object-cover" />
-        <span v-else class="text-sm font-medium text-primary-foreground">我</span>
+        <!-- 用户消息：显示消息发送者的头像 -->
+        <img
+          v-if="message.user?.avatarUrl"
+          :src="message.user.avatarUrl"
+          :alt="message.user.nickName"
+          class="w-full h-full object-cover"
+        />
+        <span v-else class="text-sm font-medium text-primary-foreground">
+          {{ message.user?.nickName?.slice(0, 2) || '我' }}
+        </span>
       </template>
       <template v-else>
+        <!-- AI 消息：显示固定头像 -->
         <img src="/assets/images/couple/couple-1.png" alt="AI" class="w-full h-full object-cover" />
       </template>
     </Avatar>
 
     <!-- 消息内容区域 -->
     <div class="flex flex-col min-w-0 flex-1" :class="message.role === 'user' ? 'items-end' : 'items-start'">
+      <!-- 发送者名称（仅情侣会话且非自己时显示） -->
+      <span v-if="shouldShowUserName" class="text-xs text-muted-foreground mb-1 px-1">
+        {{ message.user?.nickName }}
+      </span>
+
       <!-- 消息气泡 -->
       <div
         class="inline-block max-w-full rounded-2xl px-4 py-2.5 text-left break-words"
@@ -51,8 +65,14 @@ const props = defineProps<{
   message: ChatMessage
 }>()
 
-const { user } = useAuth()
-const userAvatar = computed(() => user?.avatarUrl)
+const { user: currentUser } = useAuth()
+
+// 判断是否显示用户名（情侣会话中非自己的消息）
+const shouldShowUserName = computed(() => {
+  return props.message.role === 'user' &&
+    props.message.user &&
+    props.message.user.id !== currentUser?.id
+})
 
 // 格式化时间
 function formatTime(dateStr: string): string {

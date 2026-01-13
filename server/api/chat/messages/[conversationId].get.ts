@@ -67,12 +67,21 @@ export default defineEventHandler(async (event) => {
       }
     : undefined
 
-  // 获取消息
+  // 获取消息，包含用户信息
   const messages = await prisma.chatMessage.findMany({
     where: whereClause,
     take: limit,
     ...cursorOption,
     orderBy: { createdAt: 'asc' },
+    include: {
+      user: {
+        select: {
+          id: true,
+          nickName: true,
+          avatarUrl: true,
+        },
+      },
+    },
   })
 
   return {

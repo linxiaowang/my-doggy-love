@@ -32,6 +32,11 @@ export interface ChatMessage {
   role: 'user' | 'assistant' | 'system'
   content: string
   createdAt: string
+  user?: {
+    id: string
+    nickName: string
+    avatarUrl?: string | null
+  } | null
 }
 
 export interface SystemPromptTemplate {
