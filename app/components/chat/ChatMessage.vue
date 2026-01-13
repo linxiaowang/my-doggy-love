@@ -52,7 +52,7 @@ const props = defineProps<{
 }>()
 
 const { user } = useAuth()
-const userAvatar = computed(() => user.value?.avatarUrl)
+const userAvatar = computed(() => user?.avatarUrl)
 
 // 格式化时间
 function formatTime(dateStr: string): string {

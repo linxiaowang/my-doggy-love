@@ -9,8 +9,10 @@ export default defineEventHandler(async (event) => {
 
   const files = await parseMultipartToFileLikes(event)
   if (!files.length) throw createError({ statusCode: 400, statusMessage: 'file required' })
+  const file = files[0]
+  if (!file) throw createError({ statusCode: 400, statusMessage: 'file required' })
   const storage = createStorageService()
-  const saved = await storage.save(files[0], { prefix: 'avatars' })
+  const saved = await storage.save(file, { prefix: 'avatars' })
 
   const user = await prisma.user.update({ where: { id: payload.userId }, data: { avatarUrl: saved.url } })
   

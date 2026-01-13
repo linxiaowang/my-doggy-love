@@ -25,12 +25,7 @@ export default defineNuxtConfig({
      */
     componentDir: '@/components/ui'
   },
- css: ['~/assets/css/tailwind.css'],
- vite: {
-    plugins: [
-      tailwindcss(),
-    ],
-  },
+  css: ['~/assets/css/tailwind.css'],
   devtools: {
     enabled: true,
   },
@@ -118,14 +113,9 @@ export default defineNuxtConfig({
       openAPI: false,
       wasm: false,
     },
-    // 减少构建并行度，避免内存耗尽
-    workers: {
-      threadCount: 1,
-    },
     // 严格的类型检查，避免类型循环导致的卡顿
     typescript: {
       strict: false,
-      typeCheck: false,
     },
   },
 
@@ -134,65 +124,6 @@ export default defineNuxtConfig({
     plugins: [
       tailwindcss(),
     ],
-    build: {
-      // 减少并行构建
-      parallel: false,
-      // 优化依赖预构建
-      optimizeDeps: {
-        include: [
-          'vue',
-          'pinia',
-          '@vueuse/core',
-          'class-variance-authority',
-          '@vueuse/core',
-        ],
-        // 排除一些可能导致问题的包
-        exclude: [],
-      },
-      // 减少打包模块数量
-      rollupOptions: {
-        onwarn(warning, warn) {
-          // 忽略某些警告
-          if (warning.code === 'CIRCULAR_DEPENDENCY') return
-          if (warning.code === 'EMPTY_BUNDLE') return
-          warn(warning)
-        },
-        output: {
-          // 手动分块，避免单个包过大
-          manualChunks(id) {
-            // vendor 相关
-            if (id.includes('node_modules')) {
-              // 将 UI 组件单独打包
-              if (id.includes('components/ui')) {
-                return 'ui-components'
-              }
-              // 其他依赖
-              return 'vendor'
-            }
-          },
-        },
-      },
-    },
-    // SSR 构建优化
-    ssr: {
-      // 优化 SSR 构建的外部化
-      noExternal: [
-        '@vueuse/core',
-        '@vueuse/nuxt',
-        'class-variance-authority',
-      ],
-    },
-  },
-
-  eslint: {
-    config: {
-      standalone: false,
-      nuxt: {
-        sortConfigKeys: true,
-      },
-    },
-    // 禁用构建时的 ESLint 检查，加快构建速度
-    lintOnBuild: false,
   },
 
   pwa,

@@ -45,7 +45,8 @@ export function verifyToken(token: string): AuthTokenPayload | null {
   const expected = crypto.createHmac('sha256', getSecret()).update(`${header}.${body}`).digest('base64url')
   if (expected !== sig) return null
   try {
-    const payload = JSON.parse(Buffer.from(body, 'base64url').toString()) as AuthTokenPayload
+    const bodyStr = body ?? ''
+    const payload = JSON.parse(Buffer.from(bodyStr, 'base64url').toString()) as AuthTokenPayload
     // 移除过期检查，实现永久登录（像 app 一样）
     // 只有在用户主动退出登录或 session 被删除时才会失效
     return payload

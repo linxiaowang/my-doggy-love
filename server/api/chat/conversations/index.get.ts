@@ -31,15 +31,33 @@ export default defineEventHandler(async (event) => {
 
   // 构建查询条件
   const whereClause: any = {
-    userId: payload.userId,
+    OR: [] as any[],
   }
 
-  // 如果指定了类型，添加类型过滤
-  if (type === 'personal') {
-    whereClause.type = 'personal'
-  } else if (type === 'couple') {
-    whereClause.type = 'couple'
+  // 情侣会话：查询所有属于这个情侣关系的会话（不管是谁创建的）
+  if (coupleId && (type === 'couple' || !type)) {
+    whereClause.OR.push({
+      type: 'couple',
+      coupleId: coupleId,
+    })
   }
+
+  // 个人会话：只查当前用户创建的
+  if (type === 'personal' || !type) {
+    whereClause.OR.push({
+      type: 'personal',
+      userId: payload.userId,
+    })
+  }
+
+  // 如果 OR 数组为空（不应该发生），返回空结果
+  if (whereClause.OR.length === 0) {
+    whereClause.OR.push({
+      id: 'nonexistent-id', // 永远匹配不到
+    })
+  }
+
+  console.log('[Chat Conversations] Query clause:', JSON.stringify(whereClause, null, 2))
 
   // 获取会话列表
   const conversations = await prisma.chatConversation.findMany({
@@ -60,17 +78,9 @@ export default defineEventHandler(async (event) => {
     orderBy: { updatedAt: 'desc' },
   })
 
-  // 过滤情侣会话：只返回用户所属情侣的会话
+  // 如果没有情侣关系，过滤掉情侣会话
   let filteredConversations = conversations
-  if (coupleId) {
-    filteredConversations = conversations.filter((conv) => {
-      if (conv.type === 'couple') {
-        return conv.coupleId === coupleId
-      }
-      return true
-    })
-  } else {
-    // 如果没有情侣关系，过滤掉所有情侣会话
+  if (!coupleId) {
     filteredConversations = conversations.filter((conv) => conv.type === 'personal')
   }
 

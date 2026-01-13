@@ -178,7 +178,7 @@ async function handleSend(message: string) {
   try {
     cancelStream = await streamChat(
       message,
-      activeConversationId.value,
+      activeConversationId.value || undefined,
       undefined,
       {
         onConversationId: (id) => {

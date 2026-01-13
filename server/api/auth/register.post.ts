@@ -37,7 +37,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // 如果未提供昵称，从邮箱自动生成（取@前的部分）
-    const nickName = nickNameInput || email.split('@')[0]
+    const nickName = nickNameInput || email.split('@')[0] || 'User'
 
     const passwordHash = hashPassword(password)
     const user = await prisma.user.create({ data: { email, passwordHash, nickName } })

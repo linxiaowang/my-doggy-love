@@ -93,7 +93,8 @@ watch(notificationsData, (newData) => {
     items.value = newData.items
     hasMore.value = newData.items.length === pageSize
     if (newData.items.length > 0) {
-      cursor.value = newData.items[newData.items.length - 1].id
+      const lastItem = newData.items[newData.items.length - 1]
+      if (lastItem) cursor.value = lastItem.id
     }
     loading.value = false
   }
@@ -119,7 +120,8 @@ async function loadMore() {
     if (res.items.length > 0) {
       items.value = items.value.concat(res.items)
       hasMore.value = res.items.length === pageSize
-      cursor.value = res.items[res.items.length - 1].id
+      const lastItem = res.items[res.items.length - 1]
+      if (lastItem) cursor.value = lastItem.id
     } else {
       hasMore.value = false
     }

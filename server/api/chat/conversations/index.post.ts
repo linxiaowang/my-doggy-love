@@ -41,7 +41,8 @@ export default defineEventHandler(async (event) => {
     }
 
     // 从用户的情侣关系中获取 coupleId
-    coupleId = user.coupleMemberships[0].coupleId
+    const firstMembership = user.coupleMemberships[0]
+    coupleId = firstMembership?.coupleId ?? null
     console.log('[Create Conversation] Couple mode:', { userId: payload.userId, coupleId })
   }
 

@@ -20,9 +20,9 @@ export function getThumbnailUrl(originalUrl: string): string {
   // 格式：/uploads/media/2025/11/03/xxx.jpg -> /uploads/media/2025/11/03/thumb_xxx.jpg
   const urlParts = originalUrl.split('/')
   const fileName = urlParts[urlParts.length - 1]
-  
+
   // 如果文件名已经包含 thumb_，说明已经是缩略图
-  if (fileName.startsWith('thumb_')) {
+  if (fileName?.startsWith('thumb_')) {
     return originalUrl
   }
   

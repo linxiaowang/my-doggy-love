@@ -77,6 +77,6 @@ export default defineEventHandler(async (event) => {
 
   return {
     items: messages,
-    nextCursor: messages.length === limit ? messages[messages.length - 1].id : null,
+    nextCursor: messages.length === limit ? (messages[messages.length - 1]?.id ?? null) : null,
   }
 })

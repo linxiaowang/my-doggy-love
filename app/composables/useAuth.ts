@@ -1,7 +1,6 @@
 /**
  * 认证相关的组合式函数
  * 用于检查登录状态和处理未登录情况
- * @deprecated 推荐使用 useAuthStore() 代替
  */
 
 export const useAuth = () => {
@@ -9,7 +8,7 @@ export const useAuth = () => {
   const authStore = useAuthStore()
 
   return {
-    user: authStore.user,
+    user: authStore.user as typeof authStore.user,
     loading: authStore.loading,
     isAuthenticated: authStore.isAuthenticated,
     checkAuth: authStore.fetchUser,
