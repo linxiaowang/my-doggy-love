@@ -160,6 +160,7 @@ export default defineEventHandler(async (event) => {
     await prisma.chatMessage.create({
       data: {
         conversationId: conversation.id,
+        userId: payload.userId,
         role: 'user',
         content: userMessageContent,
       },
