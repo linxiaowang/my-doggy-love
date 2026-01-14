@@ -190,11 +190,16 @@ function handleSend() {
   emit('send', message)
   input.value = ''
 
-  // 重置高度
-  const textarea = textareaRef.value?.$el?.querySelector('textarea')
-  if (textarea) {
-    textarea.style.height = 'auto'
-  }
+  // 重置高度并聚焦
+  nextTick(() => {
+    const textarea = textareaRef.value?.$el as HTMLTextAreaElement
+    console.log({ textarea });
+    
+    if (textarea) {
+      textarea.style.height = 'auto'
+      textarea.focus()
+    }
+  })
 }
 
 function handleKeydown(e: KeyboardEvent) {
@@ -321,12 +326,10 @@ function adjustHeight(e: Event) {
 
 // 外部聚焦输入
 function focusInput() {
-  nextTick(() => {
-    const textarea = textareaRef.value?.$el?.querySelector('textarea')
-    if (textarea) {
-      textarea.focus()
-    }
-  })
+  const textarea = textareaRef.value?.$el?.querySelector('textarea')
+  if (textarea) {
+    textarea.focus()
+  }
 }
 
 // 外部清空输入
@@ -341,20 +344,18 @@ function clearInput() {
 // 插入提及文本（用于右键菜单等功能）
 function insertMention(text: string) {
   input.value += text
-  nextTick(() => {
-    const textarea = textareaRef.value?.$el?.querySelector('textarea')
-    if (textarea) {
-      // 调整高度
-      textarea.style.height = 'auto'
-      const newHeight = Math.min(textarea.scrollHeight, 200)
-      textarea.style.height = `${newHeight}px`
+  const textarea = textareaRef.value?.$el?.querySelector('textarea')
+  if (textarea) {
+    // 调整高度
+    textarea.style.height = 'auto'
+    const newHeight = Math.min(textarea.scrollHeight, 200)
+    textarea.style.height = `${newHeight}px`
 
-      // 移动光标到末尾
-      textarea.focus()
-      const length = input.value.length
-      textarea.setSelectionRange(length, length)
-    }
-  })
+    // 移动光标到末尾并聚焦
+    const length = input.value.length
+    textarea.setSelectionRange(length, length)
+    textarea.focus()
+  }
 }
 
 defineExpose({

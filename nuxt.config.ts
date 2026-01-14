@@ -3,6 +3,9 @@ import { appDescription } from './app/constants/index'
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineNuxtConfig({
+  devServer: {
+    port: 3001,
+  },
   modules: [
    '@vueuse/nuxt',
    '@pinia/nuxt',

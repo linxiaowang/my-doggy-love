@@ -211,6 +211,17 @@ async function handleSend(message: string) {
             userMessage.conversationId = id
           }
         },
+        onUserMessageId: (userMessageId) => {
+          // 更新用户消息的真实 ID
+          const msgIndex = currentMessages.value.findIndex(m => m.id === userMessage?.id)
+          if (msgIndex !== -1 && currentMessages.value[msgIndex]) {
+            currentMessages.value[msgIndex].id = userMessageId
+            console.log('[ChatLayout] Updated user message ID:', {
+              oldId: userMessage?.id,
+              newId: userMessageId,
+            })
+          }
+        },
         onChunk: (chunk) => {
           streamingMessage.value += chunk
         },

@@ -29,25 +29,43 @@ export default defineEventHandler(async (event) => {
   setHeader(event, 'x-accel-buffering', 'no')
 
   let conversationIdToUse = conversationId
-  let userMessageContent = message
+  let userMessageContent = message // 保存原始消息，不去除前缀
 
-  // 检测是否需要调用 AI（个人会话自动调用，情侣会话需要 @AI 提及）
+  // 检测是否需要调用 AI
+  // 个人会话：自动调用 AI
+  // 情侣会话：需要 @AI 提及才调用 AI
+  let shouldInvokeAI = false
+  let isCoupleConversation = false
+
+  // 先获取会话信息（如果存在）
+  if (conversationIdToUse) {
+    const existingConversation = await prisma.chatConversation.findUnique({
+      where: { id: conversationIdToUse },
+      select: { type: true },
+    })
+    if (existingConversation) {
+      isCoupleConversation = existingConversation.type === 'couple'
+      shouldInvokeAI = !isCoupleConversation // 个人会话自动调用
+    }
+  }
+
+  // 如果是新会话，根据 conversationType 参数判断
+  if (!conversationIdToUse) {
+    isCoupleConversation = conversationType === 'couple'
+    shouldInvokeAI = !isCoupleConversation
+  }
+
+  // 对于情侣会话，检测 @AI 提及
   const trimmedMessage = message?.trimStart() || ''
-  const shouldInvokeAI = conversationType === 'personal' ||
-                         trimmedMessage.startsWith('@AI ') ||
-                         trimmedMessage.startsWith('@ai ') ||
-                         trimmedMessage.startsWith('@AI') ||
-                         trimmedMessage.startsWith('@ai')
+  if (isCoupleConversation) {
+    shouldInvokeAI = trimmedMessage.startsWith('@AI ') ||
+                      trimmedMessage.startsWith('@ai ') ||
+                      trimmedMessage.startsWith('@AI') ||
+                      trimmedMessage.startsWith('@ai')
 
-  // 如果是情侣会话且检测到 @AI，去除前缀
-  if (conversationType === 'couple' && shouldInvokeAI && message) {
-    // 使用更精确的正则：匹配 @AI 或 @ai，后面可选的空格
-    // ^@AI\s? 会匹配 "@AI " 或 "@AI"
-    userMessageContent = message.replace(/^@AI\s?|^@ai\s?/, '').trimStart()
-
-    console.log('[Chat Stream] @AI detected in couple conversation, stripped prefix:', {
-      original: message,
-      cleaned: userMessageContent,
+    console.log('[Chat Stream] Couple conversation @AI detection:', {
+      message: trimmedMessage,
+      shouldInvokeAI,
     })
   }
 
@@ -104,9 +122,9 @@ export default defineEventHandler(async (event) => {
     // 检查是否有情侣关系
     const coupleId = user.coupleMemberships[0]?.coupleId
 
-    // 确定会话类型：情侣会话需要 coupleId
+    // 确定会话类型
     let type: 'personal' | 'couple' = 'personal'
-    if (conversationType === 'couple') {
+    if (isCoupleConversation) {
       if (!coupleId) {
         console.error('[Chat Stream] Couple conversation requested but no coupleId found for user:', payload.userId)
         return createEventStream(event, { error: '请先建立情侣关系后再创建情侣会话' }, true)
@@ -119,6 +137,7 @@ export default defineEventHandler(async (event) => {
       coupleId,
       requestedType: conversationType,
       actualType: type,
+      isCouple: isCoupleConversation,
     })
 
     conversation = await prisma.chatConversation.create({
@@ -241,6 +260,11 @@ export default defineEventHandler(async (event) => {
 
   // 发送会话 ID
   sendEvent(event, 'conversation_id', conversation.id)
+
+  // 发送用户消息 ID（用于前端更新临时消息）
+  if (newUserMessage) {
+    sendEvent(event, 'user_message_id', newUserMessage.id)
+  }
 
   // 只有在需要时才调用 AI
   if (!shouldInvokeAI) {

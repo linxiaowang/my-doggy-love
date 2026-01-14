@@ -2,7 +2,8 @@
   <div class="flex gap-3 group" :class="isOwnMessage ? 'flex-row-reverse' : 'flex-row'">
     <!-- 头像 -->
     <Avatar
-      :class="['w-8 h-8 flex-shrink-0', isOwnMessage ? 'bg-primary' : 'bg-muted', !isOwnMessage && message.role === 'user' ? 'cursor-pointer hover:ring-2 hover:ring-primary/50' : '']"
+      ref="avatarRef"
+      :class="['w-8 h-8 flex-shrink-0', isOwnMessage ? 'bg-primary' : 'bg-muted', !isOwnMessage ? 'cursor-pointer hover:ring-2 hover:ring-primary/50' : '']"
       @click="handleAvatarClick"
       @contextmenu.prevent="handleContextMenu"
     >
@@ -40,7 +41,7 @@
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
             </svg>
-            提及 @{{ message.user?.nickName }}
+            提及 @{{ mentionTargetName }}
           </button>
         </div>
       </Transition>
@@ -77,6 +78,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import { onLongPress } from '@vueuse/core'
 import { Avatar } from '@/components/ui/avatar'
 import type { ChatMessage } from '@/services/api/chat'
 import { useAuth } from '@/composables/useAuth'
@@ -104,6 +106,64 @@ const contextMenuStyle = ref({
   top: '0px',
 })
 
+// Avatar 元素引用
+const avatarRef = ref<HTMLElement | null>(null)
+
+// 长按处理（移动端）
+const longPressed = ref(false)
+
+// 计算提及目标名称
+const mentionTargetName = computed(() => {
+  if (props.message.role === 'assistant') {
+    return 'AI'
+  }
+  return props.message.user?.nickName || '用户'
+})
+
+// 计算提及目标 ID
+const mentionTargetId = computed(() => {
+  if (props.message.role === 'assistant') {
+    return 'ai'
+  }
+  return props.message.user?.id || ''
+})
+
+onLongPress(
+  avatarRef,
+  () => {
+    // 只有非自己的消息才支持长按
+    if (!isOwnMessage.value) {
+      longPressed.value = true
+
+      // 直接触发提及用户事件
+      emit('mentionUser', {
+        id: mentionTargetId.value,
+        nickName: mentionTargetName.value,
+      })
+
+      // 震动反馈（如果设备支持）
+      if ('vibrate' in navigator) {
+        navigator.vibrate(50) // 轻微震动 50ms
+      }
+
+      // 延迟重置，防止触发点击事件
+      setTimeout(() => {
+        longPressed.value = false
+      }, 100)
+    }
+  },
+  {
+    delay: 500, // 长按触发时间（毫秒）
+  }
+)
+
+// 处理头像点击（不做任何事，只有长按才触发提及）
+function handleAvatarClick(e: MouseEvent) {
+  // 阻止默认行为和事件传播
+  e.preventDefault()
+  e.stopPropagation()
+}
+
 // 判断是否是自己的消息
 const isOwnMessage = computed(() => {
   // AI 消息不是自己的消息
@@ -122,21 +182,10 @@ const shouldShowUserName = computed(() => {
     props.message.user
 })
 
-// 处理头像点击（也可以触发提及）
-function handleAvatarClick() {
-  // 只有非自己的用户消息才能提及
-  if (props.message.role === 'user' && !isOwnMessage.value && props.message.user) {
-    emit('mentionUser', {
-      id: props.message.user.id,
-      nickName: props.message.user.nickName,
-    })
-  }
-}
-
 // 处理右键菜单
 function handleContextMenu(e: MouseEvent) {
-  // 只有非自己的用户消息才显示右键菜单
-  if (props.message.role === 'user' && !isOwnMessage.value && props.message.user) {
+  // 只有非自己的消息才显示右键菜单
+  if (!isOwnMessage.value) {
     showContextMenu.value = true
     contextMenuStyle.value = {
       left: `${e.clientX}px`,
@@ -153,12 +202,10 @@ function closeContextMenu() {
 }
 
 function handleMentionUser() {
-  if (props.message.user) {
-    emit('mentionUser', {
-      id: props.message.user.id,
-      nickName: props.message.user.nickName,
-    })
-  }
+  emit('mentionUser', {
+    id: mentionTargetId.value,
+    nickName: mentionTargetName.value,
+  })
   closeContextMenu()
 }
 
@@ -221,5 +268,13 @@ const renderedContent = computed(() => {
 .context-menu-leave-to {
   opacity: 0;
   transform: scale(0.95);
+}
+
+/* 移动端优化：头像增加点击区域 */
+@media (hover: none) and (pointer: coarse) {
+  .avatar {
+    min-width: 44px;
+    min-height: 44px;
+  }
 }
 </style>

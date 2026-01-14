@@ -137,6 +137,7 @@ export async function getSystemPromptTemplates(): Promise<{ items: SystemPromptT
  */
 export interface StreamChatCallbacks {
   onConversationId: (conversationId: string) => void
+  onUserMessageId?: (userMessageId: string) => void // 新增：用户消息 ID 回调
   onChunk: (chunk: string) => void
   onDone: (data: { messageId: string; content: string }) => void
   onError: (error: string) => void
@@ -197,6 +198,9 @@ export async function streamChat(
         switch (currentEvent || 'chunk') {
           case 'conversation_id':
             callbacks.onConversationId(data)
+            break
+          case 'user_message_id':
+            callbacks.onUserMessageId?.(data)
             break
           case 'chunk':
             callbacks.onChunk(data)

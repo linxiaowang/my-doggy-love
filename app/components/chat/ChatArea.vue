@@ -207,9 +207,8 @@ function handleSend(message: string) {
 }
 
 function handleMentionUser(user: { id: string; nickName: string }) {
-  // 调用 ChatInput 的方法插入提及
+  // insertMention 内部已经包含了聚焦逻辑
   inputRef.value?.insertMention(`@${user.nickName} `)
-  inputRef.value?.focusInput()
 }
 
 function scrollToBottom() {
