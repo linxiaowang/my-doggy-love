@@ -59,7 +59,7 @@ export default defineEventHandler(async (event) => {
     },
   }
 
-  // 游标分页
+  // 游标分页 - 从最新消息开始加载
   const cursorOption = cursor
     ? {
         cursor: { id: cursor },
@@ -68,11 +68,12 @@ export default defineEventHandler(async (event) => {
     : undefined
 
   // 获取消息，包含用户信息
+  // 注意：游标分页从最新消息开始，然后向前加载更旧的消息
   const messages = await prisma.chatMessage.findMany({
     where: whereClause,
     take: limit,
     ...cursorOption,
-    orderBy: { createdAt: 'asc' },
+    orderBy: { createdAt: 'desc' }, // 从最新消息开始
     include: {
       user: {
         select: {
@@ -84,8 +85,11 @@ export default defineEventHandler(async (event) => {
     },
   })
 
+  // 在前端反转消息顺序，使最新消息显示在底部
+  const reversedMessages = [...messages].reverse()
+
   return {
-    items: messages,
-    nextCursor: messages.length === limit ? (messages[messages.length - 1]?.id ?? null) : null,
+    items: reversedMessages,
+    nextCursor: messages.length === limit ? (messages[0]?.id ?? null) : null,
   }
 })
