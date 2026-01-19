@@ -13,6 +13,7 @@ export default defineNuxtConfig({
    '@vite-pwa/nuxt',
    // '@nuxt/eslint', // 暂时禁用以加快构建速度
    'shadcn-nuxt',
+   'nuxt-skills',
   ],
   shadcn: {
     /**

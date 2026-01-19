@@ -20,3 +20,9 @@ node_modules/.cache
 
 # 构建临时文件
 build-debug.log
+
+# skills
+.agent
+.claude
+.cursor
+.opencode

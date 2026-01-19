@@ -99,6 +99,9 @@ importers:
       lunar-typescript:
         specifier: ^1.8.6
         version: 1.8.6
+      nuxt-skills:
+        specifier: github:onmax/nuxt-skills
+        version: https://codeload.github.com/onmax/nuxt-skills/tar.gz/770294b85ef46ccdf5f2725ba394f997309c2166
       reka-ui:
         specifier: ^2.6.1
         version: 2.6.1(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3))
@@ -5446,6 +5449,10 @@ packages:
 
   nth-check@2.1.1:
     resolution: {integrity: sha512-lqjrjmaOoAnWfMmBPL+XNnynZh2+swxiX3WUE0s4yEHI6m+AwrK2UZOimIRl3X/4QctVqS8AiZjFqyOGrMXb/w==}
+
+  nuxt-skills@https://codeload.github.com/onmax/nuxt-skills/tar.gz/770294b85ef46ccdf5f2725ba394f997309c2166:
+    resolution: {tarball: https://codeload.github.com/onmax/nuxt-skills/tar.gz/770294b85ef46ccdf5f2725ba394f997309c2166}
+    version: 0.0.0
 
   nuxt@4.2.0:
     resolution: {integrity: sha512-4qzf2Ymf07dMMj50TZdNZgMqCdzDch8NY3NO2ClucUaIvvsr6wd9+JrDpI1CckSTHwqU37/dIPFpvIQZoeHoYA==}
@@ -12950,6 +12957,8 @@ snapshots:
   nth-check@2.1.1:
     dependencies:
       boolbase: 1.0.0
+
+  nuxt-skills@https://codeload.github.com/onmax/nuxt-skills/tar.gz/770294b85ef46ccdf5f2725ba394f997309c2166: {}
 
   nuxt@4.2.0(@parcel/watcher@2.5.1)(@types/node@24.9.2)(@vue/compiler-sfc@3.5.22)(db0@0.3.4)(eslint@9.38.0(jiti@2.6.1))(ioredis@5.8.2)(lightningcss@1.30.2)(magicast@0.3.5)(optionator@0.9.4)(rollup@4.52.5)(terser@5.39.0)(tsx@4.21.0)(typescript@5.9.3)(vite@7.1.12(@types/node@24.9.2)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.39.0)(tsx@4.21.0)(yaml@2.8.1))(vue-tsc@3.1.2(typescript@5.9.3))(xml2js@0.6.2)(yaml@2.8.1):
     dependencies:
