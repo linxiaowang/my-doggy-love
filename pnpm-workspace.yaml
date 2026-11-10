@@ -1,5 +1,18 @@
 packages: []
 
+# 强制全仓只用一份 Vue，修复 reka-ui SSR：Cannot read properties of null (reading 'ce')
+overrides:
+  vue: 3.5.45
+  '@vue/compiler-core': 3.5.45
+  '@vue/compiler-dom': 3.5.45
+  '@vue/compiler-sfc': 3.5.45
+  '@vue/compiler-ssr': 3.5.45
+  '@vue/reactivity': 3.5.45
+  '@vue/runtime-core': 3.5.45
+  '@vue/runtime-dom': 3.5.45
+  '@vue/server-renderer': 3.5.45
+  '@vue/shared': 3.5.45
+
 allowBuilds:
   '@prisma/client': true
   '@prisma/engines': true
@@ -30,7 +43,8 @@ catalogs:
   frontend:
     '@vueuse/core': ^14.1.0
     pinia: ^3.0.3
-    vue: ^3.5.22
+    # 与 Nuxt 4.6 自带的 vue@3.5.45 对齐，避免 SSR 打进双份 runtime-core
+    vue: 3.5.45
   icons:
     '@iconify-json/carbon': ^1.2.14
     '@iconify-json/twemoji': ^1.2.4

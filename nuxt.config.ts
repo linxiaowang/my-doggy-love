@@ -83,6 +83,11 @@ export default defineNuxtConfig({
 
   compatibilityDate: '2024-08-14',
 
+  build: {
+    // 让 reka-ui 走同一份 Vue，避免 SSR renderSlot 空实例（reading 'ce'）
+    transpile: ['reka-ui'],
+  },
+
   sourcemap: {
     server: false,
     client: false,
@@ -134,7 +139,14 @@ export default defineNuxtConfig({
     ],
     resolve: {
       // 避免 SSR 打进多份 Vue（reka-ui 等依赖易触发 renderSlot 空实例）
-      dedupe: ['vue'],
+      dedupe: [
+        'vue',
+        '@vue/runtime-core',
+        '@vue/runtime-dom',
+        '@vue/reactivity',
+        '@vue/shared',
+        '@vue/server-renderer',
+      ],
     },
   },
 
