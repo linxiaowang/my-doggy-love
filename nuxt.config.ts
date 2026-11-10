@@ -132,6 +132,10 @@ export default defineNuxtConfig({
     plugins: [
       tailwindcss(),
     ],
+    resolve: {
+      // 避免 SSR 打进多份 Vue（reka-ui 等依赖易触发 renderSlot 空实例）
+      dedupe: ['vue'],
+    },
   },
 
   pwa,
