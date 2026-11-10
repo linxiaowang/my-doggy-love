@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-slate-50 dark:bg-slate-900">
+  <div class="min-h-screen">
     <DogHeader />
     <div class="max-w-2xl mx-auto px-4 py-8">
       <div class="rounded-xl bg-white dark:bg-slate-800 p-6 shadow space-y-4">

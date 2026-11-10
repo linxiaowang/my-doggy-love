@@ -13,7 +13,6 @@ export default defineNuxtConfig({
    '@vite-pwa/nuxt',
    // '@nuxt/eslint', // 暂时禁用以加快构建速度
    'shadcn-nuxt',
-   'nuxt-skills',
   ],
   shadcn: {
     /**
@@ -52,13 +51,16 @@ export default defineNuxtConfig({
         { rel: 'icon', href: '/favicon.ico', sizes: 'any' },
         { rel: 'icon', type: 'image/svg+xml', href: '/maskable-icon.png' },
         { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=ZCOOL+KuaiLe&display=swap' },
       ],
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         { name: 'description', content: appDescription },
         { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
-        { name: 'theme-color', media: '(prefers-color-scheme: light)', content: '#faf9f5' },
-        { name: 'theme-color', media: '(prefers-color-scheme: dark)', content: '#0f0e0a' },
+        { name: 'theme-color', media: '(prefers-color-scheme: light)', content: '#fafafa' },
+        { name: 'theme-color', media: '(prefers-color-scheme: dark)', content: '#1a1b22' },
       ],
     },
   },

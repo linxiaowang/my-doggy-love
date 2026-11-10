@@ -24,6 +24,10 @@ const { isNewYear } = useThemeDecorations()
       <!-- <NewYearDecorations v-if="isNewYear" /> -->
     </ClientOnly>
   </NuxtLayout>
+  <ClientOnly>
+    <Toast />
+    <AppDialogHost />
+  </ClientOnly>
 </template>
 
 <style>
@@ -43,8 +47,8 @@ html.dark {
 /* 全局基础文本颜色，避免白底白字不可见 */
 /* 全局基础文本颜色，避免白底白字不可见 */
 /* 全局基础文本颜色，避免白底白字不可见 */
-body { 
-  font-family: 'DM Sans', sans-serif;
+body {
+  font-family: 'Nunito', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

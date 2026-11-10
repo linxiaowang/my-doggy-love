@@ -1,10 +1,13 @@
 <template>
-  <div class="min-h-screen bg-slate-50 dark:bg-slate-900">
+  <div class="min-h-screen">
     <DogHeader />
     <div class="max-w-3xl mx-auto px-4 py-6">
-      <div class="rounded-xl bg-white dark:bg-slate-800 p-4 shadow mb-4">
+      <div class="rounded-xl bg-card border border-border p-4 shadow-sm mb-4">
         <div class="flex items-center justify-between mb-4">
-          <h1 class="text-xl font-semibold">通知</h1>
+          <h1 class="text-xl font-display flex items-center gap-2">
+            <LineDogSticker scene="empty-notifications" size="xs" />
+            通知
+          </h1>
           <Button
             v-if="unreadCount > 0"
             size="sm"
@@ -23,7 +26,7 @@
         </div>
 
         <div v-else-if="items.length === 0" class="text-center py-12">
-          <EmptyState text="暂无通知" img="/assets/images/xiaojimao/xiaojimao-4.png" />
+          <EmptyState text="暂无通知" scene="empty-notifications" />
         </div>
 
         <div v-else class="space-y-2">

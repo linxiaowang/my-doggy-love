@@ -1,7 +1,7 @@
 {
   "type": "module",
   "private": true,
-  "packageManager": "pnpm@10.19.0",
+  "packageManager": "pnpm@12.18.0",
   "scripts": {
     "build": "nuxt build",
     "dev:pwa": "VITE_PLUGIN_PWA=true nuxt dev",
@@ -62,7 +62,6 @@
     "embla-carousel-vue": "^8.6.0",
     "lucide-vue-next": "^0.556.0",
     "lunar-typescript": "^1.8.6",
-    "nuxt-skills": "github:onmax/nuxt-skills",
     "reka-ui": "^2.6.1",
     "sharp": "^0.34.5",
     "tailwind-merge": "^3.4.0",

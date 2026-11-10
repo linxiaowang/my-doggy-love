@@ -1,87 +1,22 @@
 <template>
-  <div ref="treeContainer" class="relative w-full h-full min-h-[600px] overflow-hidden rounded-2xl bg-gradient-to-b from-rose-50 via-pink-50 to-amber-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 border border-rose-200/30 dark:border-slate-700/50 shadow-xl">
-    <!-- Memory Tree SVG Background -->
-    <svg class="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none z-0" :viewBox="`0 0 500 ${treeHeight}`" preserveAspectRatio="xMidYMax meet">
-      <defs>
-        <!-- Gradient for trunk -->
-        <linearGradient id="trunkGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" style="stop-color:#8B4513;stop-opacity:0.9" />
-          <stop offset="50%" style="stop-color:#A0522D;stop-opacity:0.95" />
-          <stop offset="100%" style="stop-color:#8B4513;stop-opacity:0.9" />
-        </linearGradient>
+  <div
+    ref="treeContainer"
+    class="relative w-full h-full min-h-[420px] md:min-h-[500px] overflow-hidden rounded-[1.5rem] border border-border bg-card shadow-[0_20px_50px_rgba(0,0,0,0.08)]"
+  >
+    <!-- Sticker diary wall -->
+    <div class="absolute inset-0 z-0 pointer-events-none diary-wall" />
 
-        <!-- Gradient for leaves -->
-        <linearGradient id="leafGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" style="stop-color:#90EE90;stop-opacity:0.95" />
-          <stop offset="100%" style="stop-color:#228B22;stop-opacity:0.9" />
-        </linearGradient>
+    <div class="absolute inset-x-0 top-4 z-20 flex justify-center pointer-events-none">
+      <div class="px-4 py-1.5 rounded-full bg-background/85 border border-border backdrop-blur-sm shadow-sm">
+        <span class="font-display text-sm text-foreground/80">回忆便签墙</span>
+      </div>
+    </div>
 
-        <!-- Glow effect -->
-        <filter id="glow">
-          <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-          <feMerge>
-            <feMergeNode in="coloredBlur"/>
-            <feMergeNode in="SourceGraphic"/>
-          </feMerge>
-        </filter>
-
-        <!-- Shadow filter -->
-        <filter id="shadow">
-          <feDropShadow dx="2" dy="4" stdDeviation="3" flood-opacity="0.2"/>
-        </filter>
-      </defs>
-
-      <!-- Ground -->
-      <ellipse cx="250" :cy="treeHeight - 20" rx="180" ry="25" class="fill-amber-200/60 dark:fill-amber-900/40" />
-
-      <!-- Tree Trunk with texture -->
-      <path :d="`M 235,${treeHeight - 100} Q 233,${treeHeight * 0.75} 230,${treeHeight * 0.5} L 235,${treeHeight * 0.45} Q 237,${treeHeight * 0.5} 240,${treeHeight * 0.5} Q 242,${treeHeight * 0.75} 250,${treeHeight - 100} Z`"
-            fill="url(#trunkGradient)" filter="url(#shadow)" />
-
-      <!-- Main Tree Crown - Organic flowing shape -->
-      <!-- Bottom large branches -->
-      <ellipse cx="180" :cy="treeHeight * 0.6" rx="70" ry="50" class="fill-emerald-500/90" filter="url(#shadow)" />
-      <ellipse cx="320" :cy="treeHeight * 0.6" rx="70" ry="50" class="fill-emerald-500/90" filter="url(#shadow)" />
-      <ellipse cx="250" :cy="treeHeight * 0.55" rx="80" ry="55" class="fill-emerald-400/95" filter="url(#shadow)" />
-
-      <!-- Middle branches -->
-      <ellipse cx="200" :cy="treeHeight * 0.45" rx="60" ry="45" class="fill-green-500/90" filter="url(#shadow)" />
-      <ellipse cx="300" :cy="treeHeight * 0.45" rx="60" ry="45" class="fill-green-500/90" filter="url(#shadow)" />
-      <ellipse cx="250" :cy="treeHeight * 0.42" rx="65" ry="48" class="fill-green-400/95" filter="url(#shadow)" />
-
-      <!-- Top branches -->
-      <ellipse cx="220" :cy="treeHeight * 0.33" rx="50" ry="38" class="fill-lime-500/90" filter="url(#shadow)" />
-      <ellipse cx="280" :cy="treeHeight * 0.33" rx="50" ry="38" class="fill-lime-500/90" filter="url(#shadow)" />
-      <ellipse cx="250" :cy="treeHeight * 0.3" rx="55" ry="40" class="fill-lime-400/95" filter="url(#shadow)" />
-
-      <!-- Topmost -->
-      <ellipse cx="250" :cy="treeHeight * 0.22" rx="35" ry="28" class="fill-teal-300/95" filter="url(#shadow)" />
-
-      <!-- Floating hearts decoration -->
-      <g class="animate-pulse" style="animation-duration: 3s;">
-        <path :d="`M 170,${treeHeight * 0.52} C 170,${treeHeight * 0.51} 173,${treeHeight * 0.49} 176,${treeHeight * 0.52} C 179,${treeHeight * 0.55} 182,${treeHeight * 0.52} 182,${treeHeight * 0.52} C 182,${treeHeight * 0.52} 179,${treeHeight * 0.56} 176,${treeHeight * 0.58} C 173,${treeHeight * 0.56} 170,${treeHeight * 0.52} 170,${treeHeight * 0.52} Z`"
-              class="fill-pink-400/80" />
-      </g>
-      <g class="animate-pulse" style="animation-duration: 2.5s;">
-        <path :d="`M 320,${treeHeight * 0.38} C 320,${treeHeight * 0.37} 323,${treeHeight * 0.35} 326,${treeHeight * 0.38} C 329,${treeHeight * 0.41} 332,${treeHeight * 0.38} 332,${treeHeight * 0.38} C 332,${treeHeight * 0.38} 329,${treeHeight * 0.42} 326,${treeHeight * 0.44} C 323,${treeHeight * 0.42} 320,${treeHeight * 0.38} 320,${treeHeight * 0.38} Z`"
-              class="fill-rose-400/80" />
-      </g>
-      <g class="animate-pulse" style="animation-duration: 3.5s;">
-        <path :d="`M 245,${treeHeight * 0.26} C 245,${treeHeight * 0.255} 247,${treeHeight * 0.24} 249,${treeHeight * 0.26} C 251,${treeHeight * 0.28} 253,${treeHeight * 0.26} 253,${treeHeight * 0.26} C 253,${treeHeight * 0.26} 251,${treeHeight * 0.29} 249,${treeHeight * 0.3} C 247,${treeHeight * 0.29} 245,${treeHeight * 0.26} 245,${treeHeight * 0.26} Z`"
-              class="fill-red-400/90" filter="url(#glow)" />
-      </g>
-
-      <!-- Sparkles -->
-      <g class="animate-pulse" style="animation-duration: 2s;">
-        <circle cx="200" :cy="treeHeight * 0.5" r="3" class="fill-yellow-300/90" />
-      </g>
-      <g class="animate-pulse" style="animation-duration: 2.3s;">
-        <circle cx="290" :cy="treeHeight * 0.35" r="3" class="fill-yellow-300/90" />
-      </g>
-      <g class="animate-pulse" style="animation-duration: 1.8s;">
-        <circle cx="250" :cy="treeHeight * 0.48" r="2.5" class="fill-amber-300/90" />
-      </g>
-    </svg>
+    <!-- Corner stickers -->
+    <LineDogSticker slug="love" size="sm" wobble eager class="absolute top-5 left-4 z-20 -rotate-6" />
+    <LineDogSticker slug="flower" size="sm" wobble class="absolute top-8 right-5 z-20 rotate-8" />
+    <LineDogSticker slug="yay" size="xs" class="absolute bottom-24 left-6 z-20 rotate-[-10deg] opacity-90" />
+    <LineDogSticker slug="heart" size="xs" class="absolute bottom-28 right-8 z-20 rotate-12 opacity-90" />
 
     <!-- Falling Photos Layer -->
     <div class="absolute inset-0 z-10 overflow-hidden pointer-events-none">
@@ -104,34 +39,32 @@
             animationDelay: '0s'
           }"
         >
-          <!-- Heart Decoration -->
           <template v-if="item.type === 'heart'">
             <svg viewBox="0 0 24 24" class="w-full h-full drop-shadow-md">
-              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-                    class="fill-pink-400/80" />
+              <path
+                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                fill="var(--heart)"
+                opacity="0.85"
+              />
             </svg>
           </template>
 
-          <!-- Photo Content -->
           <template v-else-if="item.type === 'photo'">
-            <div class="relative p-2 bg-white dark:bg-slate-800 shadow-xl rounded-xl transform transition-transform hover:scale-105">
-              <div class="relative aspect-square overflow-hidden rounded-lg bg-gradient-to-br from-rose-100 to-pink-100 dark:from-slate-700 dark:to-slate-600">
+            <div class="relative p-1.5 bg-white dark:bg-card shadow-xl rounded-md border border-border/80 rotate-0">
+              <div class="absolute -top-1 left-1/2 -translate-x-1/2 w-8 h-3 bg-black/80 rounded-[2px]" />
+              <div class="relative aspect-square overflow-hidden rounded-sm bg-muted">
                 <img
                   :src="item.src"
                   class="w-full h-full object-cover"
                   alt="Memory"
                   draggable="false"
-                />
+                >
               </div>
-              <!-- Photo corner decorations -->
-              <div class="absolute -top-1 -right-1 w-3 h-3 border-t-2 border-r-2 border-rose-400 rounded-tr-sm"></div>
-              <div class="absolute -bottom-1 -left-1 w-3 h-3 border-b-2 border-l-2 border-rose-400 rounded-bl-sm"></div>
             </div>
           </template>
         </div>
       </TransitionGroup>
 
-      <!-- Ground Pile Layer -->
       <TransitionGroup name="fade">
         <div
           v-for="item in fallenItems"
@@ -145,20 +78,21 @@
           }"
           @click.stop="item.type === 'photo' && item.src && handleImageClick(item.src)"
         >
-          <!-- Fallen Photo -->
           <template v-if="item.type === 'photo'">
-            <div class="relative p-1.5 bg-white dark:bg-slate-800 shadow-lg rounded-lg">
-              <div class="relative aspect-square overflow-hidden rounded-md bg-gradient-to-br from-rose-100 to-pink-100 dark:from-slate-700 dark:to-slate-600">
-                <img :src="item.src" class="w-full h-full object-cover" draggable="false" />
+            <div class="relative p-1 bg-white dark:bg-card shadow-lg rounded-md border border-border/70">
+              <div class="relative aspect-square overflow-hidden rounded-sm bg-muted">
+                <img :src="item.src" class="w-full h-full object-cover" draggable="false">
               </div>
             </div>
           </template>
 
-          <!-- Fallen Heart -->
           <template v-else-if="item.type === 'heart'">
             <svg viewBox="0 0 24 24" class="w-full h-full drop-shadow-sm">
-              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-                    class="fill-pink-400/70" />
+              <path
+                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                fill="var(--heart)"
+                opacity="0.75"
+              />
             </svg>
           </template>
         </div>
@@ -439,5 +373,19 @@ onUnmounted(() => {
 .fade-leave-to {
   opacity: 0;
   transform: translateX(-50%) scale(0.8);
+}
+
+.diary-wall {
+  background:
+    radial-gradient(circle at 20% 20%, color-mix(in oklch, var(--heart) 12%, transparent), transparent 35%),
+    radial-gradient(circle at 80% 15%, color-mix(in oklch, var(--foreground) 4%, transparent), transparent 30%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 27px,
+      color-mix(in oklch, var(--foreground) 4%, transparent) 27px,
+      color-mix(in oklch, var(--foreground) 4%, transparent) 28px
+    ),
+    linear-gradient(180deg, color-mix(in oklch, var(--background) 92%, white), var(--muted));
 }
 </style>

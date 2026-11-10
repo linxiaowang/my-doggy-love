@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-slate-50 via-slate-50/50 to-slate-50 dark:from-slate-900 dark:via-slate-900/50 dark:to-slate-900">
+  <div class="min-h-screen">
     <DogHeader />
     <ChatLayout :initial-conversation-id="initialConversationId" />
   </div>

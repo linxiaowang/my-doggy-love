@@ -87,7 +87,7 @@
           <Transition name="message">
             <div v-if="streamingMessage" class="flex gap-3 group">
               <Avatar class="w-8 h-8 flex-shrink-0 bg-muted">
-                <img src="/assets/images/couple/couple-1.png" alt="AI" class="w-full h-full object-cover" />
+                <img src="/assets/stickers/line-dog/hehe.gif" alt="AI" class="w-full h-full object-cover" />
               </Avatar>
               <div class="max-w-[80%] rounded-2xl rounded-tl-sm px-4 py-2.5 bg-muted text-foreground">
                 <div

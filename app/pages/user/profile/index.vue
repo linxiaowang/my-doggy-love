@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-slate-50 dark:bg-slate-900">
+  <div class="min-h-screen">
     <DogHeader :user-override="user" />
     <div class="max-w-2xl mx-auto px-4 py-8">
       <div class="card space-y-4">
@@ -196,8 +196,8 @@ const selectedFile = ref<File | null>(null)
 const avatarPreview = ref<string | null>(null)
 const avatarModalRef = ref<HTMLElement | null>(null)
 
-// Toast 提示
 const toast = useToast()
+const dialog = useAppDialog()
 
 // 使用 Pinia store 获取用户信息
 const authStore = useAuthStore()
@@ -224,20 +224,18 @@ onClickOutside(avatarModalRef, () => {
   }
 })
 
-function handleFileSelect(event: Event) {
+async function handleFileSelect(event: Event) {
   const target = event.target as HTMLInputElement
   const file = target.files?.[0]
-  
+
   if (file) {
-    // 验证文件类型
     if (!file.type.startsWith('image/')) {
-      alert('请选择图片文件')
+      await dialog.alert('请选择图片文件')
       return
     }
-    
-    // 验证文件大小（限制为 5MB）
+
     if (file.size > 5 * 1024 * 1024) {
-      alert('图片大小不能超过 5MB')
+      await dialog.alert('图片大小不能超过 5MB')
       return
     }
     

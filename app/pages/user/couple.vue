@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-slate-50 dark:bg-slate-900">
+  <div class="min-h-screen">
     <DogHeader />
     <div class="max-w-xl mx-auto px-4 py-8">
       <div class="card space-y-4">
@@ -117,25 +117,30 @@ onMounted(async () => {
   await refresh()
 })
 
+const dialog = useAppDialog()
+
 async function createCoupleHandler() {
   try {
     await createCouple()
     await refresh()
-  } catch (e: any) {
+  }
+  catch (e: any) {
     console.error('创建情侣失败:', e)
-    alert(e?.friendlyMessage || '创建情侣失败，请稍后再试')
+    await dialog.alert(e?.friendlyMessage || '创建情侣失败，请稍后再试')
   }
 }
 
 async function joinCoupleHandler() {
-  if (!code.value) return
+  if (!code.value)
+    return
   try {
     await joinCouple(code.value)
     code.value = ''
     await refresh()
-  } catch (e: any) {
+  }
+  catch (e: any) {
     console.error('加入情侣失败:', e)
-    alert(e?.friendlyMessage || '加入情侣失败，请检查邀请码是否正确')
+    await dialog.alert(e?.friendlyMessage || '加入情侣失败，请检查邀请码是否正确')
   }
 }
 
@@ -177,26 +182,28 @@ async function copyCode() {
       setTimeout(() => {
         copied.value = false
       }, 2000)
-    } else {
-      // 最后的降级：直接提示用户手动复制
-      alert(`邀请码：${codeToCopy}\n\n请手动复制`)
     }
-  } catch (e) {
+    else {
+      await dialog.alert(`邀请码：${codeToCopy}\n\n请手动复制`, { title: '复制邀请码' })
+    }
+  }
+  catch (e) {
     console.error('复制失败:', e)
-    // 最后的降级：直接提示用户手动复制
-    alert(`邀请码：${codeToCopy}\n\n请手动复制`)
+    await dialog.alert(`邀请码：${codeToCopy}\n\n请手动复制`, { title: '复制邀请码' })
   }
 }
 
 async function switchToCode() {
-  if (!switchCode.value) return
+  if (!switchCode.value)
+    return
   try {
     await switchCouple(switchCode.value)
     switchCode.value = ''
     await refresh()
-  } catch (e: any) {
+  }
+  catch (e: any) {
     console.error('切换情侣失败:', e)
-    alert(e?.friendlyMessage || '切换情侣失败，请检查邀请码是否正确')
+    await dialog.alert(e?.friendlyMessage || '切换情侣失败，请检查邀请码是否正确')
   }
 }
 

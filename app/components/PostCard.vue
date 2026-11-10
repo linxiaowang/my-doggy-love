@@ -455,17 +455,23 @@ const canDelete = computed(() => {
   return props.authorId && currentUserId && props.authorId === currentUserId
 })
 
+const dialog = useAppDialog()
+
 async function handleDelete() {
-  if (!confirm('确定要删除这条日常记录吗？')) {
+  const ok = await dialog.confirm('确定要删除这条日常记录吗？', {
+    title: '删除确认',
+    confirmText: '删除',
+  })
+  if (!ok)
     return
-  }
-  
+
   try {
     await deleteDailyPost(props.id)
     emit('deleted')
-  } catch (e: any) {
+  }
+  catch (e: any) {
     console.error('删除失败:', e)
-    alert(e?.friendlyMessage || '删除失败，请稍后再试')
+    await dialog.alert(e?.friendlyMessage || '删除失败，请稍后再试')
   }
 }
 </script>

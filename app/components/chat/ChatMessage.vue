@@ -3,26 +3,16 @@
     <!-- 头像 -->
     <Avatar
       ref="avatarRef"
-      :class="['w-8 h-8 flex-shrink-0', isOwnMessage ? 'bg-primary' : 'bg-muted', !isOwnMessage ? 'cursor-pointer hover:ring-2 hover:ring-primary/50' : '']"
+      :class="['w-8 h-8 flex-shrink-0 bg-muted overflow-hidden', !isOwnMessage ? 'cursor-pointer hover:ring-2 hover:ring-primary/50' : '']"
       @click="handleAvatarClick"
       @contextmenu.prevent="handleContextMenu"
     >
-      <template v-if="message.role === 'user'">
-        <!-- 用户消息：显示消息发送者的头像 -->
-        <img
-          v-if="message.user?.avatarUrl"
-          :src="message.user.avatarUrl"
-          :alt="message.user.nickName"
-          class="w-full h-full object-cover"
-        />
-        <span v-else class="text-sm font-medium text-primary-foreground">
-          {{ message.user?.nickName?.slice(0, 2) || '我' }}
-        </span>
-      </template>
-      <template v-else>
-        <!-- AI 消息：显示固定头像 -->
-        <img src="/assets/images/couple/couple-1.png" alt="AI" class="w-full h-full object-cover" />
-      </template>
+      <img
+        :src="avatarSrc"
+        :alt="avatarAlt"
+        class="w-full h-full object-cover"
+        @error="onAvatarError"
+      >
     </Avatar>
 
     <!-- 右键菜单 -->
@@ -77,7 +67,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { onLongPress } from '@vueuse/core'
 import { Avatar } from '@/components/ui/avatar'
 import type { ChatMessage } from '@/services/api/chat'
@@ -98,6 +88,32 @@ const emit = defineEmits<{
 }>()
 
 const { user: currentUser } = useAuth()
+
+const DEFAULT_USER_AVATAR = '/assets/stickers/line-dog/love.gif'
+const DEFAULT_AI_AVATAR = '/assets/stickers/line-dog/hehe.gif'
+const avatarBroken = ref(false)
+
+watch(() => props.message.id, () => {
+  avatarBroken.value = false
+})
+
+const avatarSrc = computed(() => {
+  if (props.message.role === 'assistant')
+    return DEFAULT_AI_AVATAR
+  if (avatarBroken.value)
+    return DEFAULT_USER_AVATAR
+  return props.message.user?.avatarUrl || DEFAULT_USER_AVATAR
+})
+
+const avatarAlt = computed(() => {
+  if (props.message.role === 'assistant')
+    return 'AI'
+  return props.message.user?.nickName || '用户'
+})
+
+function onAvatarError() {
+  avatarBroken.value = true
+}
 
 // 右键菜单状态
 const showContextMenu = ref(false)

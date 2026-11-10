@@ -35,9 +35,12 @@
                 @click="selectMention(item)"
                 @mouseenter="selectedIndex = index"
               >
-                <Avatar class="w-6 h-6">
-                  <img v-if="item.avatar" :src="item.avatar" :alt="item.name" class="w-full h-full object-cover" />
-                  <span v-else class="text-xs">{{ item.icon }}</span>
+                <Avatar class="w-6 h-6 bg-muted overflow-hidden">
+                  <img
+                    :src="item.avatar || (item.id === 'ai' ? '/assets/stickers/line-dog/hehe.gif' : '/assets/stickers/line-dog/love.gif')"
+                    :alt="item.name"
+                    class="w-full h-full object-cover"
+                  >
                 </Avatar>
                 <div class="flex-1 min-w-0">
                   <div class="text-sm font-medium truncate">{{ item.name }}</div>
@@ -179,11 +182,14 @@ const hasAIMention = computed(() => {
          trimmed.startsWith('@ai')
 })
 
-function handleSend() {
+const dialog = useAppDialog()
+
+async function handleSend() {
   const message = input.value.trim()
-  if (!message || props.disabled) return
+  if (!message || props.disabled)
+    return
   if (message.length > 2000) {
-    alert('消息过长，请控制在 2000 字以内')
+    await dialog.alert('消息过长，请控制在 2000 字以内')
     return
   }
 

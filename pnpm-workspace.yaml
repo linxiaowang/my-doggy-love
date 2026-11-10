@@ -1,5 +1,14 @@
 packages: []
 
+allowBuilds:
+  '@prisma/client': true
+  '@prisma/engines': true
+  esbuild: true
+  prisma: true
+  sharp: true
+  unrs-resolver: true
+  vue-demi: true
+
 catalogs:
   build:
     '@nuxt/devtools': ^3.0.0-beta.2
@@ -25,8 +34,3 @@ catalogs:
   icons:
     '@iconify-json/carbon': ^1.2.14
     '@iconify-json/twemoji': ^1.2.4
-
-onlyBuiltDependencies:
-  - '@parcel/watcher'
-  - esbuild
-  - unrs-resolver

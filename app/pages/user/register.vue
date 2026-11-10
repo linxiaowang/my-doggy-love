@@ -1,12 +1,15 @@
 <template>
-  <div class="min-h-screen bg-muted/30">
+  <div class="min-h-screen">
     <DogHeader />
     <div class="max-w-md mx-auto px-4 py-10">
       <DogLoginAnimation class="mb-4" />
-      
+
       <Card>
         <CardHeader>
-          <CardTitle>注册</CardTitle>
+          <CardTitle class="flex items-center gap-2 font-display text-2xl">
+            <LineDogSticker scene="register" size="xs" eager />
+            注册
+          </CardTitle>
           <CardDescription>使用邮箱和密码注册，昵称可选（不填写将从邮箱自动生成）</CardDescription>
         </CardHeader>
         <CardContent>

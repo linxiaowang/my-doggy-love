@@ -3,6 +3,9 @@ import { ref, onMounted, watch } from 'vue'
 import { apiFetch } from '@/services/api'
 import AnniversaryCountdown from '@/components/AnniversaryCountdown.vue'
 import Calendar from '@/components/ui/CustomCalendar.vue'
+import DogHeader from '@/components/DogHeader.vue'
+import MemoryTree from '@/components/MemoryTree.vue'
+import type { LineDogSlug } from '@/constants/lineDogStickers'
 
 definePageMeta({
   layout: 'home',
@@ -12,54 +15,51 @@ const presetImages = [
   '/assets/images/couple/couple-1.png',
   '/assets/images/couple/couple-2.png',
   '/assets/images/couple/couple-3.png',
-  '/assets/images/couple/couple-4.png'
+  '/assets/images/couple/couple-4.png',
 ]
 
 const images = ref<string[]>([...presetImages])
-
-// 使用 Pinia store 获取用户信息
 const authStore = useAuthStore()
 
-// 加载日常照片
+const floatingStickers: Array<{ slug: LineDogSlug, class: string }> = [
+  { slug: 'hi', class: 'top-[12%] left-[4%] md:left-[8%] -rotate-8' },
+  { slug: 'dance', class: 'top-[18%] right-[3%] md:right-[7%] rotate-10' },
+  { slug: 'pet', class: 'top-[48%] left-[2%] md:left-[5%] rotate-6' },
+  { slug: 'wave', class: 'top-[52%] right-[2%] md:right-[6%] -rotate-12' },
+]
+
 async function loadDailyImages() {
   try {
     if (authStore.user) {
-      // 获取更多照片以供随机展示
       const res = await apiFetch<{ items: any[] }>('/api/daily?take=100')
       const media = (res.items || []).flatMap(i => Array.isArray(i.mediaUrls) ? i.mediaUrls : [])
-      
+
       if (media.length > 0) {
-        // 使用所有获取到的照片，如果数量较少则补充默认照片
-        if (media.length < 5) {
-          images.value = [...media, ...presetImages]
-        } else {
-          images.value = media
-        }
-      } else {
-        // 如果没有日常照片，使用默认照片
+        images.value = media.length < 5 ? [...media, ...presetImages] : media
+      }
+      else {
         images.value = [...presetImages]
       }
-    } else {
-      // 未登录时使用默认照片
+    }
+    else {
       images.value = [...presetImages]
     }
-  } catch (e) {
+  }
+  catch (e) {
     console.error('加载首页照片失败', e)
-    // 失败时保持默认值或当前值
   }
 }
 
-// 监听用户数据变化，加载照片
 watch(() => authStore.user, (newUser) => {
   if (newUser) {
     loadDailyImages()
-  } else {
+  }
+  else {
     images.value = [...presetImages]
   }
 }, { immediate: true })
 
 onMounted(() => {
-  // 如果用户数据已经加载，立即加载照片
   if (authStore.user) {
     loadDailyImages()
   }
@@ -71,63 +71,59 @@ function goQuickRecord() {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-surface-100 via-surface-50 to-surface-100">
+  <div class="min-h-screen">
     <DogHeader />
-    
-    <!-- Main Content Container - ensuring centering -->
-    <div class="min-h-screen flex flex-col items-center pt-12 pb-8 px-4 relative">
-      
-      <!-- Decorative background blooms -->
-    <div class="fixed top-20 left-10 w-64 h-64 bg-primary/8 rounded-full blur-3xl pointer-events-none z-0"></div>
-    <div class="fixed bottom-20 right-10 w-80 h-80 bg-accent/10 rounded-full blur-3xl pointer-events-none z-0"></div>
 
-    <div class="w-full max-w-4xl z-10 flex flex-col items-center space-y-8">
-        
-      <!-- Slogan -->
-      <div class="bg-white/40 dark:bg-slate-800/40 backdrop-blur-sm px-6 py-2 rounded-full border border-white/50 dark:border-slate-700/50 shadow-sm animate-fade-in shrink-0">
-        <h1 class="text-xl md:text-2xl font-serif text-text-secondary tracking-widest text-center opacity-90">
-          爱的小事，值得被温柔记录
-        </h1>
-      </div>
+    <section class="relative min-h-[calc(100vh-4rem)] flex flex-col items-center justify-center px-4 pt-6 pb-10 overflow-hidden">
+      <LineDogSticker
+        v-for="item in floatingStickers"
+        :key="item.slug"
+        :slug="item.slug"
+        size="sm"
+        wobble
+        class="absolute z-0 opacity-80 hidden sm:inline-flex pointer-events-none"
+        :class="item.class"
+      />
 
-      <!-- Memory Tree Hero - blended (no box) -->
-      <div class="w-full animate-fade-in shrink-0" style="animation-delay: 0.2s">
-        <MemoryTree :images="images" class="h-[400px] md:h-[500px] !rounded-xl" />
-      </div>
-
-      <!-- Action Strip -->
-      <div class="flex flex-col items-center space-y-8 w-full animate-slide-up shrink-0" style="animation-delay: 0.4s">
-        
-        <!-- Buttons (Primary Action) -->
-        <div class="flex gap-6">
-            <button class="px-8 py-2.5 rounded-full bg-primary text-primary-foreground font-medium hover:bg-primary/90 hover:scale-105 transition-all shadow-lg active:scale-95 text-sm md:text-base" @click="goQuickRecord">
-              开始记录
-            </button>
-            <NuxtLink to="/daily" class="px-8 py-2.5 rounded-full bg-background text-foreground font-medium border border-border hover:bg-accent hover:border-accent-foreground/20 transition-all shadow-sm text-sm md:text-base">
-              查看日常
-            </NuxtLink>
+      <div class="relative z-10 w-full max-w-4xl flex flex-col items-center text-center gap-6 md:gap-8">
+        <div class="flex flex-col items-center gap-4 animate-fade-in">
+          <LineDogSticker scene="home" size="lg" wobble eager />
+          <h1 class="font-display text-4xl md:text-6xl leading-none tracking-wide text-foreground">
+            My Doggy Love
+          </h1>
+          <p class="text-base md:text-lg text-muted-foreground max-w-md">
+            爱的小事，值得被温柔记录
+          </p>
         </div>
 
-        <!-- Countdown (Secondary Info) -->
-        <div v-if="authStore.user" class="w-full max-w-md opacity-90 hover:opacity-100 transition-opacity">
-            <AnniversaryCountdown class="!bg-transparent !shadow-none !backdrop-blur-none" />
+        <div class="flex flex-wrap items-center justify-center gap-3 animate-slide-up" style="animation-delay: 0.15s">
+          <button
+            class="inline-flex items-center gap-2 px-7 py-2.5 rounded-full bg-primary text-primary-foreground font-semibold hover:scale-[1.03] active:scale-95 transition-all shadow-lg"
+            @click="goQuickRecord"
+          >
+            <LineDogSticker slug="yay" size="xs" class="!w-7 !h-7" />
+            开始记录
+          </button>
+          <NuxtLink
+            to="/daily"
+            class="inline-flex items-center gap-2 px-7 py-2.5 rounded-full bg-background text-foreground font-semibold border border-border hover:bg-accent transition-all shadow-sm"
+          >
+            查看日常
+          </NuxtLink>
         </div>
 
+        <div class="w-full animate-fade-in" style="animation-delay: 0.28s">
+          <MemoryTree :images="images" class="h-[380px] md:h-[480px]" />
+        </div>
+
+        <div v-if="authStore.user" class="w-full max-w-md opacity-95">
+          <AnniversaryCountdown class="!bg-card/80 !border !border-border !shadow-sm !rounded-2xl !px-4 !py-3" />
+        </div>
       </div>
+    </section>
 
-      <!-- Calendar Section -->
-        <section v-if="authStore.user" class="w-full pt-4 animate-fade-in opacity-90 shrink-0" style="animation-delay: 0.6s">
-        <Calendar />
-      </section>
-
-    </div>
-  </div>
+    <section v-if="authStore.user" class="w-full max-w-4xl mx-auto px-4 pb-12 animate-fade-in" style="animation-delay: 0.4s">
+      <Calendar />
+    </section>
   </div>
 </template>
-
-<script lang="ts">
-import DogHeader from '@/components/DogHeader.vue'
-// import DogCarousel from '@/components/DogCarousel.vue' // Deprecated
-import MemoryTree from '@/components/MemoryTree.vue'
-export default {}
-</script>

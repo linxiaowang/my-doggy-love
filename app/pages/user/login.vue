@@ -1,12 +1,15 @@
 <template>
-  <div class="min-h-screen bg-muted/30">
+  <div class="min-h-screen">
     <DogHeader />
     <div class="max-w-md mx-auto px-4 py-10">
       <DogLoginAnimation class="mb-4" />
-      
+
       <Card>
         <CardHeader>
-          <CardTitle>登录</CardTitle>
+          <CardTitle class="flex items-center gap-2 font-display text-2xl">
+            <LineDogSticker scene="login" size="xs" eager />
+            登录
+          </CardTitle>
           <CardDescription>使用邮箱和密码登录</CardDescription>
         </CardHeader>
         <CardContent>

@@ -1,7 +1,11 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-slate-50 via-slate-50/50 to-slate-50 dark:from-slate-900 dark:via-slate-900/50 dark:to-slate-900">
+  <div class="min-h-screen">
     <DogHeader />
     <div class="max-w-3xl mx-auto px-4 py-6 space-y-4">
+      <div class="flex items-center gap-3 px-1">
+        <LineDogSticker scene="daily" size="sm" wobble />
+        <h1 class="font-display text-2xl">日常</h1>
+      </div>
       <Card>
         <CardContent class="px-4">
           <!-- 错误提示 -->
@@ -258,7 +262,7 @@
         <SkeletonList :count="3" />
       </div>
       <div v-else-if="items.length === 0">
-        <EmptyState text="暂无日常记录" img="/assets/images/xiaojimao/xiaojimao-4.png" cta-text="去发布一条" cta-to="/daily" />
+        <EmptyState text="暂无日常记录" scene="empty-daily" cta-text="去发布一条" cta-to="/daily" />
       </div>
       <Timeline v-else>
         <template v-for="group in grouped" :key="group.label">

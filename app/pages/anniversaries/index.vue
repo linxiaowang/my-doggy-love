@@ -1,9 +1,26 @@
 <template>
-  <div class="min-h-screen bg-slate-50 dark:bg-slate-900">
+  <div class="min-h-screen">
     <DogHeader />
     <div class="max-w-3xl mx-auto px-4 py-6 space-y-4">
+      <div class="flex items-center gap-3 px-1">
+        <LineDogSticker scene="anniversaries" size="sm" wobble />
+        <h1 class="font-display text-2xl">纪念日</h1>
+      </div>
       <Card>
         <CardContent class="px-4">
+          <div
+            v-if="errorMessage"
+            class="mb-4 p-3 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-lg animate-fade-in"
+          >
+            {{ errorMessage }}
+            <NuxtLink
+              v-if="errorMessage.includes('情侣')"
+              to="/user/couple"
+              class="underline ml-1 font-medium hover:opacity-80"
+            >
+              去绑定
+            </NuxtLink>
+          </div>
           <form class="flex flex-col md:flex-row gap-3" @submit.prevent="create">
             <div class="flex-1 md:flex-[2]">
               <Input v-model="title" placeholder="纪念日标题" />
@@ -11,7 +28,9 @@
             <div class="flex-1">
               <Input v-model="date" type="date" />
             </div>
-            <Button type="submit" class="md:w-auto">创建</Button>
+            <Button type="submit" class="md:w-auto" :disabled="submitting">
+              {{ submitting ? '创建中…' : '创建' }}
+            </Button>
           </form>
         </CardContent>
       </Card>
@@ -19,7 +38,7 @@
         <SkeletonList :count="2" />
       </div>
       <div v-else-if="items.length===0">
-        <EmptyState text="添加一个特别的日子吧" img="/assets/images/couple/couple-1.png" cta-text="创建纪念日" cta-to="/anniversaries" />
+        <EmptyState text="添加一个特别的日子吧" scene="empty-anniversaries" cta-text="创建纪念日" cta-to="/anniversaries" />
       </div>
       <div v-else class="grid md:grid-cols-2 gap-4">
         <Card
@@ -88,7 +107,7 @@ import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
 import { createAnniversary, updateAnniversary, deleteAnniversary } from '@/services/api/anniversaries'
-import { apiFetch } from '@/services/api'
+import { apiFetch, handleApiError } from '@/services/api'
 import dayjs from 'dayjs'
 
 // 检查登录状态，未登录会自动跳转到登录页
@@ -101,6 +120,8 @@ const items = ref<Anniversary[]>([])
 const title = ref('')
 const date = ref('')
 const loading = ref(true)
+const submitting = ref(false)
+const errorMessage = ref('')
 const editing = ref(false)
 const editId = ref<string>('')
 const editTitle = ref('')
@@ -268,21 +289,28 @@ onMounted(load)
 
 async function create() {
   if (!title.value || !date.value) return
+  errorMessage.value = ''
+  submitting.value = true
   try {
     await createAnniversary({ title: title.value, date: date.value })
     title.value = ''
     date.value = ''
     await load()
   } catch (e: any) {
+    errorMessage.value = e?.friendlyMessage || handleApiError(e)
     console.error('创建纪念日失败:', e)
+  } finally {
+    submitting.value = false
   }
 }
 
 async function remove(id: string) {
+  errorMessage.value = ''
   try {
     await deleteAnniversary(id)
     await load()
   } catch (e: any) {
+    errorMessage.value = e?.friendlyMessage || handleApiError(e)
     console.error('删除纪念日失败:', e)
   }
 }
@@ -300,11 +328,13 @@ function closeEdit() {
 
 async function saveEdit() {
   if (!editId.value) return
+  errorMessage.value = ''
   try {
     await updateAnniversary(editId.value, { title: editTitle.value, date: editDate.value })
     editing.value = false
     await load()
   } catch (e: any) {
+    errorMessage.value = e?.friendlyMessage || handleApiError(e)
     console.error('更新纪念日失败:', e)
   }
 }

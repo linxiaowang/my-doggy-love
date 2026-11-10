@@ -1,8 +1,8 @@
 <template>
   <header class="fixed top-0 left-0 right-0 z-30 w-screen flex items-center justify-between px-4 md:px-8 lg:px-12 py-3 bg-background/95 backdrop-blur-md border-b border-border pt-[calc(0.75rem+env(safe-area-inset-top))]">
-    <NuxtLink to="/" class="flex items-center gap-2 md:gap-3 cursor-pointer hover:opacity-80 transition flex-shrink-0 min-w-0" aria-label="回到首页">
-      <img src="/assets/images/couple/couple-1.png" alt="My Doggy Love Logo" class="w-6 h-6 flex-shrink-0" />
-      <span class="font-semibold text-sm md:text-base truncate">My Doggy Love</span>
+    <NuxtLink to="/" class="flex items-center gap-2 md:gap-3 cursor-pointer hover:opacity-90 transition flex-shrink-0 min-w-0" aria-label="回到首页">
+      <LineDogSticker scene="logo" size="xs" eager />
+      <span class="font-display text-base md:text-lg tracking-wide truncate">My Doggy Love</span>
     </NuxtLink>
     
     <!-- Desktop Navigation -->
@@ -198,6 +198,8 @@ import { Separator } from '@/components/ui/separator'
 
 const isPushEnabled = ref(false)
 const pushLoading = ref(false)
+const dialog = useAppDialog()
+const toast = useToast()
 
 // 使用 Pinia store 获取用户信息
 const authStore = useAuthStore()
@@ -323,16 +325,16 @@ function urlBase64ToUint8Array(base64String: string) {
 
 async function enableNotification() {
   if (!('Notification' in window)) {
-    alert('您的浏览器不支持通知功能')
+    await dialog.alert('您的浏览器不支持通知功能')
     return
   }
-  
+
   pushLoading.value = true
   try {
     const permission = await Notification.requestPermission()
     if (permission === 'granted') {
       const { key } = await apiFetch<{ key: string }>('/api/notifications/vapid-public-key')
-      
+
       if (!key) {
         throw new Error('无法获取 VAPID 公钥')
       }
@@ -340,23 +342,26 @@ async function enableNotification() {
       const registration = await navigator.serviceWorker.ready
       const subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(key)
+        applicationServerKey: urlBase64ToUint8Array(key),
       })
-      
+
       await apiFetch('/api/notifications/subscribe', {
         method: 'POST',
-        body: { subscription }
+        body: { subscription },
       })
-      
+
       isPushEnabled.value = true
-      alert('通知已开启！')
-    } else {
-      alert('您拒绝了通知权限，无法接收消息提醒')
+      toast.success('通知已开启！')
     }
-  } catch (e) {
+    else {
+      await dialog.alert('您拒绝了通知权限，无法接收消息提醒')
+    }
+  }
+  catch (e) {
     console.error('请求通知权限失败:', e)
-    alert('开启通知失败，请重试')
-  } finally {
+    await dialog.alert('开启通知失败，请重试')
+  }
+  finally {
     pushLoading.value = false
   }
 }
@@ -366,43 +371,49 @@ async function disableNotification() {
   try {
     const registration = await navigator.serviceWorker.ready
     const subscription = await registration.pushManager.getSubscription()
-    
+
     if (subscription) {
       try {
-        await apiFetch('/api/notifications/unsubscribe', { 
-          method: 'POST', 
-          body: { endpoint: subscription.endpoint } 
+        await apiFetch('/api/notifications/unsubscribe', {
+          method: 'POST',
+          body: { endpoint: subscription.endpoint },
         })
-      } catch (e) {
+      }
+      catch (e) {
         console.warn('后端删除订阅失败，继续取消浏览器订阅', e)
       }
 
       await subscription.unsubscribe()
     }
-    
+
     isPushEnabled.value = false
-    alert('通知已关闭')
-  } catch (e) {
+    toast.success('通知已关闭')
+  }
+  catch (e) {
     console.error('关闭通知失败:', e)
-    alert('关闭通知失败，请重试')
-  } finally {
+    await dialog.alert('关闭通知失败，请重试')
+  }
+  finally {
     pushLoading.value = false
   }
 }
 
 async function testNotification() {
-  if (!('Notification' in window)) return
-  
+  if (!('Notification' in window))
+    return
+
   if (Notification.permission === 'granted') {
     try {
       await apiFetch('/api/test-push', { method: 'POST' })
-      alert('测试通知已发送，请检查通知栏')
-    } catch (e) {
-      console.error('发送测试通知失败:', e)
-      alert('发送失败')
+      toast.success('测试通知已发送，请检查通知栏')
     }
-  } else {
-    alert('请先点击"开启通知"')
+    catch (e) {
+      console.error('发送测试通知失败:', e)
+      await dialog.alert('发送失败')
+    }
+  }
+  else {
+    await dialog.alert('请先点击“开启通知”')
   }
 }
 </script>

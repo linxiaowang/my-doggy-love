@@ -1,7 +1,11 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-#f7f6f3 via-#faf9f7 to-#f7f6f3">
+  <div class="min-h-screen">
     <DogHeader />
     <div class="max-w-2xl mx-auto px-4 py-6 space-y-4">
+      <div class="flex items-center gap-3 px-1">
+        <LineDogSticker scene="messages" size="sm" wobble />
+        <h1 class="font-display text-2xl">留言板</h1>
+      </div>
       <Card>
         <CardContent class="px-4">
           <!-- 错误提示 -->
@@ -22,7 +26,7 @@
         <SkeletonList :count="3" />
       </div>
       <div v-else-if="items.length===0">
-        <EmptyState text="还没有留言" img="/assets/images/xiaobai/xiaobai-3.png" cta-text="去发表第一条" cta-to="/messages" />
+        <EmptyState text="还没有留言" scene="empty-messages" cta-text="去发表第一条" cta-to="/messages" />
       </div>
       <div v-else class="space-y-3">
         <Card v-for="m in items" :key="m.id">

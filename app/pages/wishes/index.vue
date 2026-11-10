@@ -1,7 +1,11 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-slate-50 via-slate-50/50 to-slate-50 dark:from-slate-900 dark:via-slate-900/50 dark:to-slate-900">
+  <div class="min-h-screen">
     <DogHeader />
     <div class="max-w-3xl mx-auto px-4 py-6 space-y-4">
+      <div class="flex items-center gap-3 px-1">
+        <LineDogSticker scene="wishes" size="sm" wobble />
+        <h1 class="font-display text-2xl">愿望清单</h1>
+      </div>
       <Card>
         <CardContent class="px-4">
           <form class="flex flex-col sm:flex-row gap-3 mb-4" @submit.prevent="addWish">
@@ -28,7 +32,7 @@
       </div>
 
       <div v-else-if="filteredList.length === 0">
-        <EmptyState text="还没有愿望，添加一个吧" img="/assets/images/xiaobai/xiaobai-1.png" cta-text="添加愿望" cta-to="/wishes" />
+        <EmptyState text="还没有愿望，添加一个吧" scene="empty-wishes" cta-text="添加愿望" cta-to="/wishes" />
       </div>
 
       <div v-else class="space-y-3">

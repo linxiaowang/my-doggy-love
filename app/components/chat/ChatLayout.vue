@@ -149,21 +149,29 @@ function handleNewConversation() {
   showSidebar.value = false
 }
 
+const dialog = useAppDialog()
+
 // 删除会话
 async function handleDeleteConversation(id: string) {
-  if (!confirm('确定要删除这个对话吗？')) return
+  const ok = await dialog.confirm('确定要删除这个对话吗？', {
+    title: '删除确认',
+    confirmText: '删除',
+  })
+  if (!ok)
+    return
 
   try {
     await deleteConversation(id)
-    conversations.value = conversations.value.filter((c) => c.id !== id)
+    conversations.value = conversations.value.filter(c => c.id !== id)
 
-    // 如果删除的是当前会话，清空消息
     if (activeConversationId.value === id) {
       activeConversationId.value = null
       currentMessages.value = []
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Failed to delete conversation:', error)
+    await dialog.alert('删除对话失败，请稍后再试')
   }
 }
 
