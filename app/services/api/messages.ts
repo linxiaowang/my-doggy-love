@@ -8,6 +8,7 @@ export interface Message {
   id: string
   content: string
   createdAt: string
+  commentCount?: number
   author?: {
     id: string
     nickName: string
@@ -17,6 +18,7 @@ export interface Message {
 
 export interface MessageListResponse {
   items: Message[]
+  nextCursor: string | null
 }
 
 export interface CreateMessageRequest {
@@ -24,10 +26,25 @@ export interface CreateMessageRequest {
 }
 
 /**
- * 获取留言列表
+ * 获取留言列表（游标分页）
  */
-export function useMessages() {
-  return useApiFetch<MessageListResponse>('/api/messages')
+export function getMessages(options?: { take?: number, cursor?: string }) {
+  const query: Record<string, string> = {}
+  if (options?.take) query.take = String(options.take)
+  if (options?.cursor) query.cursor = options.cursor
+  const qs = new URLSearchParams(query).toString()
+  return apiFetch<MessageListResponse>(`/api/messages${qs ? `?${qs}` : ''}`)
+}
+
+/**
+ * 获取留言列表（响应式）
+ */
+export function useMessages(options?: { take?: number, cursor?: string }) {
+  const query: Record<string, string> = {}
+  if (options?.take) query.take = String(options.take)
+  if (options?.cursor) query.cursor = options.cursor
+  const qs = new URLSearchParams(query).toString()
+  return useApiFetch<MessageListResponse>(`/api/messages${qs ? `?${qs}` : ''}`)
 }
 
 /**

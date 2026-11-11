@@ -87,6 +87,11 @@
             </div>
           </CardContent>
         </Card>
+        <div v-if="nextCursor" class="pt-2 flex justify-center">
+          <Button variant="outline" :disabled="loadingMore" @click="loadMore">
+            {{ loadingMore ? '加载中…' : '加载更多' }}
+          </Button>
+        </div>
       </div>
     </div>
   </div>
@@ -102,7 +107,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
-import { createMessage, createMessageComment, replyToComment } from '@/services/api/messages'
+import { createMessage, createMessageComment, replyToComment, getMessages, type Message } from '@/services/api/messages'
 import { apiFetch, handleApiError } from '@/services/api'
 
 // 检查登录状态，未登录会自动跳转到登录页
@@ -110,10 +115,12 @@ definePageMeta({
   middleware: 'auth',
 })
 
-interface Message { id: string; content: string; createdAt: string; commentCount?: number; author?: { id: string; nickName: string; avatarUrl?: string } }
+const pageSize = 20
 const items = ref<Message[]>([])
+const nextCursor = ref<string | null>(null)
 const content = ref('')
 const loading = ref(true)
+const loadingMore = ref(false)
 const comment = ref('')
 const openId = ref<string | null>(null)
 const inputOpenId = ref<string | null>(null)
@@ -126,25 +133,39 @@ function formatCount(n?: number) {
   return n && n > 0 ? `(${n})` : ''
 }
 
-// 头像加载失败时使用默认头像
-function handleImageError(event: Event) {
-  const img = event.target as HTMLImageElement
-  if (img.src !== '/assets/images/xiaobai/xiaobai-2.png') {
-    img.src = '/assets/images/xiaobai/xiaobai-2.png'
-  }
-}
-
 async function load() {
   loading.value = true
+  nextCursor.value = null
   try {
-    const res = await apiFetch<{ items: Message[] }>('/api/messages')
+    const res = await getMessages({ take: pageSize })
     items.value = res.items
-  } catch (e: any) {
+    nextCursor.value = res.nextCursor
+  }
+  catch (e: any) {
     console.error('加载留言失败:', e)
-  } finally {
+  }
+  finally {
     loading.value = false
   }
 }
+
+async function loadMore() {
+  if (loadingMore.value || !nextCursor.value)
+    return
+  loadingMore.value = true
+  try {
+    const res = await getMessages({ take: pageSize, cursor: nextCursor.value })
+    items.value = [...items.value, ...res.items]
+    nextCursor.value = res.nextCursor
+  }
+  catch (e: any) {
+    console.error('加载更多留言失败:', e)
+  }
+  finally {
+    loadingMore.value = false
+  }
+}
+
 onMounted(load)
 
 const errorMessage = ref('')
