@@ -491,9 +491,9 @@ function createDayData(date: Date, isCurrentMonth: boolean, _todayStr: string) {
     if (jiList && jiList.length > 0)
       ji = jiList.join(' ')
 
-    // 展示优先级：法定节假日名 > 节气 > 农历节日 > 公历节日 > 农历日
+    // 展示优先级：法定节假日名 > 节气 > 农历节日 > 农历日
     if (holidayName) {
-      displayText = holidayName.replace(/节$/, '') || holidayName
+      displayText = holidayName
       isFestival = true
     }
 
