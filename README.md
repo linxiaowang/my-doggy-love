@@ -8,8 +8,6 @@
   <img src="public/assets/stickers/line-dog/love.gif" width="160" alt="Line Dog" />
 </p>
 
-**线上**：[https://doggylove.fun](https://doggylove.fun)
-
 ## 功能
 
 - **情侣绑定** — 邀请码绑定，共享记录空间
