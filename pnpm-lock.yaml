@@ -263,8 +263,8 @@ importers:
         specifier: ^0.556.0
         version: 0.556.0(vue@3.5.45(typescript@5.9.3))
       lunar-typescript:
-        specifier: ^1.8.6
-        version: 1.8.6
+        specifier: 1.8.7
+        version: 1.8.7
       reka-ui:
         specifier: ^2.6.1
         version: 2.6.1(typescript@5.9.3)(vue@3.5.45(typescript@5.9.3))
@@ -5260,8 +5260,8 @@ packages:
     peerDependencies:
       vue: 3.5.45
 
-  lunar-typescript@1.8.6:
-    resolution: {integrity: sha512-5Eo4T/cnuXfrgO4k5LCpOGHIUOuz5hCF/IfNv0T29WY2shR36Hiz+ecN9WjnUuxUKhql9gbOkPaQoqLFKtPRNA==}
+  lunar-typescript@1.8.7:
+    resolution: {integrity: sha512-w1ZxRf+mmIqXGnk40Dl2U+qPdm2phHsoxpOEIy7BPc/+kkWZtfW98NCZvsBTYCuNXQMBanaw+u+DboXD65NrVA==}
 
   magic-string-ast@1.0.3:
     resolution: {integrity: sha512-CvkkH1i81zl7mmb94DsRiFeG9V2fR2JeuK8yDgS8oiZSFa++wWLEgZ5ufEOyLHbvSbD1gTRKv9NdX69Rnvr9JA==}
@@ -12594,7 +12594,7 @@ snapshots:
     dependencies:
       vue: 3.5.45(typescript@5.9.3)
 
-  lunar-typescript@1.8.6: {}
+  lunar-typescript@1.8.7: {}
 
   magic-string-ast@1.0.3:
     dependencies:

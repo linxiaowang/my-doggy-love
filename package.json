@@ -71,7 +71,7 @@
     "dayjs": "^1.11.19",
     "embla-carousel-vue": "^8.6.0",
     "lucide-vue-next": "^0.556.0",
-    "lunar-typescript": "^1.8.6",
+    "lunar-typescript": "1.8.7",
     "reka-ui": "^2.6.1",
     "sharp": "^0.34.5",
     "tailwind-merge": "^3.4.0",
