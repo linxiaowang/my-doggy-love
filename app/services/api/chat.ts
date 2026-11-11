@@ -88,7 +88,8 @@ export async function createConversation(data: {
  * 删除会话
  */
 export async function deleteConversation(id: string): Promise<{ success: boolean }> {
-  return apiFetch<{ success: boolean }>(`/api/chat/conversations/${id}/delete`, {
+  // 对应 server/api/chat/conversations/[id].delete.ts → DELETE /api/chat/conversations/:id
+  return apiFetch<{ success: boolean }>(`/api/chat/conversations/${id}`, {
     method: 'DELETE',
   })
 }
@@ -104,7 +105,8 @@ export async function updateConversation(
     customSystemPrompt?: string | null
   }
 ): Promise<ChatConversation> {
-  return apiFetch<ChatConversation>(`/api/chat/conversations/${id}/patch`, {
+  // 对应 server/api/chat/conversations/[id].patch.ts → PATCH /api/chat/conversations/:id
+  return apiFetch<ChatConversation>(`/api/chat/conversations/${id}`, {
     method: 'PATCH',
     body: data,
   })
