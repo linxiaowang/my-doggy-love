@@ -1,45 +1,51 @@
 <template>
   <div v-if="!loading && upcomingAnniversary" class="card">
-    <div class="flex items-center justify-between gap-4">
-      <div class="flex-1 min-w-0">
-        <div class="text-xs text-text-muted mb-1.5">纪念日提醒</div>
-        <div class="text-base font-semibold text-text-main mb-1 truncate">{{ upcomingAnniversary.title }}</div>
-        <div class="text-xs text-text-secondary">
+    <div class="flex items-center gap-3 md:gap-4">
+      <LineDogSticker
+        :slug="stickerSlug"
+        size="md"
+        wobble
+        class="shrink-0"
+      />
+      <div class="flex-1 min-w-0 text-left">
+        <div class="text-xs text-muted-foreground mb-1">纪念日提醒</div>
+        <div class="text-base font-semibold text-foreground mb-0.5 truncate">{{ upcomingAnniversary.title }}</div>
+        <div class="text-xs text-muted-foreground">
           {{ formatDate(upcomingAnniversary.date) }}
         </div>
       </div>
-      <div class="text-right flex-shrink-0">
-        <div 
+      <div class="text-right shrink-0">
+        <div
           v-if="countdown.days === 0"
-          class="text-xl font-bold text-green-700 bg-green-50 px-3 py-1.5 rounded-lg whitespace-nowrap"
+          class="text-sm md:text-base font-bold text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-950/40 px-2.5 py-1.5 rounded-lg whitespace-nowrap"
         >
-          🎉 就是今天！
+          就是今天！
         </div>
         <div v-else-if="countdown.overdue" class="text-right">
-          <div class="text-xs text-text-muted mb-0.5">已经</div>
-          <div 
-            class="text-xl font-bold text-red-600 cursor-pointer hover:opacity-80 transition-opacity"
-            @click="toggleFormat"
+          <div class="text-xs text-muted-foreground mb-0.5">已经</div>
+          <div
+            class="text-xl font-bold text-red-600 dark:text-red-400 cursor-pointer hover:opacity-80 transition-opacity"
             title="点击切换显示格式"
+            @click="toggleFormat"
           >
             {{ displayText }}
           </div>
         </div>
         <div v-else class="text-right">
-          <div class="text-xs text-text-muted mb-0.5">还有</div>
-          <div 
-            class="text-xl font-bold text-primary-800 cursor-pointer hover:opacity-80 transition-opacity"
-            @click="toggleFormat"
+          <div class="text-xs text-muted-foreground mb-0.5">还有</div>
+          <div
+            class="text-xl font-bold text-primary cursor-pointer hover:opacity-80 transition-opacity"
             title="点击切换显示格式"
+            @click="toggleFormat"
           >
             {{ displayText }}
           </div>
         </div>
       </div>
     </div>
-    <NuxtLink 
-      to="/anniversaries" 
-      class="mt-3 block text-center text-xs text-text-secondary hover:text-primary-700 underline transition-colors"
+    <NuxtLink
+      to="/anniversaries"
+      class="mt-3 block text-center text-xs text-muted-foreground hover:text-foreground underline transition-colors"
     >
       查看所有纪念日 →
     </NuxtLink>
@@ -246,6 +252,14 @@ const countdown = computed(() => {
     return { days: 0, overdue: false }
   }
   return calculateCountdown(upcomingAnniversary.value)
+})
+
+const stickerSlug = computed(() => {
+  if (countdown.value.days === 0)
+    return 'celebrate' as const
+  if (countdown.value.overdue)
+    return 'hug' as const
+  return 'heart' as const
 })
 
 // 当纪念日改变时，重置格式为默认

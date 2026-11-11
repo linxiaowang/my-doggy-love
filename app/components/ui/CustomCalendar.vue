@@ -19,22 +19,39 @@
               </button>
             </div>
           </div>
-          <div class="flex items-center justify-end gap-2">
-            <button class="p-2 rounded hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200" @click="prevMonth" title="上一个月">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-            <Button v-if="!isCurrentMonth" class="ml-auto px-3 py-1 text-sm bg-amber-600 hover:bg-amber-700 text-white shadow-sm rounded" @click="goToToday" title="回到今天">
-              今天
-            </Button>
-            <button class="p-2 rounded hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200" @click="nextMonth" title="下一个月">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-1 rounded-full bg-slate-100 dark:bg-slate-700/80 p-0.5 text-xs">
+              <button
+                class="px-2.5 py-1 rounded-full transition-colors"
+                :class="restMode === 'double' ? 'bg-white dark:bg-slate-600 text-slate-900 dark:text-slate-100 shadow-sm' : 'text-slate-500 dark:text-slate-400'"
+                @click="setRestMode('double')"
+              >
+                双休
+              </button>
+              <button
+                class="px-2.5 py-1 rounded-full transition-colors"
+                :class="restMode === 'alternate' ? 'bg-white dark:bg-slate-600 text-slate-900 dark:text-slate-100 shadow-sm' : 'text-slate-500 dark:text-slate-400'"
+                @click="setRestMode('alternate')"
+              >
+                大小周
+              </button>
+            </div>
+            <div class="flex items-center gap-2">
+              <button class="p-2 rounded hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200" @click="prevMonth" title="上一个月">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              <Button v-if="!isCurrentMonth" class="px-3 py-1 text-sm bg-amber-600 hover:bg-amber-700 text-white shadow-sm rounded" @click="goToToday" title="回到今天">
+                今天
+              </Button>
+              <button class="p-2 rounded hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200" @click="nextMonth" title="下一个月">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
           </div>
-
           <!-- 年份选择器 -->
           <div v-if="showYearPicker" ref="yearPickerRef" class="absolute top-full left-1/2 -translate-x-1/2 w-64 mt-2 bg-white/95 dark:bg-slate-800/95 backdrop-blur-md border border-slate-200 dark:border-slate-700 rounded-lg shadow-lg z-20 p-4 max-h-64 overflow-y-auto">
             <div class="grid grid-cols-4 gap-2">
@@ -85,22 +102,50 @@
             <div
               v-for="(day, index) in calendarDays"
               :key="index"
-              class="relative min-h-[60px] md:min-h-[80px] p-2 rounded border border-transparent hover:border-amber-600/50 hover:bg-amber-50/50 dark:hover:bg-amber-900/20 transition-all cursor-pointer flex flex-col items-center"
+              class="relative min-h-[64px] md:min-h-[84px] p-1.5 md:p-2 rounded-md border transition-all cursor-pointer flex flex-col items-center"
               :class="{
                 'opacity-40': !day.isCurrentMonth,
-                'bg-amber-50 dark:bg-amber-900/30 border-2 border-amber-600 dark:border-amber-500 shadow-sm': day.isToday,
-                'bg-pink-50/50 dark:bg-pink-900/20': day.anniversaries && day.anniversaries.length > 0,
-                'bg-red-50/20 dark:bg-red-900/20': day.isWeekend,
+                'border-amber-600 dark:border-amber-500 border-2 bg-amber-50 dark:bg-amber-900/30 shadow-sm': day.isToday,
+                'border-transparent': !day.isToday,
+                'bg-pink-50/60 dark:bg-pink-900/20': !day.isToday && day.anniversaries?.length && !day.isRestDay && !day.isMakeupWork,
+                'bg-red-100 dark:bg-red-950/50 border-red-200/80 dark:border-red-800/60': !day.isToday && day.isRestDay,
+                'bg-sky-50 dark:bg-sky-950/40 border-sky-200/80 dark:border-sky-800/50': !day.isToday && day.isMakeupWork,
+                'hover:border-amber-600/50 hover:bg-amber-50/50 dark:hover:bg-amber-900/20': !day.isRestDay && !day.isMakeupWork && !day.isToday,
               }"
               @click="selectDate(day)"
             >
-              <div class="text-sm md:text-base font-semibold text-slate-900 dark:text-slate-100 mb-0.5" :class="{ 'text-red-600 dark:text-red-400': day.isWeekend, 'text-amber-600 dark:text-amber-500 font-bold': day.isToday }">{{ day.date }}</div>
-              <div v-if="day.displayText" class="text-xs text-slate-600 dark:text-slate-400 whitespace-nowrap w-full text-center" :class="{ 'text-red-600 dark:text-red-400 font-medium': day.isFestival }">
-                {{ day.displayText }}
-              </div>
-              <div v-else-if="day.lunar" class="text-xs text-slate-600 dark:text-slate-400 whitespace-nowrap w-full text-center">{{ day.lunar }}</div>
-              <div v-if="day.anniversaries && day.anniversaries.length > 0" class="absolute top-1 right-1">
+              <span
+                v-if="day.restBadge"
+                class="absolute top-0.5 left-0.5 z-10 text-[10px] md:text-[11px] font-bold leading-none px-1 py-0.5 rounded-sm shadow-sm"
+                :class="day.restBadge === '休'
+                  ? 'bg-red-500 text-white'
+                  : 'bg-sky-600 text-white'"
+              >
+                {{ day.restBadge }}
+              </span>
+              <div v-if="day.anniversaries && day.anniversaries.length > 0" class="absolute top-0.5 right-0.5 z-10">
                 <AnniversaryIcon :date="day.date" class="text-pink-400 drop-shadow-sm" />
+              </div>
+              <div
+                class="text-base md:text-lg font-bold mb-0.5"
+                :class="{
+                  'text-red-600 dark:text-red-400': day.isRestDay,
+                  'text-sky-700 dark:text-sky-300': day.isMakeupWork,
+                  'text-slate-900 dark:text-slate-100': !day.isRestDay && !day.isMakeupWork && !day.isToday,
+                  'text-amber-600 dark:text-amber-500': day.isToday,
+                }"
+              >
+                {{ day.date }}
+              </div>
+              <div
+                v-if="day.displayText"
+                class="text-[10px] md:text-xs whitespace-nowrap w-full text-center leading-tight"
+                :class="{
+                  'text-red-600 dark:text-red-400 font-semibold': day.holidayName || day.isFestival,
+                  'text-slate-500 dark:text-slate-400': !day.holidayName && !day.isFestival,
+                }"
+              >
+                {{ day.displayText }}
               </div>
             </div>
           </div>
@@ -163,6 +208,17 @@
                 <div class="text-base text-amber-600 dark:text-amber-500 font-semibold">{{ selectedDate.jieqi }}</div>
               </div>
 
+              <!-- 法定节假日 / 调休 -->
+              <div v-if="selectedDate.holidayName" class="space-y-2">
+                <div class="text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">节假日</div>
+                <div class="text-base font-semibold" :class="selectedDate.isMakeupWork ? 'text-slate-700 dark:text-slate-200' : 'text-red-600 dark:text-red-400'">
+                  {{ selectedDate.holidayName }}
+                  <span class="ml-2 text-xs px-1.5 py-0.5 rounded text-white" :class="selectedDate.isMakeupWork ? 'bg-slate-500' : 'bg-red-500'">
+                    {{ selectedDate.restBadge }}
+                  </span>
+                </div>
+              </div>
+
               <!-- 纪念日 -->
               <div v-if="selectedDate.anniversaries && selectedDate.anniversaries.length > 0" class="space-y-2">
                 <div class="text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">纪念日</div>
@@ -185,15 +241,40 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, h, defineComponent } from 'vue'
-import { Solar, Lunar } from 'lunar-typescript'
+import { ref, computed, watch, h, defineComponent } from 'vue'
+import { Solar, HolidayUtil } from 'lunar-typescript'
 import dayjs from 'dayjs'
+import isoWeek from 'dayjs/plugin/isoWeek'
 import { useAnniversaries } from '@/services/api/anniversaries'
 import type { Anniversary } from '@/services/api/anniversaries'
-import { onClickOutside } from '@vueuse/core'
+import { onClickOutside, useLocalStorage } from '@vueuse/core'
 
-// 导入月份背景图片
-const bgImages = import.meta.glob('@/assets/images/*.jpg', { eager: true, import: 'default' })
+dayjs.extend(isoWeek)
+
+type RestMode = 'double' | 'alternate'
+const REST_MODE_KEY = 'mdl-calendar-rest-mode'
+const restMode = useLocalStorage<RestMode>(REST_MODE_KEY, 'double')
+
+function setRestMode(mode: RestMode) {
+  restMode.value = mode
+}
+
+/** 以「今天所在周」为单休周，下一周为双休周 */
+const singleRestWeekParity = dayjs().isoWeek() % 2
+
+function isAlternateSingleRestWeek(date: Date) {
+  return dayjs(date).isoWeek() % 2 === singleRestWeekParity
+}
+
+function isScheduleRestDay(date: Date, mode: RestMode) {
+  const day = date.getDay() // 0日 6六
+  if (mode === 'double')
+    return day === 0 || day === 6
+  // 大小周：单休周只休周日，双休周休六+日
+  if (isAlternateSingleRestWeek(date))
+    return day === 0
+  return day === 0 || day === 6
+}
 
 // 纪念日图标组件
 const StarIcon = {
@@ -307,6 +388,9 @@ const yearRange = computed(() => {
 
 // 计算日历天数
 const calendarDays = computed(() => {
+  // 依赖排班模式，切换双休/大小周时重算
+  const _mode = restMode.value
+  void _mode
   const year = currentYear.value
   const month = currentMonth.value
   const today = new Date()
@@ -352,16 +436,36 @@ const calendarDays = computed(() => {
 })
 
 // 创建日期数据
-function createDayData(date: Date, isCurrentMonth: boolean, todayStr: string) {
+function createDayData(date: Date, isCurrentMonth: boolean, _todayStr: string) {
   const today = new Date()
   const isToday = date.getFullYear() === today.getFullYear() &&
                   date.getMonth() === today.getMonth() &&
                   date.getDate() === today.getDate()
-  
-  // 判断是否为周末
+
   const dayOfWeek = date.getDay()
   const isWeekend = dayOfWeek === 0 || dayOfWeek === 6
-  
+
+  // 法定节假日 / 调休（HolidayUtil）
+  let holidayName = ''
+  let isOfficialRest = false
+  let isMakeupWork = false
+  const holiday = HolidayUtil.getHoliday(
+    date.getFullYear(),
+    date.getMonth() + 1,
+    date.getDate(),
+  )
+  if (holiday) {
+    holidayName = holiday.getName()
+    isMakeupWork = holiday.isWork()
+    isOfficialRest = !holiday.isWork()
+  }
+
+  const scheduleRest = isScheduleRestDay(date, restMode.value)
+  // 调休上班优先；否则法定放假或排班休息日
+  const isRestDay = isMakeupWork ? false : (isOfficialRest || scheduleRest)
+  // 所有休息日都标「休」，调休上班标「班」，方便一眼区分大小周
+  const restBadge = isMakeupWork ? '班' : (isRestDay ? '休' : '')
+
   // 计算农历
   let lunar = ''
   let lunarFull = ''
@@ -371,39 +475,37 @@ function createDayData(date: Date, isCurrentMonth: boolean, todayStr: string) {
   let jieqi = ''
   let displayText = ''
   let isFestival = false
-  
+
   try {
     const solar = Solar.fromDate(date)
     const lunarObj = solar.getLunar()
-    
-    // 农历日期（简化显示）
+
     lunar = lunarObj.getDayInChinese()
-    
-    // 完整农历信息
     lunarFull = lunarObj.toFullString()
-    
-    // 干支纪年
     ganzhi = `${lunarObj.getYearInGanZhi()}年 ${lunarObj.getMonthInGanZhi()}月 ${lunarObj.getDayInGanZhi()}日`
-    
-    // 宜忌
+
     const yiList = lunarObj.getDayYi()
     const jiList = lunarObj.getDayJi()
-    if (yiList && yiList.length > 0) {
+    if (yiList && yiList.length > 0)
       yi = yiList.join(' ')
-    }
-    if (jiList && jiList.length > 0) {
+    if (jiList && jiList.length > 0)
       ji = jiList.join(' ')
+
+    // 展示优先级：法定节假日名 > 节气 > 农历节日 > 公历节日 > 农历日
+    if (holidayName) {
+      displayText = holidayName.replace(/节$/, '') || holidayName
+      isFestival = true
     }
-    
-    // 节气（优先显示）
+
     const jieqiStr = lunarObj.getJieQi()
     if (jieqiStr) {
       jieqi = jieqiStr
-      displayText = jieqi
-      isFestival = true
+      if (!displayText) {
+        displayText = jieqi
+        isFestival = true
+      }
     }
-    
-    // 传统节日（如果没有节气，则显示节日）
+
     if (!displayText) {
       const festivals = lunarObj.getFestivals()
       if (festivals && festivals.length > 0) {
@@ -411,19 +513,18 @@ function createDayData(date: Date, isCurrentMonth: boolean, todayStr: string) {
         isFestival = true
       }
     }
-    
-    // 如果既没有节气也没有节日，显示农历日期
-    if (!displayText) {
+
+    // 不展示西方节日（万圣节等），避免冲淡法定假日/休息日
+    if (!displayText)
       displayText = lunar
-    }
-  } catch (e) {
+  }
+  catch (e) {
     console.error('计算农历失败:', e, date)
   }
-  
-  // 获取该日期的纪念日
+
   const dateKey = dayjs(date).format('YYYY-MM-DD')
   const dayAnniversaries = anniversariesByDate.value.get(dateKey) || []
-  
+
   return {
     date: date.getDate(),
     fullDate: dayjs(date).format('YYYY年MM月DD日'),
@@ -431,6 +532,11 @@ function createDayData(date: Date, isCurrentMonth: boolean, todayStr: string) {
     isCurrentMonth,
     isToday,
     isWeekend,
+    isRestDay,
+    isMakeupWork,
+    isOfficialRest,
+    holidayName,
+    restBadge,
     lunar,
     lunarFull,
     ganzhi,
