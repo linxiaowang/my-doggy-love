@@ -259,8 +259,12 @@ function setRestMode(mode: RestMode) {
   restMode.value = mode
 }
 
-/** 以「今天所在周」为单休周，下一周为双休周 */
-const singleRestWeekParity = dayjs().isoWeek() % 2
+/**
+ * 大小周固定锚点：2026-11-09 所在的 ISO 周（第 46 周）为单休周，之后逐周交替。
+ * 必须使用固定日期而非 new Date()，否则「本周永远是单休周」，排班每周都会整体漂移一周。
+ */
+const ALTERNATE_SINGLE_REST_WEEK_ANCHOR = dayjs('2026-11-09')
+const singleRestWeekParity = ALTERNATE_SINGLE_REST_WEEK_ANCHOR.isoWeek() % 2
 
 function isAlternateSingleRestWeek(date: Date) {
   return dayjs(date).isoWeek() % 2 === singleRestWeekParity
